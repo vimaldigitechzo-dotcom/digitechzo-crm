@@ -35,8 +35,21 @@ import {
   getCurrentFormattedTime,
 } from '@/lib/utils';
 import {
+  WhatsAppShareButton,
+  WhatsAppIcon,
+} from '@/components/meetings/WhatsAppShareButton';
+import {
+  isValidMeetingUrl,
+  normalizeMeetingUrl,
+  getMeetingPlatformInfo,
+  parseDurationToMinutes,
+  openWhatsAppShare,
+  generateAutomatedMeetUrl,
+} from '@/components/meetings/meetingUtils';
+import {
   PlusCircle,
   Video,
+  MapPin,
   Clock,
   CheckCircle2,
   RotateCcw,
@@ -48,6 +61,7 @@ import {
   FileText,
   Loader2,
   Trash2,
+  Share2,
 } from 'lucide-react';
 
 const TIME_SLOTS_OPTIONS = (() => {
@@ -81,6 +95,8 @@ export const MeetingsPage: React.FC = () => {
   const [isManualTime, setIsManualTime] = useState(false);
   const [outcomeModalMeeting, setOutcomeModalMeeting] = useState<MeetingItem | null>(null);
   const [selectedMeeting, setSelectedMeeting] = useState<MeetingItem | null>(null);
+  const [urlValidationError, setUrlValidationError] = useState<string | null>(null);
+  const [shareValidationError, setShareValidationError] = useState<string | null>(null);
 
   // Form states (starts with empty time so user selects allocated time)
   const [newMeetingForm, setNewMeetingForm] = useState({
@@ -106,6 +122,8 @@ export const MeetingsPage: React.FC = () => {
       meetingUrl: '',
     });
     setIsManualTime(false);
+    setUrlValidationError(null);
+    setShareValidationError(null);
     setFormError(null);
     setIsScheduleModalOpen(true);
   };
@@ -183,11 +201,21 @@ export const MeetingsPage: React.FC = () => {
         const diffMins = Math.round(
           (new Date(endTime).getTime() - new Date(startTime).getTime()) / 60000
         );
-        if (diffMins > 0) duration = `${diffMins} min`;
+        if (diffMins > 0) {
+          if (diffMins % 60 === 0 && diffMins >= 60) {
+            duration = `${diffMins / 60} ${diffMins === 60 ? 'hour' : 'hours'}`;
+          } else {
+            duration = `${diffMins} min`;
+          }
+        }
       }
 
       const leadFullName = m.lead?.fullName;
       const leadCompanyName = m.lead?.companyName;
+      const leadPhone =
+        m.lead?.phone ||
+        leads.find((l: any) => l.id === m.leadId)?.phone ||
+        undefined;
 
       return {
         id: m.id,
@@ -195,6 +223,7 @@ export const MeetingsPage: React.FC = () => {
         description: m.description || undefined,
         leadId: m.leadId || undefined,
         leadName: leadFullName || 'General Prospect',
+        leadPhone,
         companyName: leadCompanyName || 'Lead Company',
         dealId: m.dealId || undefined,
         dealTitle: m.deal?.title || undefined,
@@ -204,6 +233,7 @@ export const MeetingsPage: React.FC = () => {
         duration,
         hostName: m.owner?.name || m.creator?.name || 'Administrator',
         meetingUrl: m.location || undefined,
+        location: m.location || undefined,
         status,
         outcomeSummary: m.outcome || undefined,
         nextStepNotes: m.notes || undefined,
@@ -212,7 +242,7 @@ export const MeetingsPage: React.FC = () => {
         endTime,
       };
     });
-  }, [rawMeetings]);
+  }, [rawMeetings, leads]);
 
   // Derived counts
   const upcomingCount = useMemo(
@@ -326,19 +356,14 @@ export const MeetingsPage: React.FC = () => {
       const ampm = match[3]?.toUpperCase();
       if (ampm === 'PM' && hours < 12) hours += 12;
       if (ampm === 'AM' && hours === 12) hours = 0;
-      const d = new Date(dateStr);
-      d.setHours(hours, minutes, 0, 0);
-      if (!isNaN(d.getTime())) {
-        startDate = d;
+      const [y, m, d] = dateStr.split('-').map((v) => parseInt(v, 10));
+      const localDate = new Date(y, m - 1, d, hours, minutes, 0, 0);
+      if (!isNaN(localDate.getTime())) {
+        startDate = localDate;
       }
     }
 
-    let durationMinutes = 45;
-    const durMatch = durationStr.match(/(\d+)/);
-    if (durMatch) {
-      durationMinutes = parseInt(durMatch[1], 10);
-    }
-
+    const durationMinutes = parseDurationToMinutes(durationStr);
     const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
     return {
       startTime: startDate.toISOString(),
@@ -362,6 +387,17 @@ export const MeetingsPage: React.FC = () => {
       return;
     }
 
+    // Validate meeting URL if input looks like a link
+    const urlTrim = newMeetingForm.meetingUrl.trim();
+    if (urlTrim && (urlTrim.includes('://') || urlTrim.startsWith('meet.') || urlTrim.includes('.com') || urlTrim.includes('.us') || urlTrim.includes('.me'))) {
+      if (!isValidMeetingUrl(urlTrim)) {
+        setFormError(
+          'Please enter a valid meeting URL (e.g. https://meet.google.com/iqi-qsmu-muu, https://zoom.us/j/..., or Microsoft Teams link).'
+        );
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     setFormError(null);
 
@@ -372,13 +408,17 @@ export const MeetingsPage: React.FC = () => {
         newMeetingForm.duration
       );
 
+      const finalLocation = urlTrim
+        ? (isValidMeetingUrl(urlTrim) ? normalizeMeetingUrl(urlTrim) : urlTrim)
+        : generateAutomatedMeetUrl();
+
       const payload: CreateMeetingPayload = {
         title: newMeetingForm.title.trim(),
         description: newMeetingForm.notes.trim() || undefined,
         meetingType: newMeetingForm.meetingType,
         startTime,
         endTime,
-        location: newMeetingForm.meetingUrl.trim() || undefined,
+        location: finalLocation,
         leadId: newMeetingForm.leadId || undefined,
       };
 
@@ -394,6 +434,7 @@ export const MeetingsPage: React.FC = () => {
       ]);
 
       setIsScheduleModalOpen(false);
+
       setNewMeetingForm({
         title: '',
         leadId: '',
@@ -404,6 +445,7 @@ export const MeetingsPage: React.FC = () => {
         meetingUrl: '',
         notes: '',
       });
+      setUrlValidationError(null);
     } catch (err: any) {
       setFormError(err?.message || 'Failed to schedule demo. Please try again.');
     } finally {
@@ -759,24 +801,42 @@ export const MeetingsPage: React.FC = () => {
                       </TableCell>
                       <TableCell className="py-2.5">
                         {m.meetingUrl ? (
-                          <a
-                            href={m.meetingUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-btn bg-slate-50 border border-border text-[11px] font-mono text-txt-secondary hover:text-[#57B71B] hover:border-[#57B71B] transition-colors"
-                          >
-                            <Video className="h-3 w-3 text-primary shrink-0" />
-                            <span className="truncate max-w-[120px]">
-                              {m.meetingUrl.replace(/^https?:\/\//, '')}
-                            </span>
-                            <ExternalLink className="h-2.5 w-2.5 shrink-0" />
-                          </a>
+                          (() => {
+                            const platform = getMeetingPlatformInfo(m.meetingUrl);
+                            return platform.isOnline ? (
+                              <a
+                                href={normalizeMeetingUrl(m.meetingUrl)}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-btn bg-slate-50 border border-border text-[11px] font-mono text-txt-secondary hover:text-[#57B71B] hover:border-[#57B71B] transition-colors"
+                              >
+                                <Video className="h-3 w-3 text-primary shrink-0" />
+                                <span className="truncate max-w-[120px]">
+                                  {m.meetingUrl.replace(/^https?:\/\//, '')}
+                                </span>
+                                <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                              </a>
+                            ) : (
+                              <div
+                                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-btn bg-slate-50 border border-border text-[11px] text-txt-secondary"
+                                title={m.meetingUrl}
+                              >
+                                <MapPin className="h-3 w-3 text-amber-600 shrink-0" />
+                                <span className="truncate max-w-[130px]">{m.meetingUrl}</span>
+                              </div>
+                            );
+                          })()
                         ) : (
                           <span className="text-[11px] text-txt-muted italic">No link</span>
                         )}
                       </TableCell>
                       <TableCell className="py-2.5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          <WhatsAppShareButton
+                            meeting={m}
+                            size="icon"
+                            variant="outline"
+                          />
                           <Button
                             size="sm"
                             variant="secondary"
@@ -787,6 +847,11 @@ export const MeetingsPage: React.FC = () => {
                           </Button>
                           <ActionMenu
                             items={[
+                              {
+                                label: 'Share via WhatsApp',
+                                icon: WhatsAppIcon as any,
+                                onClick: () => openWhatsAppShare(m, m.leadPhone),
+                              },
                               {
                                 label: 'View Details',
                                 icon: FileText,
@@ -847,24 +912,48 @@ export const MeetingsPage: React.FC = () => {
                 </div>
 
                 {m.meetingUrl && (
-                  <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
-                    <Video className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <span className="truncate font-mono text-[11px] text-txt-secondary">
-                      {m.meetingUrl}
-                    </span>
-                  </div>
+                  (() => {
+                    const platform = getMeetingPlatformInfo(m.meetingUrl);
+                    return platform.isOnline ? (
+                      <a
+                        href={normalizeMeetingUrl(m.meetingUrl)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn hover:border-[#57B71B] transition-colors"
+                      >
+                        <Video className="h-3.5 w-3.5 text-primary shrink-0" />
+                        <span className="truncate font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]">
+                          {m.meetingUrl}
+                        </span>
+                        <ExternalLink className="h-2.5 w-2.5 text-txt-muted ml-auto shrink-0" />
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
+                        <MapPin className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+                        <span className="truncate text-[11px] text-txt-secondary">
+                          {m.meetingUrl}
+                        </span>
+                      </div>
+                    );
+                  })()
                 )}
 
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                   <span className="text-[11px] text-txt-muted">Host: {m.hostName}</span>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => openOutcomeModal(m)}
-                    className="h-7 text-xs px-2.5 bg-slate-100 hover:bg-slate-200 text-txt-primary font-semibold"
-                  >
-                    {m.status === 'SCHEDULED' ? 'Log Outcome' : 'Outcome'}
-                  </Button>
+                  <div className="flex items-center gap-1.5">
+                    <WhatsAppShareButton
+                      meeting={m}
+                      variant="solid"
+                    />
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => openOutcomeModal(m)}
+                      className="h-7 text-xs px-2.5 bg-slate-100 hover:bg-slate-200 text-txt-primary font-semibold"
+                    >
+                      {m.status === 'SCHEDULED' ? 'Log Outcome' : 'Outcome'}
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -918,17 +1007,30 @@ export const MeetingsPage: React.FC = () => {
                 </div>
 
                 {m.meetingUrl && (
-                  <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
-                    <Video className="h-3.5 w-3.5 text-primary shrink-0" />
-                    <a
-                      href={m.meetingUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="truncate font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]"
-                    >
-                      {m.meetingUrl.replace(/^https?:\/\//, '')}
-                    </a>
-                  </div>
+                  (() => {
+                    const platform = getMeetingPlatformInfo(m.meetingUrl);
+                    return platform.isOnline ? (
+                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
+                        <Video className="h-3.5 w-3.5 text-primary shrink-0" />
+                        <a
+                          href={normalizeMeetingUrl(m.meetingUrl)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="truncate font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]"
+                        >
+                          {m.meetingUrl.replace(/^https?:\/\//, '')}
+                        </a>
+                        <ExternalLink className="h-2.5 w-2.5 text-txt-muted ml-auto shrink-0" />
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
+                        <MapPin className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+                        <span className="truncate text-[11px] text-txt-secondary">
+                          {m.meetingUrl}
+                        </span>
+                      </div>
+                    );
+                  })()
                 )}
               </div>
 
@@ -937,16 +1039,20 @@ export const MeetingsPage: React.FC = () => {
                   size="sm"
                   variant="ghost"
                   onClick={() => setSelectedMeeting(m)}
-                  className="h-7 text-xs px-2 text-txt-secondary hover:text-txt-primary"
+                  className="h-7 text-xs px-2 text-txt-secondary hover:text-txt-primary cursor-pointer"
                 >
                   Details
                 </Button>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <WhatsAppShareButton
+                    meeting={m}
+                    variant="solid"
+                  />
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => openOutcomeModal(m)}
-                    className="h-7 text-xs px-2.5 bg-white font-semibold"
+                    className="h-7 text-xs px-2.5 bg-white font-semibold cursor-pointer"
                   >
                     {m.status === 'SCHEDULED' ? 'Log Outcome' : 'Outcome'}
                   </Button>
@@ -959,7 +1065,7 @@ export const MeetingsPage: React.FC = () => {
 
       {/* 5. Schedule Demo Modal */}
       <Dialog open={isScheduleModalOpen} onOpenChange={setIsScheduleModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-txt-primary">
               Schedule Meeting / Demo
@@ -1038,8 +1144,9 @@ export const MeetingsPage: React.FC = () => {
                 >
                   <option value="30 min">30 min</option>
                   <option value="45 min">45 min</option>
-                  <option value="60 min">60 min</option>
-                  <option value="90 min">90 min</option>
+                  <option value="60 min">60 min (1 hr)</option>
+                  <option value="90 min">90 min (1.5 hrs)</option>
+                  <option value="2 hours">2 hours</option>
                 </select>
               </div>
             </div>
@@ -1178,16 +1285,94 @@ export const MeetingsPage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Meeting URL / Location</label>
-              <input
-                type="text"
-                placeholder="e.g. https://meet.google.com/abc-xyz-demo"
-                value={newMeetingForm.meetingUrl}
-                onChange={(e) =>
-                  setNewMeetingForm({ ...newMeetingForm, meetingUrl: e.target.value })
-                }
-                className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle font-mono text-[11px]"
-              />
+              <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">
+                Meeting URL / Location
+              </label>
+              {/* Input + inline WhatsApp share icon */}
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  placeholder="e.g. https://meet.google.com/abc-xyz-demo"
+                  value={newMeetingForm.meetingUrl}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setNewMeetingForm({ ...newMeetingForm, meetingUrl: val });
+                    if (shareValidationError) setShareValidationError(null);
+                    const trimmed = val.trim();
+                    if (trimmed && (trimmed.includes('://') || trimmed.startsWith('meet.') || trimmed.includes('.com') || trimmed.includes('.us') || trimmed.includes('.me'))) {
+                      if (!isValidMeetingUrl(trimmed)) {
+                        setUrlValidationError(
+                          'Please enter a valid meeting URL (e.g. https://meet.google.com/abc-xyz-demo or https://zoom.us/j/...)'
+                        );
+                      } else {
+                        setUrlValidationError(null);
+                      }
+                    } else {
+                      setUrlValidationError(null);
+                    }
+                  }}
+                  className={cn(
+                    'w-full h-8 pl-2.5 pr-9 text-xs rounded-input border bg-white text-txt-primary focus:outline-none focus:ring-1 shadow-subtle',
+                    urlValidationError || shareValidationError
+                      ? 'border-red-500 focus:ring-red-500 bg-red-50/30'
+                      : 'border-border focus:ring-primary'
+                  )}
+                />
+                {/* WhatsApp Share Arrow Icon — inside the right edge of the input */}
+                <button
+                  type="button"
+                  title="Share Meeting via WhatsApp"
+                  aria-label="Share Meeting via WhatsApp"
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    // Check required fields and provide immediate inline feedback
+                    const missing: string[] = [];
+                    if (!newMeetingForm.meetingUrl.trim()) missing.push('Meeting URL');
+                    if (!newMeetingForm.title.trim()) missing.push('Meeting Title');
+                    if (!newMeetingForm.time) missing.push('Start Time');
+                    if (!newMeetingForm.date) missing.push('Date');
+
+                    if (missing.length > 0) {
+                      setShareValidationError(`Please enter ${missing.join(', ')} before sharing via WhatsApp.`);
+                      return;
+                    }
+
+                    if (!isValidMeetingUrl(newMeetingForm.meetingUrl.trim())) {
+                      setShareValidationError('Please enter a valid Meeting URL before sharing.');
+                      return;
+                    }
+
+                    // Clear any errors and trigger WhatsApp Click to Chat
+                    setShareValidationError(null);
+                    setUrlValidationError(null);
+                    setFormError(null);
+
+                    openWhatsAppShare({
+                      title: newMeetingForm.title.trim(),
+                      date: newMeetingForm.date,
+                      time: newMeetingForm.time,
+                      duration: newMeetingForm.duration,
+                      meetingUrl: newMeetingForm.meetingUrl.trim(),
+                    });
+                  }}
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-6 w-6 rounded hover:bg-slate-100 text-[#25D366] active:scale-95 transition-all cursor-pointer shrink-0"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
+              </div>
+              {shareValidationError && (
+                <p className="text-[10px] text-red-600 font-medium animate-in fade-in flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  {shareValidationError}
+                </p>
+              )}
+              {urlValidationError && !shareValidationError && (
+                <p className="text-[10px] text-red-600 font-medium animate-in fade-in flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  {urlValidationError}
+                </p>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -1455,6 +1640,10 @@ export const MeetingsPage: React.FC = () => {
               </Button>
 
               <div className="flex items-center gap-2">
+                <WhatsAppShareButton
+                  meeting={selectedMeeting}
+                  variant="solid"
+                />
                 <Button
                   size="sm"
                   variant="outline"

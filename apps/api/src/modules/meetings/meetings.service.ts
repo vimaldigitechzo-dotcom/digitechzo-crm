@@ -55,7 +55,7 @@ export class MeetingsService {
         ? { id: m.creator.id, name: m.creator.name, email: m.creator.email }
         : undefined,
       lead: m.lead
-        ? { id: m.lead.id, fullName: m.lead.fullName, companyName: m.lead.companyName }
+        ? { id: m.lead.id, fullName: m.lead.fullName, companyName: m.lead.companyName, phone: m.lead.phone }
         : undefined,
       deal: m.deal
         ? { id: m.deal.id, title: m.deal.title }
@@ -136,7 +136,7 @@ export class MeetingsService {
         include: {
           owner: { select: { id: true, name: true, email: true } },
           creator: { select: { id: true, name: true, email: true } },
-          lead: { select: { id: true, fullName: true, companyName: true } },
+          lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
           deal: { select: { id: true, title: true } },
         },
       }),
@@ -164,7 +164,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });
@@ -232,7 +232,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });
@@ -368,7 +368,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });
@@ -411,7 +411,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });
@@ -527,7 +527,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });
@@ -582,7 +582,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });
@@ -635,7 +635,7 @@ export class MeetingsService {
       include: {
         owner: { select: { id: true, name: true, email: true } },
         creator: { select: { id: true, name: true, email: true } },
-        lead: { select: { id: true, fullName: true, companyName: true } },
+        lead: { select: { id: true, fullName: true, companyName: true, phone: true } },
         deal: { select: { id: true, title: true } },
       },
     });

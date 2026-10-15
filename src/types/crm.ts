@@ -260,8 +260,10 @@ export interface MeetingItem {
   date: string;
   time: string;
   duration: string;
+  leadPhone?: string;
   hostName: string;
   meetingUrl?: string;
+  location?: string;
   status: MeetingStatus;
   outcomeSummary?: string;
   nextStepNotes?: string;

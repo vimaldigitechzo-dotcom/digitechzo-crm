@@ -52,9 +52,21 @@ import {
   Check,
   XCircle,
   MessageCircle,
+  Video,
+  MapPin,
+  ExternalLink,
 } from 'lucide-react';
 import { TaskPriority, LeadSource } from '@/types/crm';
 import { CategorySelect } from '@/components/leads/CategorySelect';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { WhatsAppShareButton } from '@/components/meetings/WhatsAppShareButton';
+import {
+  isValidMeetingUrl,
+  normalizeMeetingUrl,
+  getMeetingPlatformInfo,
+  calculateMeetingTimes,
+  generateAutomatedMeetUrl,
+} from '@/components/meetings/meetingUtils';
 
 export const LeadDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -127,6 +139,7 @@ export const LeadDetailPage: React.FC = () => {
   const [lostReasonNotes, setLostReasonNotes] = useState('');
 
   // Schedule Meeting Form State
+  const [meetingUrlError, setMeetingUrlError] = useState<string | null>(null);
   const [meetingForm, setMeetingForm] = useState({
     title: '',
     startTime: '',
@@ -663,15 +676,35 @@ export const LeadDetailPage: React.FC = () => {
     e.preventDefault();
     if (!id) return;
     setModalError(null);
+    setMeetingUrlError(null);
+
+    // Validate meeting URL if input looks like a link
+    const locTrim = meetingForm.location.trim();
+    if (locTrim && (locTrim.includes('://') || locTrim.startsWith('meet.') || locTrim.includes('.com') || locTrim.includes('.us') || locTrim.includes('.me'))) {
+      if (!isValidMeetingUrl(locTrim)) {
+        setMeetingUrlError(
+          'Please enter a valid meeting URL (e.g. https://meet.google.com/iqi-qsmu-muu, Zoom, or Teams).'
+        );
+        return;
+      }
+    }
+
     setIsSubmitting(true);
 
     try {
+      const finalLocation = locTrim
+        ? (isValidMeetingUrl(locTrim) ? normalizeMeetingUrl(locTrim) : locTrim)
+        : generateAutomatedMeetUrl();
+
+      const startIso = new Date(meetingForm.startTime).toISOString();
+      const endIso = new Date(meetingForm.endTime).toISOString();
+
       await crmApi.createMeeting({
         title: meetingForm.title.trim() || `Discovery Call with ${lead?.fullName}`,
-        startTime: new Date(meetingForm.startTime).toISOString(),
-        endTime: new Date(meetingForm.endTime).toISOString(),
+        startTime: startIso,
+        endTime: endIso,
         meetingType: meetingForm.meetingType as any,
-        location: meetingForm.location.trim() || undefined,
+        location: finalLocation,
         description: meetingForm.agenda.trim() || undefined,
         leadId: id,
         dealId: activeDeal?.id || undefined,
@@ -691,6 +724,7 @@ export const LeadDetailPage: React.FC = () => {
 
       await invalidateAll();
       setIsMeetingModalOpen(false);
+
       setMeetingForm({
         title: '',
         startTime: '',
@@ -699,6 +733,7 @@ export const LeadDetailPage: React.FC = () => {
         location: '',
         agenda: '',
       });
+      setMeetingUrlError(null);
     } catch (err: any) {
       setModalError(err?.message || 'Failed to schedule meeting.');
     } finally {
@@ -1598,26 +1633,85 @@ export const LeadDetailPage: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-2">
-                {meetings.map((meeting) => (
-                  <div
-                    key={meeting.id}
-                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between"
-                  >
-                    <div className="space-y-0.5">
-                      <h4 className="font-semibold text-xs text-txt-primary">{meeting.title}</h4>
-                      <div className="flex items-center gap-2 text-[11px] text-txt-muted">
-                        <Clock className="h-3 w-3" />
-                        <span>{formatDate(meeting.startTime)}</span>
-                        <span>•</span>
-                        <span>{meeting.meetingType}</span>
+                {meetings.map((meeting) => {
+                  const platform = getMeetingPlatformInfo(meeting.location);
+                  const times = calculateMeetingTimes(
+                    undefined,
+                    undefined,
+                    undefined,
+                    meeting.startTime,
+                    meeting.endTime
+                  );
+                  const meetingForShare = {
+                    ...meeting,
+                    leadName: meeting.lead?.fullName || lead.fullName,
+                    leadPhone: meeting.lead?.phone || lead.phone,
+                    companyName: meeting.lead?.companyName || lead.companyName,
+                    meetingUrl: meeting.location,
+                  };
+
+                  return (
+                    <div
+                      key={meeting.id}
+                      className="p-3 rounded-card bg-slate-50 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    >
+                      <div className="space-y-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-semibold text-xs text-txt-primary">{meeting.title}</h4>
+                          <Badge variant="outline" className="text-[10px] uppercase font-bold">
+                            {meeting.meetingType}
+                          </Badge>
+                          <Badge
+                            variant={meeting.status === 'SCHEDULED' ? 'info' : 'outline'}
+                            className="text-[10px]"
+                          >
+                            {meeting.status}
+                          </Badge>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-[11px] text-txt-muted flex-wrap">
+                          <span className="flex items-center gap-1 font-medium text-slate-700">
+                            <Clock className="h-3 w-3 text-slate-400" />
+                            {times.date} • {times.startTime} – {times.endTime}
+                          </span>
+                        </div>
+
+                        {meeting.location && (
+                          <div className="text-[11px] flex items-center gap-1.5 pt-0.5">
+                            {platform.isOnline && platform.validUrl ? (
+                              <a
+                                href={platform.normalizedUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                              >
+                                <Video className="h-3 w-3 text-blue-500 shrink-0" />
+                                <span>{platform.platform}</span>
+                                <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                              </a>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-slate-600">
+                                <MapPin className="h-3 w-3 text-amber-500 shrink-0" />
+                                <span>{meeting.location}</span>
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {meeting.description && (
+                          <p className="text-[11px] text-txt-secondary line-clamp-2">{meeting.description}</p>
+                        )}
                       </div>
-                      {meeting.description && (
-                        <p className="text-[11px] text-txt-secondary">{meeting.description}</p>
-                      )}
+
+                      <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <WhatsAppShareButton
+                          meeting={meetingForShare}
+                          variant="solid"
+                        />
+                      </div>
                     </div>
-                    <Badge variant="outline">{meeting.status}</Badge>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -1828,20 +1922,20 @@ export const LeadDetailPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Lead Source</label>
-                <select
+                <CustomSelect
                   value={editForm.source}
-                  onChange={(e) => setEditForm({ ...editForm, source: e.target.value as any })}
+                  onChange={(val) => setEditForm({ ...editForm, source: val as any })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="WEBSITE_FORM">WEBSITE_FORM</option>
-                  <option value="META_ADS">META_ADS</option>
-                  <option value="GOOGLE_ADS">GOOGLE_ADS</option>
-                  <option value="WHATSAPP">WHATSAPP</option>
-                  <option value="MANUAL">MANUAL</option>
-                  <option value="PHONE_INBOUND">PHONE_INBOUND</option>
-                  <option value="IMPORT">IMPORT</option>
-                </select>
+                  options={[
+                    { value: 'WEBSITE_FORM', label: 'WEBSITE_FORM' },
+                    { value: 'META_ADS', label: 'META_ADS' },
+                    { value: 'GOOGLE_ADS', label: 'GOOGLE_ADS' },
+                    { value: 'WHATSAPP', label: 'WHATSAPP' },
+                    { value: 'MANUAL', label: 'MANUAL' },
+                    { value: 'PHONE_INBOUND', label: 'PHONE_INBOUND' },
+                    { value: 'IMPORT', label: 'IMPORT' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
@@ -1873,34 +1967,34 @@ export const LeadDetailPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">SLA Priority</label>
-                <select
+                <CustomSelect
                   value={editForm.priority}
-                  onChange={(e) => setEditForm({ ...editForm, priority: e.target.value as TaskPriority })}
+                  onChange={(val) => setEditForm({ ...editForm, priority: val as TaskPriority })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="URGENT">URGENT</option>
-                </select>
+                  options={[
+                    { value: 'LOW', label: 'LOW' },
+                    { value: 'MEDIUM', label: 'MEDIUM' },
+                    { value: 'HIGH', label: 'HIGH' },
+                    { value: 'URGENT', label: 'URGENT' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Temperature</label>
-                <select
+                <CustomSelect
                   value={editForm.temperature}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, temperature: e.target.value as '' | 'HOT' | 'WARM' | 'COLD' })
+                  onChange={(val) =>
+                    setEditForm({ ...editForm, temperature: val as '' | 'HOT' | 'WARM' | 'COLD' })
                   }
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="">None (Unrated)</option>
-                  <option value="HOT">HOT</option>
-                  <option value="WARM">WARM</option>
-                  <option value="COLD">COLD</option>
-                </select>
+                  options={[
+                    { value: '', label: 'None (Unrated)' },
+                    { value: 'HOT', label: 'HOT' },
+                    { value: 'WARM', label: 'WARM' },
+                    { value: 'COLD', label: 'COLD' },
+                  ]}
+                />
               </div>
             </div>
 
@@ -1953,22 +2047,22 @@ export const LeadDetailPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Call Outcome</label>
-                <select
+                <CustomSelect
                   value={callLogForm.outcome}
-                  onChange={(e) => setCallLogForm({ ...callLogForm, outcome: e.target.value })}
+                  onChange={(val) => setCallLogForm({ ...callLogForm, outcome: val })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                >
-                  <option value="CONNECTED_INTERESTED">Connected - Interested</option>
-                  <option value="CONNECTED_CALLBACK">Connected - Requested Callback</option>
-                  <option value="CONNECTED_MEETING_BOOKED">Connected - Meeting Booked</option>
-                  <option value="NO_ANSWER">No Answer / Left Voicemail</option>
-                  <option value="BUSY">Busy</option>
-                  <option value="WRONG_NUMBER">Wrong Number</option>
-                </select>
+                  options={[
+                    { value: 'CONNECTED_INTERESTED', label: 'Connected - Interested' },
+                    { value: 'CONNECTED_CALLBACK', label: 'Connected - Requested Callback' },
+                    { value: 'CONNECTED_MEETING_BOOKED', label: 'Connected - Meeting Booked' },
+                    { value: 'NO_ANSWER', label: 'No Answer / Left Voicemail' },
+                    { value: 'BUSY', label: 'Busy' },
+                    { value: 'WRONG_NUMBER', label: 'Wrong Number' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
@@ -2278,7 +2372,7 @@ export const LeadDetailPage: React.FC = () => {
 
       {/* MODAL 7: SCHEDULE MEETING */}
       <Dialog open={isMeetingModalOpen} onOpenChange={setIsMeetingModalOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-section-title text-txt-primary">Schedule Meeting</DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
@@ -2287,6 +2381,13 @@ export const LeadDetailPage: React.FC = () => {
           </DialogHeader>
 
           <form onSubmit={handleMeetingSubmit} className="space-y-3 py-2 text-xs">
+            {(modalError || meetingUrlError) && (
+              <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
+                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                <span>{meetingUrlError || modalError}</span>
+              </div>
+            )}
+
             <div className="space-y-1">
               <label className="text-caption text-txt-secondary block font-medium">
                 Meeting Title <span className="text-red-500">*</span>
@@ -2302,7 +2403,7 @@ export const LeadDetailPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
                   Start Time <span className="text-red-500">*</span>
@@ -2332,33 +2433,69 @@ export const LeadDetailPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Meeting Type</label>
-                <select
-                  value={meetingForm.meetingType}
-                  onChange={(e) => setMeetingForm({ ...meetingForm, meetingType: e.target.value })}
-                  disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                >
-                  <option value="DISCOVERY">Discovery Meeting</option>
-                  <option value="DEMO">Product Demo</option>
-                  <option value="MEETING">General Meeting</option>
-                  <option value="FOLLOW_UP">Follow-Up</option>
-                </select>
-              </div>
+            <div className="space-y-1">
+              <label className="text-caption text-txt-secondary block font-medium">Meeting Type</label>
+              <CustomSelect
+                value={meetingForm.meetingType}
+                onChange={(val) => setMeetingForm({ ...meetingForm, meetingType: val })}
+                disabled={isSubmitting}
+                options={[
+                  { value: 'DISCOVERY', label: 'Discovery Meeting' },
+                  { value: 'DEMO', label: 'Product Demo' },
+                  { value: 'MEETING', label: 'General Meeting' },
+                  { value: 'FOLLOW_UP', label: 'Follow-Up' },
+                ]}
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Location / Link</label>
-                <input
-                  type="text"
-                  value={meetingForm.location}
-                  onChange={(e) => setMeetingForm({ ...meetingForm, location: e.target.value })}
-                  placeholder="https://meet.google.com/..."
-                  disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary"
-                />
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <label className="text-caption text-txt-secondary block font-medium">Meeting URL / Location</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const autoUrl = generateAutomatedMeetUrl();
+                    setMeetingForm((prev) => ({ ...prev, location: autoUrl }));
+                    setMeetingUrlError(null);
+                  }}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1a73e8] hover:text-[#1557b0] hover:underline cursor-pointer transition-colors"
+                >
+                  <Video className="h-3 w-3 text-[#1a73e8]" />
+                  <span>+ Generate Meet link</span>
+                </button>
               </div>
+              <input
+                type="text"
+                value={meetingForm.location}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setMeetingForm({ ...meetingForm, location: val });
+                  const trimmed = val.trim();
+                  if (trimmed && (trimmed.includes('://') || trimmed.startsWith('meet.') || trimmed.includes('.com') || trimmed.includes('.us') || trimmed.includes('.me'))) {
+                    if (!isValidMeetingUrl(trimmed)) {
+                      setMeetingUrlError('Please enter a valid meeting URL (e.g. https://meet.google.com/iqi-qsmu-muu or Zoom link)');
+                    } else {
+                      setMeetingUrlError(null);
+                    }
+                  } else {
+                    setMeetingUrlError(null);
+                  }
+                }}
+                placeholder="e.g. https://meet.google.com/iqi-qsmu-muu or Office Address"
+                disabled={isSubmitting}
+                className={cn(
+                  'w-full h-8 rounded-input border bg-white px-2.5 text-xs text-txt-primary',
+                  meetingUrlError
+                    ? 'border-red-500 focus:ring-red-400 bg-red-50/20'
+                    : 'border-border'
+                )}
+              />
+              {meetingUrlError && (
+                <p className="text-[10px] text-red-600 font-medium animate-in fade-in flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3 shrink-0" />
+                  {meetingUrlError}
+                </p>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -2786,7 +2923,7 @@ export const LeadDetailPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
                   Deal Value (₹) <span className="text-red-500">*</span>
@@ -2804,22 +2941,19 @@ export const LeadDetailPage: React.FC = () => {
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Pipeline Stage</label>
-                <select
+                <CustomSelect
                   value={dealForm.stageId}
-                  onChange={(e) => setDealForm({ ...dealForm, stageId: e.target.value })}
+                  onChange={(val) => setDealForm({ ...dealForm, stageId: val })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                >
-                  {stages.map((stage) => (
-                    <option key={stage.id} value={stage.id}>
-                      {stage.name}
-                    </option>
-                  ))}
-                </select>
+                  options={stages.map((stage) => ({
+                    value: stage.id,
+                    label: stage.name,
+                  }))}
+                />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Probability (%)</label>
                 <input

@@ -23,6 +23,7 @@ import { crmApi } from '@/lib/api';
 import { Lead, LeadSource, TaskPriority, TaskActionType } from '@/types/crm';
 import { formatDate, cn } from '@/lib/utils';
 import { CategorySelect, LEAD_CATEGORIES } from '@/components/leads/CategorySelect';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import {
   PlusCircle,
   Download,
@@ -1443,30 +1444,29 @@ export const LeadsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Lead Source</label>
-                <select
+                <CustomSelect
                   value={newLeadForm.source}
-                  onChange={(e) =>
-                    setNewLeadForm({ ...newLeadForm, source: e.target.value as LeadSource })
+                  onChange={(val) =>
+                    setNewLeadForm({ ...newLeadForm, source: val as LeadSource })
                   }
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="WEBSITE_FORM">WEBSITE_FORM</option>
-                  <option value="META_ADS">META_ADS</option>
-                  <option value="GOOGLE_ADS">GOOGLE_ADS</option>
-                  <option value="WHATSAPP">WHATSAPP</option>
-                  <option value="MANUAL">MANUAL</option>
-                  <option value="PHONE_INBOUND">PHONE_INBOUND</option>
-                  <option value="IMPORT">IMPORT</option>
-                </select>
+                  options={[
+                    { value: 'WEBSITE_FORM', label: 'WEBSITE_FORM' },
+                    { value: 'META_ADS', label: 'META_ADS' },
+                    { value: 'GOOGLE_ADS', label: 'GOOGLE_ADS' },
+                    { value: 'WHATSAPP', label: 'WHATSAPP' },
+                    { value: 'MANUAL', label: 'MANUAL' },
+                    { value: 'PHONE_INBOUND', label: 'PHONE_INBOUND' },
+                    { value: 'IMPORT', label: 'IMPORT' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Assign Owner</label>
-                <select
+                <CustomSelect
                   value={newLeadForm.ownerId}
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
+                  onChange={(selectedId) => {
                     const member = teamMembers.find((m: any) => m.id === selectedId);
                     setNewLeadForm({
                       ...newLeadForm,
@@ -1475,15 +1475,15 @@ export const LeadsPage: React.FC = () => {
                     });
                   }}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="">Default (Logged-in Account Owner)</option>
-                  {teamMembers.map((member: any) => (
-                    <option key={member.id} value={member.id}>
-                      {member.name} {member.email ? `(${member.email})` : ''}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Default (Logged-in Account Owner)"
+                  options={[
+                    { value: '', label: 'Default (Logged-in Account Owner)' },
+                    ...teamMembers.map((member: any) => ({
+                      value: member.id,
+                      label: `${member.name}${member.email ? ` (${member.email})` : ''}`,
+                    })),
+                  ]}
+                />
               </div>
             </div>
 
@@ -1503,39 +1503,39 @@ export const LeadsPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Customer Priority</label>
-                <select
+                <CustomSelect
                   value={newLeadForm.priority}
-                  onChange={(e) =>
-                    setNewLeadForm({ ...newLeadForm, priority: e.target.value as TaskPriority })
+                  onChange={(val) =>
+                    setNewLeadForm({ ...newLeadForm, priority: val as TaskPriority })
                   }
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM (Default)</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="URGENT">URGENT</option>
-                </select>
+                  options={[
+                    { value: 'LOW', label: 'LOW' },
+                    { value: 'MEDIUM', label: 'MEDIUM (Default)' },
+                    { value: 'HIGH', label: 'HIGH' },
+                    { value: 'URGENT', label: 'URGENT' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Customer Temperature</label>
-                <select
+                <CustomSelect
                   value={newLeadForm.temperature}
-                  onChange={(e) =>
+                  onChange={(val) =>
                     setNewLeadForm({
                       ...newLeadForm,
-                      temperature: e.target.value as '' | 'HOT' | 'WARM' | 'COLD',
+                      temperature: val as '' | 'HOT' | 'WARM' | 'COLD',
                     })
                   }
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="">None (Unrated)</option>
-                  <option value="HOT">HOT</option>
-                  <option value="WARM">WARM</option>
-                  <option value="COLD">COLD</option>
-                </select>
+                  options={[
+                    { value: '', label: 'None (Unrated)' },
+                    { value: 'HOT', label: 'HOT' },
+                    { value: 'WARM', label: 'WARM' },
+                    { value: 'COLD', label: 'COLD' },
+                  ]}
+                />
               </div>
             </div>
 
@@ -1574,24 +1574,24 @@ export const LeadsPage: React.FC = () => {
 
                 <div className="space-y-1">
                   <label className="text-[11px] text-txt-muted block">Action Type</label>
-                  <select
+                  <CustomSelect
                     value={newLeadForm.nextActionType}
-                    onChange={(e) =>
+                    onChange={(val) =>
                       setNewLeadForm({
                         ...newLeadForm,
-                        nextActionType: e.target.value as TaskActionType,
+                        nextActionType: val as TaskActionType,
                       })
                     }
                     disabled={isSubmitting}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                  >
-                    <option value="CALL">Call</option>
-                    <option value="WHATSAPP">WhatsApp</option>
-                    <option value="EMAIL">Email</option>
-                    <option value="MEETING">Meeting</option>
-                    <option value="PROPOSAL">Proposal</option>
-                    <option value="INTERNAL_REVIEW">Internal Review</option>
-                  </select>
+                    options={[
+                      { value: 'CALL', label: 'Call' },
+                      { value: 'WHATSAPP', label: 'WhatsApp' },
+                      { value: 'EMAIL', label: 'Email' },
+                      { value: 'MEETING', label: 'Meeting' },
+                      { value: 'PROPOSAL', label: 'Proposal' },
+                      { value: 'INTERNAL_REVIEW', label: 'Internal Review' },
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -1778,43 +1778,42 @@ export const LeadsPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                 <div className="space-y-1">
                   <label className="text-caption text-txt-secondary block font-medium">Priority</label>
-                  <select
+                  <CustomSelect
                     value={editForm.priority}
-                    onChange={(e) => setEditForm({ ...editForm, priority: e.target.value as TaskPriority })}
+                    onChange={(val) => setEditForm({ ...editForm, priority: val as TaskPriority })}
                     disabled={isEditSubmitting}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                  >
-                    <option value="LOW">LOW</option>
-                    <option value="MEDIUM">MEDIUM</option>
-                    <option value="HIGH">HIGH</option>
-                    <option value="URGENT">URGENT</option>
-                  </select>
+                    options={[
+                      { value: 'LOW', label: 'LOW' },
+                      { value: 'MEDIUM', label: 'MEDIUM' },
+                      { value: 'HIGH', label: 'HIGH' },
+                      { value: 'URGENT', label: 'URGENT' },
+                    ]}
+                  />
                 </div>
 
                 <div className="space-y-1">
                   <label className="text-caption text-txt-secondary block font-medium">Temperature</label>
-                  <select
+                  <CustomSelect
                     value={editForm.temperature}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, temperature: e.target.value as '' | 'HOT' | 'WARM' | 'COLD' })
+                    onChange={(val) =>
+                      setEditForm({ ...editForm, temperature: val as '' | 'HOT' | 'WARM' | 'COLD' })
                     }
                     disabled={isEditSubmitting}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                  >
-                    <option value="">None (Unrated)</option>
-                    <option value="HOT">HOT</option>
-                    <option value="WARM">WARM</option>
-                    <option value="COLD">COLD</option>
-                  </select>
+                    options={[
+                      { value: '', label: 'None (Unrated)' },
+                      { value: 'HOT', label: 'HOT' },
+                      { value: 'WARM', label: 'WARM' },
+                      { value: 'COLD', label: 'COLD' },
+                    ]}
+                  />
                 </div>
               </div>
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Assign Owner</label>
-                <select
+                <CustomSelect
                   value={editForm.ownerId}
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
+                  onChange={(selectedId) => {
                     const member = teamMembers.find((m: any) => m.id === selectedId);
                     setEditForm({
                       ...editForm,
@@ -1823,15 +1822,15 @@ export const LeadsPage: React.FC = () => {
                     });
                   }}
                   disabled={isEditSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  <option value="">Keep Existing Owner</option>
-                  {teamMembers.map((member: any) => (
-                    <option key={member.id} value={member.id}>
-                      {member.name} {member.email ? `(${member.email})` : ''}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Keep Existing Owner"
+                  options={[
+                    { value: '', label: 'Keep Existing Owner' },
+                    ...teamMembers.map((member: any) => ({
+                      value: member.id,
+                      label: `${member.name}${member.email ? ` (${member.email})` : ''}`,
+                    })),
+                  ]}
+                />
               </div>
 
               <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row gap-2 sm:gap-0">

@@ -18,6 +18,7 @@ import {
 import { crmApi } from '@/lib/api';
 import { Deal, PipelineStage } from '@/types/crm';
 import { formatCurrency } from '@/lib/utils';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import {
   KanbanSquare,
   Table as TableIcon,
@@ -105,10 +106,20 @@ export const PipelinePage: React.FC = () => {
     }));
   }, [rawDeals]);
 
+const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
+  { id: 'cc188905-517a-4b7a-9c17-d306d0dd15f1', name: 'New Lead (Qualification)', order: 1, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '03c77337-d28a-48ff-846f-d3e2d5edd11c', name: 'Discovery & Requirement Discussion', order: 2, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '1f5153d1-9d16-460f-8e9b-0dc5afab54cc', name: 'Demo / Meeting Completed', order: 3, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '532ed2ed-5521-457b-ae4b-691ba0054da7', name: 'Proposal Sent', order: 4, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '56dde455-f754-4805-b948-f0ff1e15b4de', name: 'Negotiation', order: 5, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '1d79d247-9d30-40ed-aa7d-a960fa5b9bcd', name: 'Closed Won', order: 6, dealCount: 0, totalValue: 0, stageType: 'WON' },
+  { id: '7de7800c-0045-4705-8379-ea9ba925cb46', name: 'Closed Lost', order: 7, dealCount: 0, totalValue: 0, stageType: 'LOST' },
+];
+
   // Compute Stages with real aggregate counts and totals
   const stages: PipelineStage[] = useMemo(() => {
-    if (!rawStages || rawStages.length === 0) return [];
-    return rawStages.map((s) => {
+    const stageSource = (rawStages && rawStages.length > 0) ? rawStages : DEFAULT_PIPELINE_STAGES;
+    return stageSource.map((s) => {
       const stageDeals = deals.filter((d) => d.stageId === s.id);
       const totalValue = stageDeals.reduce((sum, d) => sum + (d.amount || 0), 0);
       return {
@@ -131,7 +142,7 @@ export const PipelinePage: React.FC = () => {
   const [addError, setAddError] = useState<string | null>(null);
   const [newDealForm, setNewDealForm] = useState({
     title: '',
-    stageId: '',
+    stageId: DEFAULT_PIPELINE_STAGES[0].id,
     amount: 500000,
     probability: 50,
     expectedCloseDate: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
@@ -465,6 +476,10 @@ export const PipelinePage: React.FC = () => {
               size="sm"
               onClick={() => {
                 setAddError(null);
+                setNewDealForm((prev) => ({
+                  ...prev,
+                  stageId: prev.stageId || (stages.length > 0 ? stages[0].id : DEFAULT_PIPELINE_STAGES[0].id),
+                }));
                 setIsAddModalOpen(true);
               }}
               className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer shadow-subtle"
@@ -1158,17 +1173,15 @@ export const PipelinePage: React.FC = () => {
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">Initial Stage</label>
-                <select
+                <CustomSelect
                   value={newDealForm.stageId}
-                  onChange={(e) => setNewDealForm({ ...newDealForm, stageId: e.target.value })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  {stages.map((stg) => (
-                    <option key={stg.id} value={stg.id}>
-                      {stg.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setNewDealForm({ ...newDealForm, stageId: val })}
+                  options={stages.map((stg) => ({
+                    value: stg.id,
+                    label: stg.name,
+                  }))}
+                  placeholder="Select Stage..."
+                />
               </div>
             </div>
 
@@ -1272,17 +1285,15 @@ export const PipelinePage: React.FC = () => {
 
                 <div className="space-y-1">
                   <label className="text-caption text-txt-secondary block font-medium">Pipeline Stage</label>
-                  <select
+                  <CustomSelect
                     value={editForm.stageId}
-                    onChange={(e) => setEditForm({ ...editForm, stageId: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                  >
-                    {stages.map((stg) => (
-                      <option key={stg.id} value={stg.id}>
-                        {stg.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setEditForm({ ...editForm, stageId: val })}
+                    options={stages.map((stg) => ({
+                      value: stg.id,
+                      label: stg.name,
+                    }))}
+                    placeholder="Select Stage..."
+                  />
                 </div>
               </div>
 
@@ -1363,18 +1374,16 @@ export const PipelinePage: React.FC = () => {
                 <label className="text-caption text-txt-secondary block font-medium">
                   Lost Reason <span className="text-red-500">*</span>
                 </label>
-                <select
-                  required
+                <CustomSelect
                   value={selectedLostReasonId}
-                  onChange={(e) => setSelectedLostReasonId(e.target.value)}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-                >
-                  {lostReasons.map((lr) => (
-                    <option key={lr.id} value={lr.id}>
-                      {lr.label}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setSelectedLostReasonId(val)}
+                  required
+                  placeholder="Select reason..."
+                  options={lostReasons.map((lr) => ({
+                    value: lr.id,
+                    label: lr.label,
+                  }))}
+                />
               </div>
 
               <div className="space-y-1">

@@ -20,6 +20,9 @@ export class MeetingLeadSummaryDto {
 
   @ApiPropertyOptional()
   companyName?: string;
+
+  @ApiPropertyOptional()
+  phone?: string;
 }
 
 export class MeetingDealSummaryDto {
