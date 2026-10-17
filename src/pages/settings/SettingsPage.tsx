@@ -26,10 +26,12 @@ import {
   Palette,
 } from 'lucide-react';
 import { NavbarColorSettings } from '@/components/settings/NavbarColorSettings';
+import { InvoiceColorSettings } from '@/components/settings/InvoiceColorSettings';
 
 const SETTINGS_TABS: FilterOption[] = [
   { id: 'general', label: 'General' },
   { id: 'appearance', label: 'Navbar & Appearance' },
+  { id: 'invoice-theme', label: 'In-Voice Theme & Colors' },
   { id: 'pipeline', label: 'Pipeline' },
   { id: 'taxonomies', label: 'Taxonomies' },
   { id: 'adapters', label: 'Adapters' },
@@ -277,12 +279,52 @@ export const SettingsPage: React.FC = () => {
               </Button>
             </CardContent>
           </Card>
+
+          {/* In-Voice Colors Quick link card on General tab */}
+          <Card className="border-border shadow-card bg-white md:col-span-2">
+            <CardHeader className="py-3 px-4 border-b border-border flex flex-row items-center justify-between">
+              <CardTitle className="text-xs font-bold text-txt-primary flex items-center gap-2">
+                <Palette className="h-4 w-4 text-indigo-600" />
+                In-Voice Brand & Accent Colors
+              </CardTitle>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setActiveTab('invoice-theme')}
+                className="h-7 px-2.5 text-xs font-semibold cursor-pointer"
+              >
+                Customize In-Voice &rarr;
+              </Button>
+            </CardHeader>
+            <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div>
+                <p className="text-txt-primary font-medium">
+                  Set default brand colors for all client invoices: header divider gradient line, TAX INVOICE title, and summary boxes.
+                </p>
+                <p className="text-txt-muted text-[11px] mt-0.5">
+                  Choose from signature presets or configure custom hex colors. Synchronizes automatically with the In-Voice Studio.
+                </p>
+              </div>
+              <Button
+                size="sm"
+                onClick={() => setActiveTab('invoice-theme')}
+                className="h-8 px-3.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shrink-0 cursor-pointer"
+              >
+                Open In-Voice Colors
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       )}
 
       {/* Tab: Appearance & Navbar Customization */}
       {activeTab === 'appearance' && (
         <NavbarColorSettings />
+      )}
+
+      {/* Tab: In-Voice Colors & Theme Customization */}
+      {activeTab === 'invoice-theme' && (
+        <InvoiceColorSettings />
       )}
 
       {/* Tab 2: Pipeline Stages */}

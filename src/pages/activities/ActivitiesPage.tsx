@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/dialog';
 import { crmApi } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useCrmDirectory } from '@/hooks/useCrmDirectory';
 import { ActivityItem, ActivityType, CreateActivityPayload } from '@/types/crm';
 import { formatDate, cn } from '@/lib/utils';
 import {
@@ -48,6 +50,7 @@ export const ActivitiesPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
+  const { teamOwnerNames, clients, clientNames } = useCrmDirectory();
 
   const urlType = searchParams.get('type') || searchParams.get('filter') || 'ALL';
 
@@ -204,14 +207,16 @@ export const ActivitiesPage: React.FC = () => {
     ];
   }, [activities, totalCount, callCount, waCount, stageChangeCount]);
 
-  // Unique prospects and authors
+  // Unique prospects and authors combining activities and CRM directory
   const uniqueProspects = useMemo(() => {
-    return Array.from(new Set(activities.map((a) => a.leadName).filter(Boolean))) as string[];
-  }, [activities]);
+    const fromActivities = activities.map((a) => a.leadName).filter(Boolean) as string[];
+    return Array.from(new Set([...fromActivities, ...clientNames]));
+  }, [activities, clientNames]);
 
   const uniqueAuthors = useMemo(() => {
-    return Array.from(new Set(activities.map((a) => a.authorName).filter(Boolean)));
-  }, [activities]);
+    const fromActivities = activities.map((a) => a.authorName).filter(Boolean);
+    return Array.from(new Set([...fromActivities, ...teamOwnerNames]));
+  }, [activities, teamOwnerNames]);
 
   // Lead lookup helper for company name
   const leadCompanyMap = useMemo(() => {
@@ -529,32 +534,26 @@ export const ActivitiesPage: React.FC = () => {
 
           <div className="flex items-center gap-2 flex-wrap">
             {/* Prospect Filter */}
-            <select
+            <CustomSelect
               value={prospectFilter}
-              onChange={(e) => setProspectFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Prospects</option>
-              {uniqueProspects.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setProspectFilter(val)}
+              className="w-36"
+              options={[
+                { value: 'ALL', label: 'All Prospects' },
+                ...uniqueProspects.map((name) => ({ value: name, label: name })),
+              ]}
+            />
 
             {/* Author Filter */}
-            <select
+            <CustomSelect
               value={authorFilter}
-              onChange={(e) => setAuthorFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Authors</option>
-              {uniqueAuthors.map((author) => (
-                <option key={author} value={author}>
-                  {author}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setAuthorFilter(val)}
+              className="w-36"
+              options={[
+                { value: 'ALL', label: 'All Authors' },
+                ...uniqueAuthors.map((author) => ({ value: author, label: author })),
+              ]}
+            />
 
             {isFiltered && (
               <Button
@@ -771,45 +770,48 @@ export const ActivitiesPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleCreateActivity} className="space-y-3.5 py-1">
+          <form onSubmit={handleCreateActivity} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+              {formError && (
+                <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="text-xs font-semibold text-txt-primary">Interaction Modality</label>
-              <select
+              <CustomSelect
                 value={newActivityForm.type}
-                onChange={(e) =>
-                  setNewActivityForm({ ...newActivityForm, type: e.target.value as ActivityType })
+                onChange={(val) =>
+                  setNewActivityForm({ ...newActivityForm, type: val as ActivityType })
                 }
-                className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
-              >
-                <option value="CALL">Phone Call</option>
-                <option value="WHATSAPP">WhatsApp Communication</option>
-                <option value="MEETING">Demo / Discovery Meeting</option>
-                <option value="EMAIL">Email Thread</option>
-                <option value="NOTE">Internal Team Note</option>
-              </select>
+                options={[
+                  { value: 'CALL', label: 'Phone Call' },
+                  { value: 'WHATSAPP', label: 'WhatsApp Communication' },
+                  { value: 'MEETING', label: 'Demo / Discovery Meeting' },
+                  { value: 'EMAIL', label: 'Email Thread' },
+                  { value: 'NOTE', label: 'Internal Team Note' },
+                ]}
+              />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-txt-primary">Related Prospect / Lead</label>
-              <select
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-txt-primary">Related Prospect / Client</label>
+                <span className="text-[10px] text-txt-muted">{clients.length} available</span>
+              </div>
+              <CustomSelect
                 value={newActivityForm.leadId}
-                onChange={(e) => setNewActivityForm({ ...newActivityForm, leadId: e.target.value })}
-                className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
-              >
-                <option value="">None / General Touchpoint</option>
-                {leads.map((lead: any) => (
-                  <option key={lead.id} value={lead.id}>
-                    {lead.fullName} {lead.companyName ? `(${lead.companyName})` : ''}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setNewActivityForm({ ...newActivityForm, leadId: val })}
+                placeholder="None / General Touchpoint"
+                options={[
+                  { value: '', label: 'None / General Touchpoint' },
+                  ...clients.map((c) => ({
+                    value: c.id,
+                    label: c.displayText,
+                  })),
+                ]}
+              />
             </div>
 
             {newActivityForm.type === 'CALL' && (
@@ -818,21 +820,21 @@ export const ActivitiesPage: React.FC = () => {
                   <label className="text-[11px] font-bold text-[#166534]">
                     Call Outcome <span className="text-red-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={newActivityForm.callOutcome}
-                    onChange={(e) =>
+                    onChange={(val) =>
                       setNewActivityForm({
                         ...newActivityForm,
-                        callOutcome: e.target.value as CallOutcome,
+                        callOutcome: val as CallOutcome,
                       })
                     }
-                    className="w-full h-7 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle"
-                  >
-                    <option value="CONNECTED">Connected</option>
-                    <option value="NO_ANSWER">No Answer</option>
-                    <option value="BUSY">Busy</option>
-                    <option value="CALLBACK_REQUESTED">Callback Requested</option>
-                  </select>
+                    options={[
+                      { value: 'CONNECTED', label: 'Connected' },
+                      { value: 'NO_ANSWER', label: 'No Answer' },
+                      { value: 'BUSY', label: 'Busy' },
+                      { value: 'CALLBACK_REQUESTED', label: 'Callback Requested' },
+                    ]}
+                  />
                 </div>
 
                 <div className="space-y-1">
@@ -889,8 +891,9 @@ export const ActivitiesPage: React.FC = () => {
                 className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-slate-50 text-txt-secondary cursor-not-allowed shadow-subtle"
               />
             </div>
+            </div>
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
@@ -948,7 +951,7 @@ export const ActivitiesPage: React.FC = () => {
               </div>
             </DialogHeader>
 
-            <div className="space-y-3 py-2 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="p-3 bg-slate-50 rounded-card border border-border space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-txt-muted font-medium">Prospect</span>
@@ -991,7 +994,7 @@ export const ActivitiesPage: React.FC = () => {
               )}
             </div>
 
-            <DialogFooter className="flex-row justify-between sm:justify-between items-center pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between sm:justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"

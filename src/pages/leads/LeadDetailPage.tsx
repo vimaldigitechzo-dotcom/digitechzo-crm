@@ -915,24 +915,27 @@ export const LeadDetailPage: React.FC = () => {
   return (
     <div className="space-y-4 select-none pb-12">
       {/* 1. Top Navigation & Primary Actions */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 rounded-card border border-border shadow-card">
-        <div className="flex items-center gap-2.5">
+      <div className="bg-white p-3 sm:p-3.5 rounded-card border border-border shadow-card space-y-2.5 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-3">
+        {/* Mobile: Top Row / Desktop: Left Side */}
+        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-2.5">
           <Button
             variant="outline"
             size="sm"
             onClick={() => navigate('/leads')}
-            className="h-8 text-xs cursor-pointer border-border hover:bg-slate-50"
+            className="h-8 text-xs cursor-pointer border-border hover:bg-slate-50 shrink-0"
           >
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Back to Leads
           </Button>
           <div className="h-4 w-px bg-border hidden sm:block" />
-          <div className="flex items-center gap-2">
-            <h1 className="text-base sm:text-lg font-bold text-txt-primary">{lead.fullName}</h1>
+
+          {/* Desktop inline Name & Badges */}
+          <div className="hidden sm:flex items-center gap-2 min-w-0">
+            <h1 className="text-base sm:text-lg font-bold text-txt-primary truncate">{lead.fullName}</h1>
             <StatusBadge status={lead.status} type="lead" />
             {lead.temperature && (
               <Badge
                 variant="outline"
-                className={`text-[10px] font-semibold uppercase px-2 py-0.5 ${
+                className={`text-[10px] font-semibold uppercase px-2 py-0.5 shrink-0 ${
                   lead.temperature === 'HOT'
                     ? 'border-red-200 bg-red-50 text-red-700'
                     : lead.temperature === 'WARM'
@@ -944,10 +947,54 @@ export const LeadDetailPage: React.FC = () => {
               </Badge>
             )}
           </div>
+
+          {/* Mobile Right Action Buttons (on top row next to Back button) */}
+          <div className="flex sm:hidden items-center gap-1.5 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleOpenEditModal}
+              className="h-8 px-2.5 text-xs cursor-pointer border-border hover:bg-slate-50"
+            >
+              <Edit className="mr-1 h-3.5 w-3.5 text-txt-muted" /> Edit
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setModalError(null);
+                setIsDeleteModalOpen(true);
+              }}
+              className="h-8 w-8 p-0 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 cursor-pointer justify-center"
+              aria-label="Delete lead"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2 flex-wrap justify-end">
+        {/* Mobile Row 2: Lead Name & Badges */}
+        <div className="flex sm:hidden items-center gap-2 flex-wrap pt-0.5">
+          <h1 className="text-base font-bold text-txt-primary break-words">{lead.fullName}</h1>
+          <StatusBadge status={lead.status} type="lead" />
+          {lead.temperature && (
+            <Badge
+              variant="outline"
+              className={`text-[10px] font-semibold uppercase px-2 py-0.5 ${
+                lead.temperature === 'HOT'
+                  ? 'border-red-200 bg-red-50 text-red-700'
+                  : lead.temperature === 'WARM'
+                  ? 'border-amber-200 bg-amber-50 text-amber-700'
+                  : 'border-blue-200 bg-blue-50 text-blue-700'
+              }`}
+            >
+              {lead.temperature}
+            </Badge>
+          )}
+        </div>
+
+        {/* Desktop Action Buttons (sm and above) */}
+        <div className="hidden sm:flex items-center gap-2 flex-wrap justify-end shrink-0">
           <Button
             variant="outline"
             size="sm"
@@ -972,15 +1019,15 @@ export const LeadDetailPage: React.FC = () => {
       </div>
 
       {/* 2. Interactive Pipeline & Sales Journey Tracker */}
-      <div className="bg-white p-4 rounded-card border border-border shadow-card space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-[#57B71B]" />
-            <h2 className="text-xs font-bold text-txt-primary uppercase tracking-wider">
+      <div className="bg-white p-3.5 sm:p-4 rounded-card border border-border shadow-card space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <TrendingUp className="h-4 w-4 text-[#57B71B] shrink-0" />
+            <h2 className="text-xs font-bold text-txt-primary uppercase tracking-wider break-words">
               Master Sales Journey & Pipeline Progression
             </h2>
           </div>
-          <span className="text-[11px] text-txt-muted">
+          <span className="text-[10px] sm:text-[11px] text-txt-muted">
             Click any step to shift pipeline stage
           </span>
         </div>
@@ -995,7 +1042,7 @@ export const LeadDetailPage: React.FC = () => {
                 key={stage.id}
                 disabled={isStageUpdating}
                 onClick={() => handleStageClick(stage)}
-                className={`p-2.5 rounded-btn border text-center transition-all text-left sm:text-center ${
+                className={`p-2 sm:p-2.5 rounded-btn border transition-all text-center ${
                   isStageUpdating ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
                 } ${
                   isCurrent
@@ -1018,7 +1065,7 @@ export const LeadDetailPage: React.FC = () => {
                   </span>
                 </div>
                 <p
-                  className={`text-xs font-bold leading-tight ${
+                  className={`text-xs font-bold leading-tight break-words ${
                     isCurrent ? 'text-[#15803D]' : isCompleted ? 'text-txt-secondary' : 'text-txt-muted'
                   }`}
                 >
@@ -1032,20 +1079,20 @@ export const LeadDetailPage: React.FC = () => {
         {/* Active Commercial Opportunity Pill */}
         {activeDeal && (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 rounded-btn bg-slate-50 border border-border text-xs gap-2">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-txt-muted">Commercial Deal:</span>
-              <span className="font-semibold text-txt-primary">{activeDeal.title}</span>
-              <span className="font-bold text-primary tabular-nums">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap min-w-0">
+              <span className="text-txt-muted shrink-0">Commercial Deal:</span>
+              <span className="font-semibold text-txt-primary break-words">{activeDeal.title}</span>
+              <span className="font-bold text-primary tabular-nums shrink-0">
                 ({formatCurrency(Number(activeDeal.value || activeDeal.amount || 0))})
               </span>
             </div>
-            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+            <div className="flex items-center gap-2 self-stretch sm:self-auto justify-end shrink-0">
               <span className="text-txt-muted hidden xs:inline">Stage: {activeDeal.stage?.name || 'In Progress'}</span>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setIsWonModalOpen(true)}
-                className="h-6 text-[11px] bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                className="h-7 text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100 flex-1 sm:flex-none justify-center"
               >
                 <Check className="h-3 w-3 mr-1" /> Mark Won
               </Button>
@@ -1053,7 +1100,7 @@ export const LeadDetailPage: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsLostModalOpen(true)}
-                className="h-6 text-[11px] bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                className="h-7 text-xs bg-red-50 text-red-700 border-red-200 hover:bg-red-100 flex-1 sm:flex-none justify-center"
               >
                 <XCircle className="h-3 w-3 mr-1" /> Mark Lost
               </Button>
@@ -1063,11 +1110,11 @@ export const LeadDetailPage: React.FC = () => {
       </div>
 
       {/* 3. Quick Touchpoint Action Bar */}
-      <div className="flex items-center justify-between gap-2 flex-wrap bg-white p-3 rounded-card border border-border shadow-card">
-        <span className="text-xs font-bold text-txt-primary flex items-center gap-1.5">
+      <div className="bg-white p-3 sm:p-3.5 rounded-card border border-border shadow-card space-y-2.5 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-2">
+        <span className="text-xs font-bold text-txt-primary flex items-center gap-1.5 shrink-0">
           <Sparkles className="h-4 w-4 text-[#57B71B]" /> Quick Touchpoint Actions:
         </span>
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 sm:gap-2 sm:flex-wrap">
           <Button
             variant="outline"
             size="sm"
@@ -1075,9 +1122,9 @@ export const LeadDetailPage: React.FC = () => {
               setModalError(null);
               setIsCallModalOpen(true);
             }}
-            className="h-8 text-xs cursor-pointer border-border hover:border-blue-500 hover:text-blue-600"
+            className="h-8 text-xs cursor-pointer border-border hover:border-blue-500 hover:text-blue-600 justify-center w-full sm:w-auto"
           >
-            <PhoneCall className="mr-1.5 h-3.5 w-3.5 text-blue-600" /> Log Call
+            <PhoneCall className="mr-1.5 h-3.5 w-3.5 text-blue-600 shrink-0" /> Log Call
           </Button>
 
           <Button
@@ -1087,9 +1134,9 @@ export const LeadDetailPage: React.FC = () => {
               setModalError(null);
               setIsWhatsAppModalOpen(true);
             }}
-            className="h-8 text-xs cursor-pointer border-border hover:border-green-500 hover:text-green-600"
+            className="h-8 text-xs cursor-pointer border-border hover:border-green-500 hover:text-green-600 justify-center w-full sm:w-auto"
           >
-            <MessageCircle className="mr-1.5 h-3.5 w-3.5 text-green-600" /> Log WhatsApp
+            <MessageCircle className="mr-1.5 h-3.5 w-3.5 text-green-600 shrink-0" /> Log WhatsApp
           </Button>
 
           <Button
@@ -1099,18 +1146,18 @@ export const LeadDetailPage: React.FC = () => {
               setModalError(null);
               setIsMeetingModalOpen(true);
             }}
-            className="h-8 text-xs cursor-pointer border-border hover:border-purple-500 hover:text-purple-600"
+            className="h-8 text-xs cursor-pointer border-border hover:border-purple-500 hover:text-purple-600 justify-center w-full sm:w-auto"
           >
-            <CalendarPlus className="mr-1.5 h-3.5 w-3.5 text-purple-600" /> Schedule Meeting
+            <CalendarPlus className="mr-1.5 h-3.5 w-3.5 text-purple-600 shrink-0" /> Schedule Meeting
           </Button>
 
           <Button
             variant="outline"
             size="sm"
             onClick={handleOpenTaskModal}
-            className="h-8 text-xs cursor-pointer border-border hover:border-amber-500 hover:text-amber-600"
+            className="h-8 text-xs cursor-pointer border-border hover:border-amber-500 hover:text-amber-600 justify-center w-full sm:w-auto"
           >
-            <CheckSquare className="mr-1.5 h-3.5 w-3.5 text-amber-600" /> Follow-Up Task
+            <CheckSquare className="mr-1.5 h-3.5 w-3.5 text-amber-600 shrink-0" /> Follow-Up Task
           </Button>
 
           <Button
@@ -1120,26 +1167,26 @@ export const LeadDetailPage: React.FC = () => {
               setModalError(null);
               setIsNoteModalOpen(true);
             }}
-            className="h-8 text-xs cursor-pointer border-border hover:border-slate-400"
+            className="col-span-2 sm:col-span-1 h-8 text-xs cursor-pointer border-border hover:border-slate-400 justify-center w-full sm:w-auto"
           >
-            <FileText className="mr-1.5 h-3.5 w-3.5 text-txt-muted" /> Add Note
+            <FileText className="mr-1.5 h-3.5 w-3.5 text-txt-muted shrink-0" /> Add Note
           </Button>
         </div>
       </div>
 
       {/* 4. Master 360° Lead Summary Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 bg-white p-4 rounded-card border border-border shadow-card">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 bg-white p-3.5 sm:p-4 rounded-card border border-border shadow-card">
         {/* Contact Info */}
-        <div className="space-y-1.5 md:border-r border-border md:pr-4 border-b md:border-b-0 pb-3 md:pb-0">
+        <div className="space-y-1.5 md:border-r border-border md:pr-4 border-b md:border-b-0 pb-3 md:pb-0 min-w-0">
           <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
             Prospect Information
           </span>
           <div className="space-y-1 text-xs">
-            <div className="flex items-center gap-1.5 text-txt-primary font-semibold">
+            <div className="flex items-center gap-1.5 text-txt-primary font-semibold min-w-0">
               <Building className="h-3.5 w-3.5 text-txt-muted shrink-0" />
-              <span className="truncate">{lead.companyName || 'Independent Prospect'}</span>
+              <span className="truncate break-words">{lead.companyName || 'Independent Prospect'}</span>
             </div>
-            {lead.title && <div className="text-[11px] text-txt-muted pl-5">{lead.title}</div>}
+            {lead.title && <div className="text-[11px] text-txt-muted pl-5 break-words">{lead.title}</div>}
             <div className="flex items-center gap-1.5 text-txt-secondary font-medium">
               <Phone className="h-3.5 w-3.5 text-txt-muted shrink-0" />
               <a href={`tel:${lead.phone}`} className="hover:text-primary transition-colors">
@@ -1147,9 +1194,9 @@ export const LeadDetailPage: React.FC = () => {
               </a>
             </div>
             {lead.email ? (
-              <div className="flex items-center gap-1.5 text-txt-secondary">
+              <div className="flex items-center gap-1.5 text-txt-secondary min-w-0">
                 <Mail className="h-3.5 w-3.5 text-txt-muted shrink-0" />
-                <a href={`mailto:${lead.email}`} className="hover:text-primary transition-colors truncate">
+                <a href={`mailto:${lead.email}`} className="hover:text-primary transition-colors truncate break-all min-w-0">
                   {lead.email}
                 </a>
               </div>
@@ -1162,14 +1209,14 @@ export const LeadDetailPage: React.FC = () => {
         </div>
 
         {/* Commercial Interest */}
-        <div className="space-y-1.5 md:border-r border-border md:pr-4 border-b md:border-b-0 pb-3 md:pb-0">
+        <div className="space-y-1.5 md:border-r border-border md:pr-4 border-b md:border-b-0 pb-3 md:pb-0 min-w-0">
           <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
             Commercial Requirement
           </span>
-          <p className="text-xs font-semibold text-txt-primary line-clamp-2">
+          <p className="text-xs font-semibold text-txt-primary line-clamp-2 break-words">
             {lead.serviceInterest || 'General Inquiry'}
           </p>
-          <div className="flex items-center gap-2 pt-1 text-xs">
+          <div className="flex items-center gap-2 pt-1 text-xs flex-wrap">
             <span className="text-[11px] text-txt-muted">Source:</span>
             <span className="inline-flex items-center px-1.5 py-0.5 rounded-badge text-[10px] font-semibold bg-slate-100 text-txt-secondary border border-border">
               {lead.source}
@@ -1178,17 +1225,17 @@ export const LeadDetailPage: React.FC = () => {
         </div>
 
         {/* Next Action Snapshot */}
-        <div className="space-y-1.5 md:border-r border-border md:pr-4 border-b md:border-b-0 pb-3 md:pb-0">
+        <div className="space-y-1.5 md:border-r border-border md:pr-4 border-b md:border-b-0 pb-3 md:pb-0 min-w-0">
           <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
             Next Action Follow-Up
           </span>
           {lead.nextAction ? (
             <div className="p-2 rounded-btn bg-[#F0FDF4] border border-[#BBF7D0] text-xs space-y-0.5">
-              <div className="flex items-center justify-between text-[#166534] font-semibold text-[11px]">
+              <div className="flex items-center justify-between text-[#166534] font-semibold text-[11px] flex-wrap gap-1">
                 <span>{lead.nextAction.actionType || 'CALL'}</span>
                 <span>{lead.nextAction.dueDate ? formatDate(lead.nextAction.dueDate) : 'Scheduled'}</span>
               </div>
-              <p className="text-[#15803D] text-[11px] line-clamp-1">{lead.nextAction.purpose}</p>
+              <p className="text-[#15803D] text-[11px] line-clamp-1 break-words">{lead.nextAction.purpose}</p>
             </div>
           ) : (
             <div className="text-xs text-txt-muted italic py-1">No next action scheduled</div>
@@ -1196,14 +1243,14 @@ export const LeadDetailPage: React.FC = () => {
         </div>
 
         {/* Ownership & BANT */}
-        <div className="space-y-1.5 flex flex-col justify-between">
+        <div className="space-y-1.5 flex flex-col justify-between min-w-0">
           <div>
             <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
               Ownership & BANT Score
             </span>
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-1.5">
-                <Avatar className="h-6 w-6">
+            <div className="flex items-center justify-between pt-1 gap-2">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Avatar className="h-6 w-6 shrink-0">
                   <AvatarFallback className="bg-primary-soft text-primary text-[10px] font-bold">
                     {(lead.owner?.name || lead.ownerName || 'Admin')
                       .split(' ')
@@ -1211,11 +1258,11 @@ export const LeadDetailPage: React.FC = () => {
                       .join('')}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-xs font-semibold text-txt-primary truncate max-w-[110px]">
+                <span className="text-xs font-semibold text-txt-primary truncate">
                   {lead.owner?.name || lead.ownerName || 'Admin'}
                 </span>
               </div>
-              <div className="text-right">
+              <div className="text-right shrink-0">
                 <span className="text-base font-bold text-txt-primary tabular-nums">
                   {lead.leadScore ?? 80}
                   <span className="text-[11px] text-txt-muted font-normal">/100</span>
@@ -1223,14 +1270,14 @@ export const LeadDetailPage: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="text-[10px] text-txt-muted">
+          <div className="text-[10px] text-txt-muted break-words">
             Created on {formatDate(lead.createdAt)} • Last activity {formatDate(lead.lastActivityAt)}
           </div>
         </div>
       </div>
 
       {/* 5. Tabbed Navigation */}
-      <div className="flex items-center gap-1 border-b border-border bg-white px-2 rounded-t-card overflow-x-auto shadow-subtle [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex items-center gap-1 border-b border-border bg-white px-2 rounded-t-card overflow-x-auto shadow-subtle [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x">
         {[
           { id: 'overview', label: 'Overview & Scope', icon: FileText },
           { id: 'activities', label: `Touchpoint Timeline (${activities.length})`, icon: ActivityIcon },
@@ -1260,7 +1307,7 @@ export const LeadDetailPage: React.FC = () => {
       </div>
 
       {/* 6. Tab Content Panes */}
-      <div className="bg-white p-4 rounded-b-card border-x border-b border-border shadow-card min-h-[300px]">
+      <div className="bg-white p-3.5 sm:p-4 rounded-b-card border-x border-b border-border shadow-card min-h-[300px]">
         {/* TAB 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <div className="space-y-4 text-xs">
@@ -1269,18 +1316,18 @@ export const LeadDetailPage: React.FC = () => {
                 <h3 className="font-bold text-txt-primary text-xs uppercase tracking-wider flex items-center gap-1.5">
                   <UserIcon className="h-3.5 w-3.5 text-primary" /> Master Lead Attributes
                 </h3>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                   <div>
                     <span className="text-[10px] text-txt-muted block">Full Name</span>
-                    <span className="font-semibold text-txt-primary">{lead.fullName}</span>
+                    <span className="font-semibold text-txt-primary break-words">{lead.fullName}</span>
                   </div>
                   <div>
                     <span className="text-[10px] text-txt-muted block">Company</span>
-                    <span className="font-medium text-txt-primary">{lead.companyName || '—'}</span>
+                    <span className="font-medium text-txt-primary break-words">{lead.companyName || '—'}</span>
                   </div>
                   <div>
                     <span className="text-[10px] text-txt-muted block">Job Title</span>
-                    <span className="font-medium text-txt-primary">{lead.title || '—'}</span>
+                    <span className="font-medium text-txt-primary break-words">{lead.title || '—'}</span>
                   </div>
                   <div>
                     <span className="text-[10px] text-txt-muted block">Acquisition Source</span>
@@ -1290,9 +1337,9 @@ export const LeadDetailPage: React.FC = () => {
                     <span className="text-[10px] text-txt-muted block">Contact Phone</span>
                     <span className="font-semibold text-txt-primary tabular-nums">{lead.phone}</span>
                   </div>
-                  <div>
+                  <div className="sm:col-span-1 col-span-1 min-w-0">
                     <span className="text-[10px] text-txt-muted block">Email Address</span>
-                    <span className="font-medium text-txt-primary truncate block">
+                    <span className="font-medium text-txt-primary break-all block">
                       {lead.email || '—'}
                     </span>
                   </div>
@@ -1312,17 +1359,17 @@ export const LeadDetailPage: React.FC = () => {
                   <h3 className="font-bold text-txt-primary text-xs uppercase tracking-wider flex items-center gap-1.5">
                     <Briefcase className="h-3.5 w-3.5 text-primary" /> Service Scope & Interest
                   </h3>
-                  <p className="p-2.5 rounded-btn bg-white border border-border text-txt-primary font-medium">
+                  <p className="p-2.5 rounded-btn bg-white border border-border text-txt-primary font-medium break-words">
                     {lead.serviceInterest}
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-border/80 flex items-center justify-between">
+                <div className="pt-2 border-t border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <span className="text-xs text-txt-muted">Log an interaction to advance qualification?</span>
                   <Button
                     size="sm"
                     onClick={() => setIsCallModalOpen(true)}
-                    className="h-7 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer"
+                    className="h-8 sm:h-7 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer w-full sm:w-auto justify-center"
                   >
                     <PhoneCall className="mr-1 h-3 w-3" /> Log Discovery Call
                   </Button>
@@ -1335,34 +1382,34 @@ export const LeadDetailPage: React.FC = () => {
         {/* TAB 2: TOUCHPOINT TIMELINE */}
         {activeTab === 'activities' && (
           <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <h3 className="font-bold text-txt-primary text-xs uppercase tracking-wider">
                 Full Touchpoint & Activity History ({activities.length})
               </h3>
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2">
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => setIsCallModalOpen(true)}
-                  className="h-7 text-xs"
+                  className="h-7 text-xs px-2 sm:px-3 justify-center"
                 >
-                  <PhoneCall className="mr-1 h-3 w-3 text-blue-600" /> Log Call
+                  <PhoneCall className="mr-1 h-3 w-3 text-blue-600 shrink-0" /> Log Call
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => setIsWhatsAppModalOpen(true)}
-                  className="h-7 text-xs"
+                  className="h-7 text-xs px-2 sm:px-3 justify-center"
                 >
-                  <MessageCircle className="mr-1 h-3 w-3 text-green-600" /> Log WhatsApp
+                  <MessageCircle className="mr-1 h-3 w-3 text-green-600 shrink-0" /> WhatsApp
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => setIsNoteModalOpen(true)}
-                  className="h-7 text-xs"
+                  className="h-7 text-xs px-2 sm:px-3 justify-center"
                 >
-                  <FileText className="mr-1 h-3 w-3 text-txt-muted" /> Add Note
+                  <FileText className="mr-1 h-3 w-3 text-txt-muted shrink-0" /> Note
                 </Button>
               </div>
             </div>
@@ -1469,7 +1516,7 @@ export const LeadDetailPage: React.FC = () => {
         {/* TAB 3: BANT QUALIFICATION */}
         {activeTab === 'qualification' && (
           <div className="space-y-4 text-xs">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <h3 className="font-bold text-txt-primary text-xs uppercase tracking-wider flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-[#57B71B]" /> BANT Qualification Breakdown
               </h3>
@@ -1480,7 +1527,7 @@ export const LeadDetailPage: React.FC = () => {
                   setModalError(null);
                   setIsQualModalOpen(true);
                 }}
-                className="h-7 text-xs cursor-pointer border-border hover:bg-slate-50"
+                className="h-7 text-xs cursor-pointer border-border hover:bg-slate-50 self-start sm:self-auto"
               >
                 <Edit className="mr-1.5 h-3 w-3 text-txt-muted" /> Update Qualification
               </Button>
@@ -1587,15 +1634,15 @@ export const LeadDetailPage: React.FC = () => {
                 {deals.map((deal) => (
                   <div
                     key={deal.id}
-                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between"
+                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between gap-2"
                   >
-                    <div>
-                      <h4 className="font-bold text-xs text-txt-primary">{deal.title}</h4>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-xs text-txt-primary break-words">{deal.title}</h4>
                       <p className="text-[11px] text-txt-muted">
-                        Stage: {deal.stage?.name || 'In Pipeline'} • Probability: {deal.probability}%
+                        Stage: {deal.stage?.name || 'In Pipeline'} • {deal.probability}%
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <span className="font-bold text-sm text-primary tabular-nums block">
                         {formatCurrency(Number(deal.value || deal.amount || 0))}
                       </span>
@@ -1742,20 +1789,20 @@ export const LeadDetailPage: React.FC = () => {
                 {tasks.map((task) => (
                   <div
                     key={task.id}
-                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between"
+                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between gap-2"
                   >
-                    <div className="space-y-0.5">
-                      <h4 className="font-semibold text-xs text-txt-primary flex items-center gap-1.5">
-                        <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                    <div className="space-y-0.5 min-w-0">
+                      <h4 className="font-semibold text-xs text-txt-primary flex items-center gap-1.5 flex-wrap">
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 shrink-0">
                           {task.taskType || task.actionType || 'CALL'}
                         </Badge>
-                        {task.title}
+                        <span className="break-words">{task.title}</span>
                       </h4>
                       <p className="text-[11px] text-txt-muted">
-                        Due: {formatDate(task.dueDate)} • Priority: {task.priority}
+                        Due: {formatDate(task.dueDate)} • {task.priority}
                       </p>
                     </div>
-                    <Badge variant={task.status === 'COMPLETED' ? 'default' : 'secondary'}>
+                    <Badge variant={task.status === 'COMPLETED' ? 'default' : 'secondary'} className="shrink-0">
                       {task.status}
                     </Badge>
                   </div>
@@ -1780,16 +1827,16 @@ export const LeadDetailPage: React.FC = () => {
                 {proposals.map((prop) => (
                   <div
                     key={prop.id}
-                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between"
+                    className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between gap-2"
                   >
-                    <div>
-                      <h4 className="font-semibold text-xs text-txt-primary">{prop.title}</h4>
+                    <div className="min-w-0">
+                      <h4 className="font-semibold text-xs text-txt-primary break-words">{prop.title}</h4>
                       <p className="text-[11px] text-txt-muted">
                         Amount: {formatCurrency(Number(prop.amount || 0))} • Valid until:{' '}
                         {formatDate(prop.validUntil)}
                       </p>
                     </div>
-                    <Badge variant="outline">{prop.status}</Badge>
+                    <Badge variant="outline" className="shrink-0">{prop.status}</Badge>
                   </div>
                 ))}
               </div>
@@ -1800,7 +1847,7 @@ export const LeadDetailPage: React.FC = () => {
 
       {/* MODAL 1: EDIT LEAD */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-section-title text-txt-primary">Edit Lead</DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
@@ -1808,13 +1855,14 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleEditSubmit} className="space-y-3 py-2 text-xs">
-            {modalError && (
-              <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
-                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>{modalError}</span>
-              </div>
-            )}
+          <form onSubmit={handleEditSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              {modalError && (
+                <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span>{modalError}</span>
+                </div>
+              )}
 
             <div className="space-y-1">
               <label className="text-caption text-txt-secondary block font-medium">
@@ -1997,8 +2045,9 @@ export const LeadDetailPage: React.FC = () => {
                 />
               </div>
             </div>
+            </div>
 
-            <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row gap-2 sm:gap-0">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2034,65 +2083,67 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleLogCallSubmit} className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Call Subject</label>
-              <input
-                type="text"
-                required
-                value={callLogForm.subject}
-                onChange={(e) => setCallLogForm({ ...callLogForm, subject: e.target.value })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <form onSubmit={handleLogCallSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Call Outcome</label>
-                <CustomSelect
-                  value={callLogForm.outcome}
-                  onChange={(val) => setCallLogForm({ ...callLogForm, outcome: val })}
-                  disabled={isSubmitting}
-                  options={[
-                    { value: 'CONNECTED_INTERESTED', label: 'Connected - Interested' },
-                    { value: 'CONNECTED_CALLBACK', label: 'Connected - Requested Callback' },
-                    { value: 'CONNECTED_MEETING_BOOKED', label: 'Connected - Meeting Booked' },
-                    { value: 'NO_ANSWER', label: 'No Answer / Left Voicemail' },
-                    { value: 'BUSY', label: 'Busy' },
-                    { value: 'WRONG_NUMBER', label: 'Wrong Number' },
-                  ]}
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Duration (Minutes)</label>
+                <label className="text-caption text-txt-secondary block font-medium">Call Subject</label>
                 <input
-                  type="number"
-                  min={1}
-                  value={callLogForm.durationMinutes}
-                  onChange={(e) => setCallLogForm({ ...callLogForm, durationMinutes: Number(e.target.value) })}
+                  type="text"
+                  required
+                  value={callLogForm.subject}
+                  onChange={(e) => setCallLogForm({ ...callLogForm, subject: e.target.value })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary tabular-nums"
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Call Outcome</label>
+                  <CustomSelect
+                    value={callLogForm.outcome}
+                    onChange={(val) => setCallLogForm({ ...callLogForm, outcome: val })}
+                    disabled={isSubmitting}
+                    options={[
+                      { value: 'CONNECTED_INTERESTED', label: 'Connected - Interested' },
+                      { value: 'CONNECTED_CALLBACK', label: 'Connected - Requested Callback' },
+                      { value: 'CONNECTED_MEETING_BOOKED', label: 'Connected - Meeting Booked' },
+                      { value: 'NO_ANSWER', label: 'No Answer / Left Voicemail' },
+                      { value: 'BUSY', label: 'Busy' },
+                      { value: 'WRONG_NUMBER', label: 'Wrong Number' },
+                    ]}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Duration (Minutes)</label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={callLogForm.durationMinutes}
+                    onChange={(e) => setCallLogForm({ ...callLogForm, durationMinutes: Number(e.target.value) })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary tabular-nums"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">
+                  Discussion Notes <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
+                </label>
+                <textarea
+                  rows={3}
+                  value={callLogForm.description}
+                  onChange={(e) => setCallLogForm({ ...callLogForm, description: e.target.value })}
+                  placeholder="What was discussed with the client?"
+                  disabled={isSubmitting}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
                 />
               </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Discussion Notes <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
-              </label>
-              <textarea
-                rows={3}
-                value={callLogForm.description}
-                onChange={(e) => setCallLogForm({ ...callLogForm, description: e.target.value })}
-                placeholder="What was discussed with the client?"
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2128,49 +2179,51 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleLogWhatsAppSubmit} className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Subject / Topic</label>
-              <input
-                type="text"
-                required
-                value={whatsAppLogForm.subject}
-                onChange={(e) => setWhatsAppLogForm({ ...whatsAppLogForm, subject: e.target.value })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
+          <form onSubmit={handleLogWhatsAppSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Subject / Topic</label>
+                <input
+                  type="text"
+                  required
+                  value={whatsAppLogForm.subject}
+                  onChange={(e) => setWhatsAppLogForm({ ...whatsAppLogForm, subject: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Interaction Status</label>
+                <CustomSelect
+                  value={whatsAppLogForm.outcome}
+                  onChange={(val) => setWhatsAppLogForm({ ...whatsAppLogForm, outcome: val })}
+                  disabled={isSubmitting}
+                  options={[
+                    { value: 'MESSAGE_SENT', label: 'Message Sent / Introductory Pitch' },
+                    { value: 'REPLIED_INTERESTED', label: 'Client Replied & Interested' },
+                    { value: 'REPLIED_PRICE_QUERY', label: 'Client Asked for Pricing / Brochure' },
+                    { value: 'DELIVERED_NO_REPLY', label: 'Delivered - No Reply Yet' },
+                  ]}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">
+                  Message / Reply Details <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
+                </label>
+                <textarea
+                  rows={3}
+                  value={whatsAppLogForm.description}
+                  onChange={(e) => setWhatsAppLogForm({ ...whatsAppLogForm, description: e.target.value })}
+                  placeholder="Details of the WhatsApp message or conversation..."
+                  disabled={isSubmitting}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
+                />
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Interaction Status</label>
-              <select
-                value={whatsAppLogForm.outcome}
-                onChange={(e) => setWhatsAppLogForm({ ...whatsAppLogForm, outcome: e.target.value })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-              >
-                <option value="MESSAGE_SENT">Message Sent / Introductory Pitch</option>
-                <option value="REPLIED_INTERESTED">Client Replied & Interested</option>
-                <option value="REPLIED_PRICE_QUERY">Client Asked for Pricing / Brochure</option>
-                <option value="DELIVERED_NO_REPLY">Delivered - No Reply Yet</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Message / Reply Details <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
-              </label>
-              <textarea
-                rows={3}
-                value={whatsAppLogForm.description}
-                onChange={(e) => setWhatsAppLogForm({ ...whatsAppLogForm, description: e.target.value })}
-                placeholder="Details of the WhatsApp message or conversation..."
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2206,33 +2259,35 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleLogNoteSubmit} className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Note Title</label>
-              <input
-                type="text"
-                required
-                value={noteForm.subject}
-                onChange={(e) => setNoteForm({ ...noteForm, subject: e.target.value })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
+          <form onSubmit={handleLogNoteSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Note Title</label>
+                <input
+                  type="text"
+                  required
+                  value={noteForm.subject}
+                  onChange={(e) => setNoteForm({ ...noteForm, subject: e.target.value })}
+                  disabled={isSubmitting}
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Note Content</label>
+                <textarea
+                  rows={3}
+                  required
+                  value={noteForm.description}
+                  onChange={(e) => setNoteForm({ ...noteForm, description: e.target.value })}
+                  placeholder="Enter discovery notes or team instructions..."
+                  disabled={isSubmitting}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
+                />
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Note Content</label>
-              <textarea
-                rows={3}
-                required
-                value={noteForm.description}
-                onChange={(e) => setNoteForm({ ...noteForm, description: e.target.value })}
-                placeholder="Enter discovery notes or team instructions..."
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2268,40 +2323,42 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Won Notes / Contract Terms</label>
-              <textarea
-                rows={3}
-                value={wonNotes}
-                onChange={(e) => setWonNotes(e.target.value)}
-                placeholder="Details of the closed deal..."
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
+          <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Won Notes / Contract Terms</label>
+                <textarea
+                  rows={3}
+                  value={wonNotes}
+                  onChange={(e) => setWonNotes(e.target.value)}
+                  placeholder="Details of the closed deal..."
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
+                />
+              </div>
             </div>
-          </div>
 
-          <DialogFooter className="pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={() => setIsWonModalOpen(false)}
-              disabled={isSubmitting}
-              className="h-8 text-xs cursor-pointer"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              onClick={handleConfirmWon}
-              disabled={isSubmitting}
-              className="h-8 text-xs bg-[#16A34A] hover:bg-[#15803D] text-white cursor-pointer"
-            >
-              {isSubmitting ? 'Converting...' : 'Confirm WON & Create Customer'}
-            </Button>
-          </DialogFooter>
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsWonModalOpen(false)}
+                disabled={isSubmitting}
+                className="h-8 text-xs cursor-pointer"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                onClick={handleConfirmWon}
+                disabled={isSubmitting}
+                className="h-8 text-xs bg-[#16A34A] hover:bg-[#15803D] text-white cursor-pointer"
+              >
+                {isSubmitting ? 'Converting...' : 'Confirm WON & Create Customer'}
+              </Button>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -2317,62 +2374,61 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Lost Reason <span className="text-red-500">*</span></label>
-              <select
-                value={selectedLostReasonId}
-                onChange={(e) => setSelectedLostReasonId(e.target.value)}
-                className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
+          <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Lost Reason <span className="text-red-500">*</span></label>
+                <CustomSelect
+                  value={selectedLostReasonId}
+                  onChange={(val) => setSelectedLostReasonId(val)}
+                  options={lostReasons.map((lr: any) => ({
+                    value: lr.id,
+                    label: lr.label || lr.code,
+                  }))}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Lost Reason Notes</label>
+                <textarea
+                  rows={3}
+                  value={lostReasonNotes}
+                  onChange={(e) => setLostReasonNotes(e.target.value)}
+                  placeholder="Additional context on why the deal was lost..."
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsLostModalOpen(false)}
+                disabled={isSubmitting}
+                className="h-8 text-xs cursor-pointer"
               >
-                {lostReasons.map((lr: any) => (
-                  <option key={lr.id} value={lr.id}>
-                    {lr.label || lr.code}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Lost Reason Notes</label>
-              <textarea
-                rows={3}
-                value={lostReasonNotes}
-                onChange={(e) => setLostReasonNotes(e.target.value)}
-                placeholder="Additional context on why the deal was lost..."
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={handleConfirmLost}
+                disabled={isSubmitting}
+                className="h-8 text-xs bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+              >
+                {isSubmitting ? 'Updating...' : 'Confirm Closed Lost'}
+              </Button>
+            </DialogFooter>
           </div>
-
-          <DialogFooter className="pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={() => setIsLostModalOpen(false)}
-              disabled={isSubmitting}
-              className="h-8 text-xs cursor-pointer"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              size="sm"
-              onClick={handleConfirmLost}
-              disabled={isSubmitting}
-              className="h-8 text-xs bg-red-600 hover:bg-red-700 text-white cursor-pointer"
-            >
-              {isSubmitting ? 'Updating...' : 'Confirm Closed Lost'}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* MODAL 7: SCHEDULE MEETING */}
       <Dialog open={isMeetingModalOpen} onOpenChange={setIsMeetingModalOpen}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-section-title text-txt-primary">Schedule Meeting</DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
@@ -2380,137 +2436,139 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleMeetingSubmit} className="space-y-3 py-2 text-xs">
-            {(modalError || meetingUrlError) && (
-              <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
-                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>{meetingUrlError || modalError}</span>
-              </div>
-            )}
+          <form onSubmit={handleMeetingSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+              {(modalError || meetingUrlError) && (
+                <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span>{meetingUrlError || modalError}</span>
+                </div>
+              )}
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Meeting Title <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                value={meetingForm.title}
-                onChange={(e) => setMeetingForm({ ...meetingForm, title: e.target.value })}
-                placeholder={`e.g. Discovery Call with ${lead.fullName}`}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
-                  Start Time <span className="text-red-500">*</span>
+                  Meeting Title <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="datetime-local"
+                  type="text"
                   required
-                  value={meetingForm.startTime}
-                  onChange={(e) => setMeetingForm({ ...meetingForm, startTime: e.target.value })}
+                  value={meetingForm.title}
+                  onChange={(e) => setMeetingForm({ ...meetingForm, title: e.target.value })}
+                  placeholder={`e.g. Discovery Call with ${lead.fullName}`}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary"
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">
+                    Start Time <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={meetingForm.startTime}
+                    onChange={(e) => setMeetingForm({ ...meetingForm, startTime: e.target.value })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">
+                    End Time <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={meetingForm.endTime}
+                    onChange={(e) => setMeetingForm({ ...meetingForm, endTime: e.target.value })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Meeting Type</label>
+                <CustomSelect
+                  value={meetingForm.meetingType}
+                  onChange={(val) => setMeetingForm({ ...meetingForm, meetingType: val })}
+                  disabled={isSubmitting}
+                  options={[
+                    { value: 'DISCOVERY', label: 'Discovery Meeting' },
+                    { value: 'DEMO', label: 'Product Demo' },
+                    { value: 'MEETING', label: 'General Meeting' },
+                    { value: 'FOLLOW_UP', label: 'Follow-Up' },
+                  ]}
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">
-                  End Time <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-caption text-txt-secondary block font-medium">Meeting URL / Location</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const autoUrl = generateAutomatedMeetUrl();
+                      setMeetingForm((prev) => ({ ...prev, location: autoUrl }));
+                      setMeetingUrlError(null);
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1a73e8] hover:text-[#1557b0] hover:underline cursor-pointer transition-colors"
+                  >
+                    <Video className="h-3 w-3 text-[#1a73e8]" />
+                    <span>+ Generate Meet link</span>
+                  </button>
+                </div>
                 <input
-                  type="datetime-local"
-                  required
-                  value={meetingForm.endTime}
-                  onChange={(e) => setMeetingForm({ ...meetingForm, endTime: e.target.value })}
-                  disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Meeting Type</label>
-              <CustomSelect
-                value={meetingForm.meetingType}
-                onChange={(val) => setMeetingForm({ ...meetingForm, meetingType: val })}
-                disabled={isSubmitting}
-                options={[
-                  { value: 'DISCOVERY', label: 'Discovery Meeting' },
-                  { value: 'DEMO', label: 'Product Demo' },
-                  { value: 'MEETING', label: 'General Meeting' },
-                  { value: 'FOLLOW_UP', label: 'Follow-Up' },
-                ]}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <label className="text-caption text-txt-secondary block font-medium">Meeting URL / Location</label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const autoUrl = generateAutomatedMeetUrl();
-                    setMeetingForm((prev) => ({ ...prev, location: autoUrl }));
-                    setMeetingUrlError(null);
-                  }}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1a73e8] hover:text-[#1557b0] hover:underline cursor-pointer transition-colors"
-                >
-                  <Video className="h-3 w-3 text-[#1a73e8]" />
-                  <span>+ Generate Meet link</span>
-                </button>
-              </div>
-              <input
-                type="text"
-                value={meetingForm.location}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setMeetingForm({ ...meetingForm, location: val });
-                  const trimmed = val.trim();
-                  if (trimmed && (trimmed.includes('://') || trimmed.startsWith('meet.') || trimmed.includes('.com') || trimmed.includes('.us') || trimmed.includes('.me'))) {
-                    if (!isValidMeetingUrl(trimmed)) {
-                      setMeetingUrlError('Please enter a valid meeting URL (e.g. https://meet.google.com/iqi-qsmu-muu or Zoom link)');
+                  type="text"
+                  value={meetingForm.location}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setMeetingForm({ ...meetingForm, location: val });
+                    const trimmed = val.trim();
+                    if (trimmed && (trimmed.includes('://') || trimmed.startsWith('meet.') || trimmed.includes('.com') || trimmed.includes('.us') || trimmed.includes('.me'))) {
+                      if (!isValidMeetingUrl(trimmed)) {
+                        setMeetingUrlError('Please enter a valid meeting URL (e.g. https://meet.google.com/iqi-qsmu-muu or Zoom link)');
+                      } else {
+                        setMeetingUrlError(null);
+                      }
                     } else {
                       setMeetingUrlError(null);
                     }
-                  } else {
-                    setMeetingUrlError(null);
-                  }
-                }}
-                placeholder="e.g. https://meet.google.com/iqi-qsmu-muu or Office Address"
-                disabled={isSubmitting}
-                className={cn(
-                  'w-full h-8 rounded-input border bg-white px-2.5 text-xs text-txt-primary',
-                  meetingUrlError
-                    ? 'border-red-500 focus:ring-red-400 bg-red-50/20'
-                    : 'border-border'
+                  }}
+                  placeholder="e.g. https://meet.google.com/iqi-qsmu-muu or Office Address"
+                  disabled={isSubmitting}
+                  className={cn(
+                    'w-full h-8 rounded-input border bg-white px-2.5 text-xs text-txt-primary',
+                    meetingUrlError
+                      ? 'border-red-500 focus:ring-red-400 bg-red-50/20'
+                      : 'border-border'
+                  )}
+                />
+                {meetingUrlError && (
+                  <p className="text-[10px] text-red-600 font-medium animate-in fade-in flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3 shrink-0" />
+                    {meetingUrlError}
+                  </p>
                 )}
-              />
-              {meetingUrlError && (
-                <p className="text-[10px] text-red-600 font-medium animate-in fade-in flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3 shrink-0" />
-                  {meetingUrlError}
-                </p>
-              )}
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Agenda & Objective</label>
+                <textarea
+                  rows={2}
+                  value={meetingForm.agenda}
+                  onChange={(e) => setMeetingForm({ ...meetingForm, agenda: e.target.value })}
+                  placeholder="Key points to discuss..."
+                  disabled={isSubmitting}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
+                />
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Agenda & Objective</label>
-              <textarea
-                rows={2}
-                value={meetingForm.agenda}
-                onChange={(e) => setMeetingForm({ ...meetingForm, agenda: e.target.value })}
-                placeholder="Key points to discuss..."
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2544,187 +2602,189 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleTaskSubmit} className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Task Title <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                value={taskForm.title}
-                onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })}
-                placeholder="e.g. Follow-up phone consultation"
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              <div className="space-y-1 col-span-2 sm:col-span-1">
-                <label className="text-caption text-txt-secondary block font-medium">Action Type</label>
-                <select
-                  value={taskForm.taskType}
-                  onChange={(e) => setTaskForm({ ...taskForm, taskType: e.target.value as any })}
-                  disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                >
-                  <option value="CALL">Phone Call</option>
-                  <option value="WHATSAPP">WhatsApp Message</option>
-                  <option value="EMAIL">Email</option>
-                  <option value="FOLLOW_UP">Follow-Up Task</option>
-                  <option value="REVIEW">Review Requirement</option>
-                </select>
-              </div>
-
+          <form onSubmit={handleTaskSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
-                  Due Date <span className="text-red-500">*</span>
+                  Task Title <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="date"
+                  type="text"
                   required
-                  min={getLocalDateString()}
-                  value={taskForm.dueDate}
-                  onChange={(e) => handleTaskDueDateChange(e.target.value)}
+                  value={taskForm.title}
+                  onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })}
+                  placeholder="e.g. Follow-up phone consultation"
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <div className="space-y-1 col-span-2 sm:col-span-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Action Type</label>
+                  <CustomSelect
+                    value={taskForm.taskType}
+                    onChange={(val) => setTaskForm({ ...taskForm, taskType: val as any })}
+                    disabled={isSubmitting}
+                    options={[
+                      { value: 'CALL', label: 'Phone Call' },
+                      { value: 'WHATSAPP', label: 'WhatsApp Message' },
+                      { value: 'EMAIL', label: 'Email' },
+                      { value: 'FOLLOW_UP', label: 'Follow-Up Task' },
+                      { value: 'REVIEW', label: 'Review Requirement' },
+                    ]}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">
+                    Due Date <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    min={getLocalDateString()}
+                    value={taskForm.dueDate}
+                    onChange={(e) => handleTaskDueDateChange(e.target.value)}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <label className="text-caption text-txt-secondary block font-medium">
+                      Due Time <span className="text-red-500">*</span>
+                    </label>
+                    {isTimeOver(taskForm.dueDate, taskForm.dueTime) && (
+                      <span className="text-[10px] text-red-600 font-semibold flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                        Time Over
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    type="time"
+                    required
+                    value={taskForm.dueTime}
+                    onChange={(e) => {
+                      setTaskForm({ ...taskForm, dueTime: e.target.value });
+                      if (modalError) setModalError(null);
+                    }}
+                    disabled={isSubmitting}
+                    className={cn(
+                      'w-full h-8 rounded-input border bg-white px-2 text-xs text-txt-primary cursor-pointer',
+                      isTimeOver(taskForm.dueDate, taskForm.dueTime)
+                        ? 'border-red-500 text-red-600 focus:ring-red-400 bg-red-50/30'
+                        : 'border-border'
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Overtime warning message */}
+              {isTimeOver(taskForm.dueDate, taskForm.dueTime) && (
+                <div className="rounded-md bg-red-50 border border-red-200 p-2 text-[11px] text-red-600 leading-tight flex items-start gap-1.5 animate-in fade-in duration-150">
+                  <span className="text-sm leading-none shrink-0">⚠️</span>
+                  <div>
+                    <span className="font-semibold">Time Over: </span>
+                    {taskForm.dueTime ? formatDisplayTime(taskForm.dueTime) : 'Selected time'} has already passed today. Please select a valid future time after <span className="font-bold underline">{getCurrentFormattedTime()}</span>.
+                  </div>
+                </div>
+              )}
+
+              {/* Quick time suggestion buttons */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                <span className="text-[10px] text-txt-muted font-medium">Quick suggest:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const now = new Date(Date.now() + 30 * 60000);
+                    const hh = String(now.getHours()).padStart(2, '0');
+                    const mm = String(now.getMinutes()).padStart(2, '0');
+                    setTaskForm({ ...taskForm, dueTime: `${hh}:${mm}` });
+                    if (modalError) setModalError(null);
+                  }}
+                  className="px-2 py-0.5 text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors"
+                >
+                  +30 mins
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const now = new Date(Date.now() + 60 * 60000);
+                    const hh = String(now.getHours()).padStart(2, '0');
+                    const mm = String(now.getMinutes()).padStart(2, '0');
+                    setTaskForm({ ...taskForm, dueTime: `${hh}:${mm}` });
+                    if (modalError) setModalError(null);
+                  }}
+                  className="px-2 py-0.5 text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors"
+                >
+                  +1 hour
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const now = new Date(Date.now() + 120 * 60000);
+                    const hh = String(now.getHours()).padStart(2, '0');
+                    const mm = String(now.getMinutes()).padStart(2, '0');
+                    setTaskForm({ ...taskForm, dueTime: `${hh}:${mm}` });
+                    if (modalError) setModalError(null);
+                  }}
+                  className="px-2 py-0.5 text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors"
+                >
+                  +2 hours
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    const yyyy = tomorrow.getFullYear();
+                    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                    const dd = String(tomorrow.getDate()).padStart(2, '0');
+                    setTaskForm({
+                      ...taskForm,
+                      dueDate: `${yyyy}-${mm}-${dd}`,
+                      dueTime: '10:00',
+                    });
+                    if (modalError) setModalError(null);
+                  }}
+                  className="px-2 py-0.5 text-[10px] bg-blue-50 hover:bg-blue-100 text-blue-700 rounded transition-colors"
+                >
+                  Tomorrow 10:00 AM
+                </button>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Priority</label>
+                <CustomSelect
+                  value={taskForm.priority}
+                  onChange={(val) => setTaskForm({ ...taskForm, priority: val as TaskPriority })}
+                  disabled={isSubmitting}
+                  options={[
+                    { value: 'LOW', label: 'LOW' },
+                    { value: 'MEDIUM', label: 'MEDIUM' },
+                    { value: 'HIGH', label: 'HIGH' },
+                    { value: 'URGENT', label: 'URGENT' },
+                  ]}
                 />
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <label className="text-caption text-txt-secondary block font-medium">
-                    Due Time <span className="text-red-500">*</span>
-                  </label>
-                  {isTimeOver(taskForm.dueDate, taskForm.dueTime) && (
-                    <span className="text-[10px] text-red-600 font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                      Time Over
-                    </span>
-                  )}
-                </div>
-                <input
-                  type="time"
-                  required
-                  value={taskForm.dueTime}
-                  onChange={(e) => {
-                    setTaskForm({ ...taskForm, dueTime: e.target.value });
-                    if (modalError) setModalError(null);
-                  }}
+                <label className="text-caption text-txt-secondary block font-medium">Notes & Description</label>
+                <textarea
+                  rows={2}
+                  value={taskForm.description}
+                  onChange={(e) => setTaskForm({ ...taskForm, description: e.target.value })}
+                  placeholder="Additional instructions..."
                   disabled={isSubmitting}
-                  className={cn(
-                    'w-full h-8 rounded-input border bg-white px-2 text-xs text-txt-primary cursor-pointer',
-                    isTimeOver(taskForm.dueDate, taskForm.dueTime)
-                      ? 'border-red-500 text-red-600 focus:ring-red-400 bg-red-50/30'
-                      : 'border-border'
-                  )}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
                 />
               </div>
             </div>
 
-            {/* Overtime warning message */}
-            {isTimeOver(taskForm.dueDate, taskForm.dueTime) && (
-              <div className="rounded-md bg-red-50 border border-red-200 p-2 text-[11px] text-red-600 leading-tight flex items-start gap-1.5 animate-in fade-in duration-150">
-                <span className="text-sm leading-none shrink-0">⚠️</span>
-                <div>
-                  <span className="font-semibold">Time Over: </span>
-                  {taskForm.dueTime ? formatDisplayTime(taskForm.dueTime) : 'Selected time'} has already passed today. Please select a valid future time after <span className="font-bold underline">{getCurrentFormattedTime()}</span>.
-                </div>
-              </div>
-            )}
-
-            {/* Quick time suggestion buttons */}
-            <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-              <span className="text-[10px] text-txt-muted font-medium">Quick suggest:</span>
-              <button
-                type="button"
-                onClick={() => {
-                  const now = new Date(Date.now() + 30 * 60000);
-                  const hh = String(now.getHours()).padStart(2, '0');
-                  const mm = String(now.getMinutes()).padStart(2, '0');
-                  setTaskForm({ ...taskForm, dueTime: `${hh}:${mm}` });
-                  if (modalError) setModalError(null);
-                }}
-                className="px-2 py-0.5 text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors"
-              >
-                +30 mins
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const now = new Date(Date.now() + 60 * 60000);
-                  const hh = String(now.getHours()).padStart(2, '0');
-                  const mm = String(now.getMinutes()).padStart(2, '0');
-                  setTaskForm({ ...taskForm, dueTime: `${hh}:${mm}` });
-                  if (modalError) setModalError(null);
-                }}
-                className="px-2 py-0.5 text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors"
-              >
-                +1 hour
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const now = new Date(Date.now() + 120 * 60000);
-                  const hh = String(now.getHours()).padStart(2, '0');
-                  const mm = String(now.getMinutes()).padStart(2, '0');
-                  setTaskForm({ ...taskForm, dueTime: `${hh}:${mm}` });
-                  if (modalError) setModalError(null);
-                }}
-                className="px-2 py-0.5 text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded transition-colors"
-              >
-                +2 hours
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const tomorrow = new Date();
-                  tomorrow.setDate(tomorrow.getDate() + 1);
-                  const yyyy = tomorrow.getFullYear();
-                  const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-                  const dd = String(tomorrow.getDate()).padStart(2, '0');
-                  setTaskForm({
-                    ...taskForm,
-                    dueDate: `${yyyy}-${mm}-${dd}`,
-                    dueTime: '10:00',
-                  });
-                  if (modalError) setModalError(null);
-                }}
-                className="px-2 py-0.5 text-[10px] bg-blue-50 hover:bg-blue-100 text-blue-700 rounded transition-colors"
-              >
-                Tomorrow 10:00 AM
-              </button>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Priority</label>
-              <select
-                value={taskForm.priority}
-                onChange={(e) => setTaskForm({ ...taskForm, priority: e.target.value as TaskPriority })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-              >
-                <option value="LOW">LOW</option>
-                <option value="MEDIUM">MEDIUM</option>
-                <option value="HIGH">HIGH</option>
-                <option value="URGENT">URGENT</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Notes & Description</label>
-              <textarea
-                rows={2}
-                value={taskForm.description}
-                onChange={(e) => setTaskForm({ ...taskForm, description: e.target.value })}
-                placeholder="Additional instructions..."
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2760,7 +2820,7 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <DialogFooter className="pt-2">
+          <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
             <Button
               type="button"
               variant="secondary"
@@ -2787,7 +2847,7 @@ export const LeadDetailPage: React.FC = () => {
 
       {/* MODAL 10: BANT QUALIFICATION */}
       <Dialog open={isQualModalOpen} onOpenChange={setIsQualModalOpen}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-section-title text-txt-primary">Update BANT Qualification</DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
@@ -2795,85 +2855,87 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleQualSubmit} className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Budget Amount (₹)</label>
-              <input
-                type="number"
-                min={0}
-                value={qualForm.budgetAmount}
-                onChange={(e) => setQualForm({ ...qualForm, budgetAmount: Number(e.target.value) })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary tabular-nums"
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="budgetConfirmed"
-                checked={qualForm.budgetConfirmed}
-                onChange={(e) => setQualForm({ ...qualForm, budgetConfirmed: e.target.checked })}
-                disabled={isSubmitting}
-                className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
-              />
-              <label htmlFor="budgetConfirmed" className="text-xs text-txt-primary font-medium cursor-pointer">
-                Budget officially confirmed with prospect
-              </label>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2.5">
+          <form onSubmit={handleQualSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Decision Maker Name</label>
+                <label className="text-caption text-txt-secondary block font-medium">Budget Amount (₹)</label>
                 <input
-                  type="text"
-                  value={qualForm.decisionMakerName}
-                  onChange={(e) => setQualForm({ ...qualForm, decisionMakerName: e.target.value })}
+                  type="number"
+                  min={0}
+                  value={qualForm.budgetAmount}
+                  onChange={(e) => setQualForm({ ...qualForm, budgetAmount: Number(e.target.value) })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary tabular-nums"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="budgetConfirmed"
+                  checked={qualForm.budgetConfirmed}
+                  onChange={(e) => setQualForm({ ...qualForm, budgetConfirmed: e.target.checked })}
+                  disabled={isSubmitting}
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                />
+                <label htmlFor="budgetConfirmed" className="text-xs text-txt-primary font-medium cursor-pointer">
+                  Budget officially confirmed with prospect
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Decision Maker Name</label>
+                  <input
+                    type="text"
+                    value={qualForm.decisionMakerName}
+                    onChange={(e) => setQualForm({ ...qualForm, decisionMakerName: e.target.value })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Urgency Level</label>
+                  <CustomSelect
+                    value={qualForm.urgencyLevel}
+                    onChange={(val) => setQualForm({ ...qualForm, urgencyLevel: val })}
+                    disabled={isSubmitting}
+                    options={[
+                      { value: 'LOW', label: 'LOW' },
+                      { value: 'MEDIUM', label: 'MEDIUM' },
+                      { value: 'HIGH', label: 'HIGH' },
+                      { value: 'URGENT', label: 'URGENT' },
+                    ]}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Pain Points & Need</label>
+                <textarea
+                  rows={2}
+                  value={qualForm.painPoints}
+                  onChange={(e) => setQualForm({ ...qualForm, painPoints: e.target.value })}
+                  placeholder="What challenges are they solving?"
+                  disabled={isSubmitting}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Urgency Level</label>
-                <select
-                  value={qualForm.urgencyLevel}
-                  onChange={(e) => setQualForm({ ...qualForm, urgencyLevel: e.target.value })}
+                <label className="text-caption text-txt-secondary block font-medium">Target Timeline Date</label>
+                <input
+                  type="date"
+                  value={qualForm.timelineTargetDate}
+                  onChange={(e) => setQualForm({ ...qualForm, timelineTargetDate: e.target.value })}
                   disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                >
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="URGENT">URGENT</option>
-                </select>
+                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                />
               </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Pain Points & Need</label>
-              <textarea
-                rows={2}
-                value={qualForm.painPoints}
-                onChange={(e) => setQualForm({ ...qualForm, painPoints: e.target.value })}
-                placeholder="What challenges are they solving?"
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Target Timeline Date</label>
-              <input
-                type="date"
-                value={qualForm.timelineTargetDate}
-                onChange={(e) => setQualForm({ ...qualForm, timelineTargetDate: e.target.value })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -2907,79 +2969,81 @@ export const LeadDetailPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleDealSubmit} className="space-y-3 py-2 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Deal Title <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                value={dealForm.title}
-                onChange={(e) => setDealForm({ ...dealForm, title: e.target.value })}
-                placeholder="e.g. Enterprise Solution Package"
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <form onSubmit={handleDealSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
-                  Deal Value (₹) <span className="text-red-500">*</span>
+                  Deal Title <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="number"
-                  min={0}
+                  type="text"
                   required
-                  value={dealForm.value}
-                  onChange={(e) => setDealForm({ ...dealForm, value: Number(e.target.value) })}
-                  disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary tabular-nums"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Pipeline Stage</label>
-                <CustomSelect
-                  value={dealForm.stageId}
-                  onChange={(val) => setDealForm({ ...dealForm, stageId: val })}
-                  disabled={isSubmitting}
-                  options={stages.map((stage) => ({
-                    value: stage.id,
-                    label: stage.name,
-                  }))}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Probability (%)</label>
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  value={dealForm.probability}
-                  onChange={(e) => setDealForm({ ...dealForm, probability: Number(e.target.value) })}
-                  disabled={isSubmitting}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary tabular-nums"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Expected Close Date</label>
-                <input
-                  type="date"
-                  value={dealForm.expectedCloseDate}
-                  onChange={(e) => setDealForm({ ...dealForm, expectedCloseDate: e.target.value })}
+                  value={dealForm.title}
+                  onChange={(e) => setDealForm({ ...dealForm, title: e.target.value })}
+                  placeholder="e.g. Enterprise Solution Package"
                   disabled={isSubmitting}
                   className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
                 />
               </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">
+                    Deal Value (₹) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    required
+                    value={dealForm.value}
+                    onChange={(e) => setDealForm({ ...dealForm, value: Number(e.target.value) })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary tabular-nums"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Pipeline Stage</label>
+                  <CustomSelect
+                    value={dealForm.stageId}
+                    onChange={(val) => setDealForm({ ...dealForm, stageId: val })}
+                    disabled={isSubmitting}
+                    options={stages.map((stage) => ({
+                      value: stage.id,
+                      label: stage.name,
+                    }))}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Probability (%)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    value={dealForm.probability}
+                    onChange={(e) => setDealForm({ ...dealForm, probability: Number(e.target.value) })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary tabular-nums"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">Expected Close Date</label>
+                  <input
+                    type="date"
+                    value={dealForm.expectedCloseDate}
+                    onChange={(e) => setDealForm({ ...dealForm, expectedCloseDate: e.target.value })}
+                    disabled={isSubmitting}
+                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                  />
+                </div>
+              </div>
             </div>
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"

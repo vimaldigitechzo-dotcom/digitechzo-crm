@@ -19,6 +19,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { crmApi } from '@/lib/api';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { TeamUserItem, RoleItem } from '@/types/crm';
 import { MOCK_USERS } from '@/mocks/mockAuth';
 import {
@@ -663,9 +664,9 @@ export const TeamPage: React.FC = () => {
 
       {/* 5. Member Profile & Documented RBAC Capabilities Modal */}
       <Dialog open={!!selectedMember} onOpenChange={(open) => !open && setSelectedMember(null)}>
-        <DialogContent className="max-w-lg w-full p-5">
+        <DialogContent className="max-w-lg w-full">
           {selectedMember && (
-            <div className="space-y-4">
+            <>
               <DialogHeader>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
@@ -699,6 +700,8 @@ export const TeamPage: React.FC = () => {
                   </div>
                 </div>
               </DialogHeader>
+
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-4 text-xs">
 
               {/* Assignment Information Grid */}
               <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-card border border-border/60 text-xs">
@@ -766,7 +769,9 @@ export const TeamPage: React.FC = () => {
                 </div>
               </div>
 
-              <DialogFooter className="pt-2 border-t border-border flex items-center justify-between sm:justify-between">
+              </div>
+
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-between sm:justify-between shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   type="button"
                   variant={selectedMember.status === 'ACTIVE' ? 'destructive' : 'outline'}
@@ -793,14 +798,14 @@ export const TeamPage: React.FC = () => {
                   Close
                 </Button>
               </DialogFooter>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
 
       {/* 6. Invite Member Modal */}
       <Dialog open={isInviteModalOpen} onOpenChange={setIsInviteModalOpen}>
-        <DialogContent className="max-w-md w-full p-5">
+        <DialogContent className="max-w-md w-full">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <UserPlus className="h-4 w-4 text-[#57B71B]" /> Add / Invite Team Member
@@ -810,14 +815,14 @@ export const TeamPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="flex items-center gap-2 p-2.5 bg-danger/10 border border-danger/30 rounded-card text-xs text-danger-dark font-medium">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleInviteSubmit} className="space-y-3 pt-1" autoComplete="off">
+          <form onSubmit={handleInviteSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden" autoComplete="off">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+              {formError && (
+                <div className="flex items-center gap-2 p-2.5 bg-danger/10 border border-danger/30 rounded-card text-xs text-danger-dark font-medium">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             {/* Hidden dummy inputs to defeat aggressive browser password managers */}
             <input type="text" name="prevent_autofill_user" className="hidden" tabIndex={-1} aria-hidden="true" autoComplete="off" />
             <input type="password" name="prevent_autofill_pwd" className="hidden" tabIndex={-1} aria-hidden="true" autoComplete="off" />
@@ -872,10 +877,9 @@ export const TeamPage: React.FC = () => {
                 <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
                   Role *
                 </label>
-                <select
+                <CustomSelect
                   value={inviteForm.role}
-                  onChange={(e) => {
-                    const selectedRole = e.target.value;
+                  onChange={(selectedRole) => {
                     const matchedRoleObj = roles.find(
                       (r) => r.name === selectedRole || r.displayAlias === selectedRole
                     );
@@ -885,24 +889,21 @@ export const TeamPage: React.FC = () => {
                       roleId: matchedRoleObj ? matchedRoleObj.id : '',
                     });
                   }}
-                  className="w-full h-8 rounded-button border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-                >
-                  {roles.length > 0 ? (
-                    roles.map((r) => (
-                      <option key={r.id} value={r.name}>
-                        {r.displayAlias || r.displayName || r.name}
-                      </option>
-                    ))
-                  ) : (
-                    <>
-                      <option value="BDE">BDE (Sales Rep)</option>
-                      <option value="MANAGER">Sales Manager</option>
-                      <option value="ADMIN">Admin</option>
-                      <option value="MARKETING">Marketing</option>
-                      <option value="DELIVERY">Delivery</option>
-                    </>
-                  )}
-                </select>
+                  options={
+                    roles.length > 0
+                      ? roles.map((r) => ({
+                          value: r.name,
+                          label: r.displayAlias || r.displayName || r.name,
+                        }))
+                      : [
+                          { value: 'BDE', label: 'BDE (Sales Rep)' },
+                          { value: 'MANAGER', label: 'Sales Manager' },
+                          { value: 'ADMIN', label: 'Admin' },
+                          { value: 'MARKETING', label: 'Marketing' },
+                          { value: 'DELIVERY', label: 'Delivery' },
+                        ]
+                  }
+                />
               </div>
 
               <div className="space-y-1">
@@ -1010,9 +1011,10 @@ export const TeamPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
 
-            <DialogFooter className="pt-2 border-t border-border">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"

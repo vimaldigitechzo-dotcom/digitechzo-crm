@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { crmApi } from '@/lib/api';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useAuth } from '@/hooks/useAuth';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -42,7 +43,13 @@ import {
   Users,
   Download,
   Loader2,
+  Wand2,
 } from 'lucide-react';
+import {
+  useInvoiceTheme,
+  InvoiceColorTheme,
+} from '@/context/InvoiceThemeContext';
+import { removeSignatureBackground } from '@/lib/signatureImageProcessor';
 
 export interface CustomColumnConfig {
   id: string;
@@ -465,14 +472,23 @@ export const InvoicesPage: React.FC = () => {
     name: 'Digitechzo Director',
     role: 'Managing Director',
     signatureImage: '',
+    rawSignatureImage: '',
+    isTransparent: true,
+    inkColorMode: 'auto' as 'auto' | 'black' | 'blue' | 'original',
   });
+  const [isProcessingSignature, setIsProcessingSignature] = useState(false);
   const [showSignatureBlock, setShowSignatureBlock] = useState(true);
   const [footerText, setFooterText] = useState(
     'Digitechzo | Official Invoice Generator & Billing Portal'
   );
 
-  // 9. Theme (Default Digitechzo Green)
-  const [activeTheme, setActiveTheme] = useState(DEFAULT_BRAND_THEME);
+  // 9. Invoice Theme & Accent Colors (Controlled directly from Settings Module)
+  const { appliedTheme: globalInvoiceTheme } = useInvoiceTheme();
+  const [activeTheme, setActiveTheme] = useState<InvoiceColorTheme>(globalInvoiceTheme);
+
+  useEffect(() => {
+    setActiveTheme(globalInvoiceTheme);
+  }, [globalInvoiceTheme]);
 
   // 9b. Responsive Studio Layout View Mode ('split' | 'editor' | 'preview')
   const [studioViewMode, setStudioViewMode] = useState<'split' | 'editor' | 'preview'>('editor');
@@ -1060,6 +1076,69 @@ export const InvoicesPage: React.FC = () => {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
+  const handleSignatureUpload = async (file: File) => {
+    setIsProcessingSignature(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const rawDataUrl = reader.result as string;
+        try {
+          const processedUrl = await removeSignatureBackground(rawDataUrl, {
+            inkColorMode: signature.inkColorMode || 'auto',
+            autoCrop: true,
+          });
+          setSignature((prev) => ({
+            ...prev,
+            signatureImage: processedUrl,
+            rawSignatureImage: rawDataUrl,
+            isTransparent: true,
+          }));
+          showToast('Signature background removed automatically');
+        } catch (err) {
+          console.error('Failed to remove signature background automatically:', err);
+          setSignature((prev) => ({
+            ...prev,
+            signatureImage: rawDataUrl,
+            rawSignatureImage: rawDataUrl,
+            isTransparent: false,
+          }));
+          showToast('Signature uploaded');
+        } finally {
+          setIsProcessingSignature(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch {
+      setIsProcessingSignature(false);
+    }
+  };
+
+  const handleApplySignatureBackgroundRemoval = async (mode?: 'auto' | 'black' | 'blue' | 'original') => {
+    const src = signature.rawSignatureImage || signature.signatureImage;
+    if (!src) return;
+    setIsProcessingSignature(true);
+    try {
+      const chosenMode = mode || signature.inkColorMode || 'auto';
+      const processedUrl = await removeSignatureBackground(src, {
+        inkColorMode: chosenMode,
+        autoCrop: true,
+      });
+      setSignature((prev) => ({
+        ...prev,
+        signatureImage: processedUrl,
+        rawSignatureImage: src,
+        isTransparent: true,
+        inkColorMode: chosenMode,
+      }));
+      showToast('Clean transparent text extracted');
+    } catch (err) {
+      console.error('Error removing signature background:', err);
+      showToast('Could not process signature image');
+    } finally {
+      setIsProcessingSignature(false);
+    }
+  };
+
   // Invoice Preview Sticky & Smooth Scroll Sync
   const invoiceContainerRef = useRef<HTMLDivElement>(null);
 
@@ -1478,7 +1557,7 @@ export const InvoicesPage: React.FC = () => {
     }));
     setShowNotesBlock(true);
     setShowSignatureBlock(true);
-    setActiveTheme(DEFAULT_BRAND_THEME);
+    setActiveTheme(globalInvoiceTheme);
     showToast('Invoice form reset');
   };
 
@@ -2200,10 +2279,10 @@ export const InvoicesPage: React.FC = () => {
                   <label className="text-[11px] font-bold text-[#57B71B] flex items-center gap-1 mb-1">
                     <Sparkles className="h-3 w-3" /> Quick Auto-Fill from CRM Leads:
                   </label>
-                  <select
-                    className="w-full h-8 rounded-input border border-border bg-emerald-50/50 px-2 text-xs text-txt-primary font-medium cursor-pointer"
-                    onChange={(e) => {
-                      const selected = leads.find((l: any) => l.id === e.target.value);
+                  <CustomSelect
+                    value=""
+                    onChange={(val) => {
+                      const selected = leads.find((l: any) => l.id === val);
                       if (selected) {
                         setClient({
                           name: selected.companyName || selected.fullName || '',
@@ -2215,17 +2294,12 @@ export const InvoicesPage: React.FC = () => {
                         showToast(`Filled client details for ${selected.fullName}`);
                       }
                     }}
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select an existing CRM Lead / Company...
-                    </option>
-                    {leads.map((lead: any) => (
-                      <option key={lead.id} value={lead.id}>
-                        {lead.companyName ? `${lead.companyName} (${lead.fullName})` : lead.fullName}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select an existing CRM Lead / Company..."
+                    options={leads.map((lead: any) => ({
+                      value: lead.id,
+                      label: lead.companyName ? `${lead.companyName} (${lead.fullName})` : lead.fullName,
+                    }))}
+                  />
                 </div>
               )}
 
@@ -2341,18 +2415,18 @@ export const InvoicesPage: React.FC = () => {
 
                 <div>
                   <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Payment Terms</label>
-                  <select
+                  <CustomSelect
                     value={meta.paymentTermsDays}
-                    onChange={(e) => setMeta({ ...meta, paymentTermsDays: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                  >
-                    <option value="0">Due on Receipt</option>
-                    <option value="7">Net 7 Days</option>
-                    <option value="15">Net 15 Days</option>
-                    <option value="30">Net 30 Days</option>
-                    <option value="60">Net 60 Days</option>
-                    <option value="custom">Custom Date</option>
-                  </select>
+                    onChange={(val) => setMeta({ ...meta, paymentTermsDays: val })}
+                    options={[
+                      { value: '0', label: 'Due on Receipt' },
+                      { value: '7', label: 'Net 7 Days' },
+                      { value: '15', label: 'Net 15 Days' },
+                      { value: '30', label: 'Net 30 Days' },
+                      { value: '60', label: 'Net 60 Days' },
+                      { value: 'custom', label: 'Custom Date' },
+                    ]}
+                  />
                 </div>
 
                 <div>
@@ -2369,32 +2443,32 @@ export const InvoicesPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Currency</label>
-                  <select
+                  <CustomSelect
                     value={meta.currency}
-                    onChange={(e) => setMeta({ ...meta, currency: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary font-bold cursor-pointer"
-                  >
-                    <option value="₹">INR (₹)</option>
-                    <option value="$">USD ($)</option>
-                    <option value="€">EUR (€)</option>
-                    <option value="£">GBP (£)</option>
-                    <option value="AED">AED (AED)</option>
-                  </select>
+                    onChange={(val) => setMeta({ ...meta, currency: val })}
+                    options={[
+                      { value: '₹', label: 'INR (₹)' },
+                      { value: '$', label: 'USD ($)' },
+                      { value: '€', label: 'EUR (€)' },
+                      { value: '£', label: 'GBP (£)' },
+                      { value: 'AED', label: 'AED (AED)' },
+                    ]}
+                  />
                 </div>
 
                 <div>
                   <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Invoice Status</label>
-                  <select
+                  <CustomSelect
                     value={meta.status}
-                    onChange={(e) => setMeta({ ...meta, status: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs font-bold text-txt-primary cursor-pointer"
-                  >
-                    <option value="DRAFT">⚪ DRAFT</option>
-                    <option value="UNPAID">🔴 UNPAID</option>
-                    <option value="PARTIALLY_PAID">🟡 PARTIALLY PAID</option>
-                    <option value="PAID">🟢 PAID</option>
-                    <option value="CANCELLED">🟣 CANCELLED</option>
-                  </select>
+                    onChange={(val) => setMeta({ ...meta, status: val })}
+                    options={[
+                      { value: 'DRAFT', label: '⚪ DRAFT' },
+                      { value: 'UNPAID', label: '🔴 UNPAID' },
+                      { value: 'PARTIALLY_PAID', label: '🟡 PARTIALLY PAID' },
+                      { value: 'PAID', label: '🟢 PAID' },
+                      { value: 'CANCELLED', label: '🟣 CANCELLED' },
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -4608,9 +4682,9 @@ export const InvoicesPage: React.FC = () => {
                       <span>Quick Select from CRM Team:</span>
                       <span className="text-[10px] text-indigo-600 font-medium">Auto-fills signatory</span>
                     </label>
-                    <select
-                      onChange={(e) => {
-                        const val = e.target.value;
+                    <CustomSelect
+                      value=""
+                      onChange={(val) => {
                         if (!val) return;
                         if (val === '__me' && user) {
                           setSignature((s) => ({
@@ -4651,25 +4725,21 @@ export const InvoicesPage: React.FC = () => {
                           showToast(`Signatory set to: ${fullName}`);
                         }
                       }}
-                      defaultValue=""
-                      className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer"
-                    >
-                      <option value="" disabled>-- Select CRM Team Member or Role --</option>
-                      {user && (
-                        <option value="__me">👤 Current User ({user.name} - {user.role})</option>
-                      )}
-                      <option value="__default_director">👔 Managing Director (Digitechzo Director)</option>
-                      <option value="__finance">💼 Finance & Accounts Lead</option>
-                      {teamUsers.map((member: any) => {
-                        const mName = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim() || member.email;
-                        const mRole = member.role?.displayAlias || member.role?.name || 'Team Member';
-                        return (
-                          <option key={member.id} value={member.id}>
-                            👥 {mName} ({mRole})
-                          </option>
-                        );
-                      })}
-                    </select>
+                      placeholder="-- Select CRM Team Member or Role --"
+                      options={[
+                        ...(user ? [{ value: '__me', label: `👤 Current User (${user.name} - ${user.role})` }] : []),
+                        { value: '__default_director', label: '👔 Managing Director (Digitechzo Director)' },
+                        { value: '__finance', label: '💼 Finance & Accounts Lead' },
+                        ...teamUsers.map((member: any) => {
+                          const mName = member.name || `${member.firstName || ''} ${member.lastName || ''}`.trim() || member.email;
+                          const mRole = member.role?.displayAlias || member.role?.name || 'Team Member';
+                          return {
+                            value: member.id,
+                            label: `👥 ${mName} (${mRole})`,
+                          };
+                        }),
+                      ]}
+                    />
                   </div>
 
                   {/* Manual Inputs for Signatory Name and Role */}
@@ -4701,45 +4771,188 @@ export const InvoicesPage: React.FC = () => {
                   </div>
 
                   {/* Signature Image Upload / Preview in Editor */}
-                  <div>
-                    <label className="text-[11px] font-semibold text-txt-secondary block mb-1">
-                      Signatory Signature Image (Optional)
-                    </label>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11px] font-semibold text-txt-secondary block">
+                        Signatory Signature Image (Optional)
+                      </label>
+                      <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                        <Sparkles className="h-3 w-3" /> Auto-removes background
+                      </span>
+                    </div>
+
                     {signature.signatureImage ? (
-                      <div className="flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-md">
-                        <img
-                          src={signature.signatureImage}
-                          alt="Signature"
-                          className="h-9 max-w-[120px] object-contain bg-white border border-slate-200 rounded p-1"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setSignature({ ...signature, signatureImage: '' })}
-                          className="text-xs font-bold text-rose-600 hover:text-rose-700 cursor-pointer"
-                        >
-                          Remove Signature
-                        </button>
+                      <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2.5">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div className="flex items-center gap-3">
+                            {/* Checkerboard container to visually verify transparent background */}
+                            <div
+                              className="h-12 px-3 py-1 border border-slate-200 rounded-md flex items-center justify-center bg-white shadow-xs overflow-hidden"
+                              style={{
+                                backgroundImage: `linear-gradient(45deg, #f1f5f9 25%, transparent 25%), linear-gradient(-45deg, #f1f5f9 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f1f5f9 75%), linear-gradient(-45deg, transparent 75%, #f1f5f9 75%)`,
+                                backgroundSize: '10px 10px',
+                                backgroundPosition: '0 0, 0 5px, 5px -5px, -5px 0px',
+                              }}
+                            >
+                              <img
+                                src={signature.signatureImage}
+                                alt="Signature"
+                                className="h-9 max-w-[140px] object-contain"
+                              />
+                            </div>
+                            <div className="space-y-0.5">
+                              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span>Background Removed (Transparent Text)</span>
+                              </div>
+                              <p className="text-[10px] text-txt-muted">
+                                Clean ink extracted with no paper background box
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <label className="text-xs font-semibold text-primary hover:underline cursor-pointer">
+                              Replace
+                              <input
+                                type="file"
+                                accept="image/*"
+                                disabled={isProcessingSignature}
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handleSignatureUpload(file);
+                                }}
+                                className="hidden"
+                              />
+                            </label>
+                            <span className="text-slate-300">|</span>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSignature({
+                                  ...signature,
+                                  signatureImage: '',
+                                  rawSignatureImage: '',
+                                })
+                              }
+                              className="text-xs font-bold text-rose-600 hover:text-rose-700 cursor-pointer"
+                            >
+                              Remove Signature
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Ink color styling selector */}
+                        <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between flex-wrap gap-2 text-xs">
+                          <span className="text-[11px] font-medium text-txt-secondary flex items-center gap-1">
+                            <Wand2 className="h-3 w-3 text-emerald-600" /> Ink Text Style:
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              disabled={isProcessingSignature}
+                              onClick={() => handleApplySignatureBackgroundRemoval('auto')}
+                              className={`px-2 py-0.5 text-[11px] rounded font-semibold border transition-colors cursor-pointer ${
+                                signature.inkColorMode === 'auto'
+                                  ? 'bg-slate-800 text-white border-slate-800'
+                                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                              }`}
+                            >
+                              Auto Ink
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isProcessingSignature}
+                              onClick={() => handleApplySignatureBackgroundRemoval('blue')}
+                              className={`px-2 py-0.5 text-[11px] rounded font-semibold border transition-colors cursor-pointer ${
+                                signature.inkColorMode === 'blue'
+                                  ? 'bg-blue-600 text-white border-blue-600'
+                                  : 'bg-white text-blue-700 border-blue-200 hover:bg-blue-50'
+                              }`}
+                            >
+                              Royal Blue Pen
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isProcessingSignature}
+                              onClick={() => handleApplySignatureBackgroundRemoval('black')}
+                              className={`px-2 py-0.5 text-[11px] rounded font-semibold border transition-colors cursor-pointer ${
+                                signature.inkColorMode === 'black'
+                                  ? 'bg-slate-900 text-white border-slate-900'
+                                  : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-100'
+                              }`}
+                            >
+                              Rich Black
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isProcessingSignature}
+                              onClick={() => handleApplySignatureBackgroundRemoval('original')}
+                              className={`px-2 py-0.5 text-[11px] rounded font-semibold border transition-colors cursor-pointer ${
+                                signature.inkColorMode === 'original'
+                                  ? 'bg-slate-700 text-white border-slate-700'
+                                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                              }`}
+                            >
+                              Original Color
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Magic Re-clean button */}
+                        <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                          <button
+                            type="button"
+                            disabled={isProcessingSignature}
+                            onClick={() => handleApplySignatureBackgroundRemoval()}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-50 hover:bg-emerald-100 text-[#16A34A] border border-emerald-200 font-semibold cursor-pointer transition-colors"
+                          >
+                            {isProcessingSignature ? (
+                              <>
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                                Processing...
+                              </>
+                            ) : (
+                              <>
+                                <Sparkles className="h-3 w-3 text-emerald-600" />
+                                Re-clean Background (Keep Text Only)
+                              </>
+                            )}
+                          </button>
+                          <span className="text-[10px] text-txt-muted">
+                            Transparent PNG • 0% background
+                          </span>
+                        </div>
                       </div>
                     ) : (
-                      <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-btn border border-dashed border-slate-300 hover:border-indigo-600 bg-slate-50 hover:bg-indigo-50/40 text-xs font-semibold text-slate-700 transition-colors cursor-pointer w-fit">
-                        <Upload className="h-3.5 w-3.5 text-slate-500" />
-                        <span>+ Upload Signature Image</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const reader = new FileReader();
-                              reader.onload = () => {
-                                setSignature((s) => ({ ...s, signatureImage: reader.result as string }));
-                              };
-                              reader.readAsDataURL(file);
-                            }
-                          }}
-                          className="hidden"
-                        />
-                      </label>
+                      <div className="space-y-1.5">
+                        <label className="flex items-center gap-2 px-3.5 py-2 rounded-btn border border-dashed border-slate-300 hover:border-emerald-600 bg-slate-50 hover:bg-emerald-50/40 text-xs font-semibold text-slate-700 transition-colors cursor-pointer w-fit">
+                          {isProcessingSignature ? (
+                            <>
+                              <Loader2 className="h-4 w-4 text-emerald-600 animate-spin" />
+                              <span>Auto-removing background & extracting text...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="h-4 w-4 text-emerald-600" />
+                              <span>+ Upload Signature Image (Auto-Removes Background)</span>
+                            </>
+                          )}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={isProcessingSignature}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleSignatureUpload(file);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                        <p className="text-[10px] text-txt-muted">
+                          Upload any photo or scan of your signature on paper. The background is automatically removed so only clean signature text appears on the invoice.
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -4844,7 +5057,10 @@ export const InvoicesPage: React.FC = () => {
 
                 {/* Right (5 Cols): Tax Invoice Heading & UNPAID Badge */}
                 <div className="col-span-12 sm:col-span-5 invoice-header-right flex flex-col items-start sm:items-end justify-start min-w-0 text-left sm:text-right">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-indigo-600 uppercase leading-normal pb-0.5">
+                  <h1
+                    className="text-2xl sm:text-3xl font-extrabold uppercase leading-normal pb-0.5 transition-colors"
+                    style={{ color: activeTheme.primaryColor }}
+                  >
                     TAX INVOICE
                   </h1>
                   <div className="mt-2 flex items-center sm:justify-end">
@@ -4880,8 +5096,16 @@ export const InvoicesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Accent Divider Line: Brand gradient */}
-              <div className="h-[2.5px] bg-gradient-to-r from-[#57B71B] via-emerald-400 to-indigo-600 rounded-full my-3.5" />
+              {/* Accent Divider Line: Brand gradient or solid (Customizable) */}
+              <div
+                className="h-[2.5px] rounded-full my-3.5 transition-all shadow-2xs"
+                style={{
+                  background:
+                    activeTheme.dividerStyle === 'solid'
+                      ? activeTheme.primaryColor
+                      : `linear-gradient(to right, ${activeTheme.gradientFrom}, ${activeTheme.gradientVia || activeTheme.gradientFrom}, ${activeTheme.gradientTo})`,
+                }}
+              />
 
               {/* 2. Metadata Grid: Billed To (Left 7 Cols) & Invoice Details Box (Right 5 Cols) */}
               <div className="invoice-meta-grid grid grid-cols-12 gap-5 py-3 items-start">
@@ -4914,7 +5138,12 @@ export const InvoicesPage: React.FC = () => {
                 <div className="col-span-12 sm:col-span-5 invoice-meta-right border border-slate-200/90 rounded-xl p-4 bg-white text-xs shadow-2xs space-y-2">
                   <div className="flex items-center justify-between py-0.5">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">INVOICE #</span>
-                    <span className="font-extrabold text-indigo-600 text-xs tracking-tight">{meta.number || 'DIGI-2026-001'}</span>
+                    <span
+                      className="font-extrabold text-xs tracking-tight transition-colors"
+                      style={{ color: activeTheme.primaryColor }}
+                    >
+                      {meta.number || 'DIGI-2026-001'}
+                    </span>
                   </div>
                   {meta.poNumber && (
                     <div className="flex items-center justify-between py-0.5">
@@ -5046,8 +5275,11 @@ export const InvoicesPage: React.FC = () => {
                 {/* Standalone Bank QR Code Card: Displayed OUTSIDE the payment details box on the left ONLY when Bank Transfer is selected and QR is not removed */}
                 {activePaymentMethod === 'bank' && payment.showBankQr !== false && (
                   <div className="col-span-12 sm:col-span-3 invoice-bank-qr-outside bg-white border border-slate-200/90 rounded-xl p-3 shadow-2xs flex flex-col items-center justify-center text-center self-stretch">
-                    <div className="text-[10px] font-black uppercase text-indigo-600 tracking-wider flex items-center gap-1 mb-2">
-                      <QrCode className="h-3.5 w-3.5 text-indigo-600" />
+                    <div
+                      className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1 mb-2"
+                      style={{ color: activeTheme.primaryColor }}
+                    >
+                      <QrCode className="h-3.5 w-3.5" style={{ color: activeTheme.primaryColor }} />
                       <span>SCAN & PAY</span>
                     </div>
                     {activePaymentQrUrl ? (
@@ -5071,16 +5303,27 @@ export const InvoicesPage: React.FC = () => {
                 <div
                   className={`col-span-12 ${
                     activePaymentMethod === 'bank' && payment.showBankQr !== false ? 'sm:col-span-5' : 'md:col-span-7'
-                  } invoice-payment-left bg-[#F8FAFC] border border-indigo-100/90 rounded-xl p-3.5 sm:p-4 shadow-2xs flex flex-col justify-between`}
+                  } invoice-payment-left bg-[#F8FAFC] rounded-xl p-3.5 sm:p-4 shadow-2xs flex flex-col justify-between border`}
+                  style={{ borderColor: `${activeTheme.primaryColor}26` }}
                 >
                   {/* Header: Payment Details & Active Method Badge */}
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-3 pb-2.5 border-b border-slate-200/70">
-                      <div className="text-[10px] font-black uppercase text-indigo-600 tracking-wider flex items-center gap-1.5">
-                        <CreditCard className="h-3.5 w-3.5 text-indigo-600" />
+                      <div
+                        className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5"
+                        style={{ color: activeTheme.primaryColor }}
+                      >
+                        <CreditCard className="h-3.5 w-3.5" style={{ color: activeTheme.primaryColor }} />
                         <span>PAYMENT DETAILS</span>
                       </div>
-                      <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/90 px-3 py-1.5 rounded-md inline-flex items-center gap-1.5 leading-normal shadow-2xs">
+                      <span
+                        className="text-[11px] font-bold px-3 py-1.5 rounded-md inline-flex items-center gap-1.5 leading-normal shadow-2xs border"
+                        style={{
+                          color: activeTheme.primaryColor,
+                          backgroundColor: `${activeTheme.primaryColor}0D`,
+                          borderColor: `${activeTheme.primaryColor}30`,
+                        }}
+                      >
                         {activePaymentMethod === 'bank' && <Building2 className="h-3.5 w-3.5 shrink-0" />}
                         {activePaymentMethod === 'upi' && <QrCode className="h-3.5 w-3.5 shrink-0" />}
                         {activePaymentMethod === 'crypto' && <Wallet className="h-3.5 w-3.5 shrink-0" />}
@@ -5238,7 +5481,14 @@ export const InvoicesPage: React.FC = () => {
                       <div className="flex-1 min-w-0 space-y-2 py-0.5 text-xs">
                         <div className="flex items-center gap-2">
                           <span className="text-slate-500 font-medium">Coin:</span>
-                          <span className="bg-[#EEF2FF] text-[#4F46E5] px-2.5 py-0.5 rounded-full font-bold text-xs border border-indigo-100">
+                          <span
+                            className="px-2.5 py-0.5 rounded-full font-bold text-xs border"
+                            style={{
+                              color: activeTheme.primaryColor,
+                              backgroundColor: `${activeTheme.primaryColor}12`,
+                              borderColor: `${activeTheme.primaryColor}26`,
+                            }}
+                          >
                             {payment.crypto.coin} ({payment.crypto.network})
                           </span>
                         </div>
@@ -5306,14 +5556,26 @@ export const InvoicesPage: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="border-t border-slate-200 pt-3 mt-3 flex justify-between items-center bg-indigo-50/60 -mx-1 px-3 py-2.5 rounded-xl border border-indigo-100/90 shadow-2xs">
+                    <div
+                      className="border-t border-slate-200 pt-3 mt-3 flex justify-between items-center -mx-1 px-3 py-2.5 rounded-xl border shadow-2xs transition-colors"
+                      style={{
+                        backgroundColor: `${activeTheme.primaryColor}0D`,
+                        borderColor: `${activeTheme.primaryColor}26`,
+                      }}
+                    >
                       <div>
-                        <span className="font-extrabold text-xs sm:text-sm text-indigo-700 uppercase tracking-tight block">
+                        <span
+                          className="font-extrabold text-xs sm:text-sm uppercase tracking-tight block"
+                          style={{ color: activeTheme.primaryColor }}
+                        >
                           Total Amount Due
                         </span>
                         <span className="text-[10px] text-slate-500 font-medium">Net Payable Balance</span>
                       </div>
-                      <span className="font-tabular font-black text-xl sm:text-2xl text-indigo-700 tracking-tight">
+                      <span
+                        className="font-tabular font-black text-xl sm:text-2xl tracking-tight"
+                        style={{ color: activeTheme.primaryColor }}
+                      >
                         {formatCurrency(balanceDue > 0 ? balanceDue : grandTotal, meta.currency)}
                       </span>
                     </div>
@@ -5328,8 +5590,11 @@ export const InvoicesPage: React.FC = () => {
                   {/* Note Block */}
                   {showNotesBlock && notes && (
                     <div className="space-y-1">
-                      <div className="text-[10px] font-black uppercase text-indigo-600 tracking-wider flex items-center gap-1.5 pb-0.5">
-                        <MessageSquare className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
+                      <div
+                        className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 pb-0.5"
+                        style={{ color: activeTheme.primaryColor }}
+                      >
+                        <MessageSquare className="h-3.5 w-3.5 shrink-0" style={{ color: activeTheme.primaryColor }} />
                         <span>{notesHeading || 'NOTE:'}</span>
                       </div>
                       <p className="text-xs text-slate-600 leading-relaxed font-normal whitespace-pre-line">
@@ -5341,8 +5606,11 @@ export const InvoicesPage: React.FC = () => {
                   {/* Terms Block */}
                   {showTermsBlock && terms && (
                     <div className="space-y-1">
-                      <div className="text-[10px] font-black uppercase text-indigo-600 tracking-wider flex items-center gap-1.5 pb-0.5">
-                        <FileText className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
+                      <div
+                        className="text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 pb-0.5"
+                        style={{ color: activeTheme.primaryColor }}
+                      >
+                        <FileText className="h-3.5 w-3.5 shrink-0" style={{ color: activeTheme.primaryColor }} />
                         <span>{termsHeading || 'TERMS:'}</span>
                       </div>
                       <p className="text-xs text-slate-600 leading-relaxed font-normal whitespace-pre-line">
@@ -5356,11 +5624,17 @@ export const InvoicesPage: React.FC = () => {
                 {showSignatureBlock && (
                   <div className="col-span-12 sm:col-span-5 invoice-terms-right flex flex-col items-end text-right">
                     {signature.signatureImage ? (
-                      <img
-                        src={signature.signatureImage}
-                        alt="Signature"
-                        className="h-10 max-w-[140px] object-contain mb-2"
-                      />
+                      <div className="relative flex items-center justify-end mb-1.5">
+                        <img
+                          src={signature.signatureImage}
+                          alt="Authorized Signature"
+                          className="h-11 max-w-[160px] object-contain"
+                          style={{
+                            mixBlendMode: 'multiply',
+                            filter: 'contrast(1.05)',
+                          }}
+                        />
+                      </div>
                     ) : (
                       <div className="w-44 sm:w-52 border-t-2 border-slate-800 mb-2.5" />
                     )}
@@ -5520,8 +5794,8 @@ export const InvoicesPage: React.FC = () => {
       {/* ========================================================= */}
       {isColumnModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-border rounded-card shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in-50 zoom-in-95">
-            <div className="p-4 border-b border-border bg-slate-50 flex items-center justify-between">
+          <div className="bg-white border border-border rounded-card shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in-50 zoom-in-95">
+            <div className="p-4 border-b border-border bg-slate-50 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <Settings2 className="h-4 w-4 text-[#57B71B]" />
                 <h3 className="text-sm font-bold text-txt-primary">
@@ -5537,7 +5811,7 @@ export const InvoicesPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-4 space-y-3.5 text-xs">
+            <div className="p-4 space-y-3.5 text-xs flex-1 overflow-y-auto overscroll-contain">
               {/* Column Heading */}
               <div>
                 <label className="text-[11px] font-semibold text-txt-secondary block mb-1">
@@ -5562,15 +5836,15 @@ export const InvoicesPage: React.FC = () => {
                   <label className="text-[11px] font-semibold text-txt-secondary block mb-1">
                     Column Type
                   </label>
-                  <select
+                  <CustomSelect
                     value={newColType}
-                    onChange={(e) => setNewColType(e.target.value as any)}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs font-semibold text-txt-primary cursor-pointer"
-                  >
-                    <option value="text">Text (e.g. Phase / Note)</option>
-                    <option value="number">Number (Numeric)</option>
-                    <option value="currency">Currency ({meta.currency})</option>
-                  </select>
+                    onChange={(val) => setNewColType(val as any)}
+                    options={[
+                      { value: 'text', label: 'Text (e.g. Phase / Note)' },
+                      { value: 'number', label: 'Number (Numeric)' },
+                      { value: 'currency', label: `Currency (${meta.currency})` },
+                    ]}
+                  />
                 </div>
 
                 <div>

@@ -19,6 +19,7 @@ import { crmApi } from '@/lib/api';
 import { Deal, PipelineStage } from '@/types/crm';
 import { formatCurrency } from '@/lib/utils';
 import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useCrmDirectory } from '@/hooks/useCrmDirectory';
 import {
   KanbanSquare,
   Table as TableIcon,
@@ -39,6 +40,7 @@ import {
 
 export const PipelinePage: React.FC = () => {
   const queryClient = useQueryClient();
+  const { teamOwnerNames } = useCrmDirectory();
 
   const [viewMode, setViewMode] = useState<'kanban' | 'table'>('kanban');
   const [searchQuery, setSearchQuery] = useState('');
@@ -193,9 +195,11 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
     return deals.length;
   }, [deals]);
 
+  // Unique owners combining active deals and CRM directory
   const uniqueOwners = useMemo(() => {
-    return Array.from(new Set(deals.map((d) => d.ownerName).filter(Boolean)));
-  }, [deals]);
+    const fromDeals = deals.map((d) => d.ownerName).filter(Boolean);
+    return Array.from(new Set([...fromDeals, ...teamOwnerNames]));
+  }, [deals, teamOwnerNames]);
 
   // Filter deals
   const filteredDeals = useMemo(() => {
@@ -502,19 +506,15 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
 
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
           {/* Owner Filter Dropdown */}
-          <select
+          <CustomSelect
             value={ownerFilter}
-            onChange={(e) => setOwnerFilter(e.target.value)}
-            className="w-full sm:w-auto h-8 rounded-input border border-border bg-white px-2.5 py-1 text-xs text-txt-primary shadow-subtle focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-            aria-label="Filter deals by owner"
-          >
-            <option value="ALL">All Owners</option>
-            {uniqueOwners.map((own) => (
-              <option key={own} value={own}>
-                {own}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setOwnerFilter(val)}
+            className="w-full sm:w-36"
+            options={[
+              { value: 'ALL', label: 'All Owners' },
+              ...uniqueOwners.map((own) => ({ value: own, label: own })),
+            ]}
+          />
 
           {hasActiveFilters && (
             <Button
@@ -1020,7 +1020,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               </div>
             </DialogHeader>
 
-            <div className="space-y-3.5 py-2 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
               {/* Stage Progress Bar / Card */}
               <div className="p-3 rounded-card bg-slate-50 border border-border space-y-1.5">
                 <div className="flex items-center justify-between">
@@ -1110,12 +1110,12 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               </div>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 variant="secondary"
                 size="sm"
                 onClick={() => setSelectedDeal(null)}
-                className="h-8 text-xs"
+                className="h-8 text-xs cursor-pointer"
               >
                 Close
               </Button>
@@ -1134,14 +1134,14 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
             </DialogDescription>
           </DialogHeader>
 
-          {addError && (
-            <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{addError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleAddDealSubmit} className="space-y-3 py-2 text-xs">
+          <form onSubmit={handleAddDealSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              {addError && (
+                <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{addError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="text-caption text-txt-secondary block font-medium">
                 Deal Title <span className="text-red-500">*</span>
@@ -1208,8 +1208,9 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                 />
               </div>
             </div>
+            </div>
 
-            <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row gap-2 sm:gap-0">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -1249,14 +1250,14 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               </DialogDescription>
             </DialogHeader>
 
-            {editError && (
-              <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                <span>{editError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleEditDealSubmit} className="space-y-3 py-2 text-xs">
+            <form onSubmit={handleEditDealSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+                {editError && (
+                  <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{editError}</span>
+                  </div>
+                )}
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
                   Deal Title <span className="text-red-500">*</span>
@@ -1319,9 +1320,10 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                     className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
                   />
                 </div>
+                </div>
               </div>
 
-              <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row gap-2 sm:gap-0">
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1362,44 +1364,46 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               </DialogDescription>
             </DialogHeader>
 
-            {lostError && (
-              <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                <span>{lostError}</span>
-              </div>
-            )}
+            <form onSubmit={handleLostSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+                {lostError && (
+                  <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{lostError}</span>
+                  </div>
+                )}
 
-            <form onSubmit={handleLostSubmit} className="space-y-3 py-2 text-xs">
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">
-                  Lost Reason <span className="text-red-500">*</span>
-                </label>
-                <CustomSelect
-                  value={selectedLostReasonId}
-                  onChange={(val) => setSelectedLostReasonId(val)}
-                  required
-                  placeholder="Select reason..."
-                  options={lostReasons.map((lr) => ({
-                    value: lr.id,
-                    label: lr.label,
-                  }))}
-                />
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">
+                    Lost Reason <span className="text-red-500">*</span>
+                  </label>
+                  <CustomSelect
+                    value={selectedLostReasonId}
+                    onChange={(val) => setSelectedLostReasonId(val)}
+                    required
+                    placeholder="Select reason..."
+                    options={lostReasons.map((lr) => ({
+                      value: lr.id,
+                      label: lr.label,
+                    }))}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-caption text-txt-secondary block font-medium">
+                    Debrief Notes (Optional)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={lostReasonNotes}
+                    onChange={(e) => setLostReasonNotes(e.target.value)}
+                    placeholder="Explain why the deal was lost (e.g. competitor pricing, feature gap)..."
+                    className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">
-                  Debrief Notes (Optional)
-                </label>
-                <textarea
-                  rows={3}
-                  value={lostReasonNotes}
-                  onChange={(e) => setLostReasonNotes(e.target.value)}
-                  placeholder="Explain why the deal was lost (e.g. competitor pricing, feature gap)..."
-                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary resize-none"
-                />
-              </div>
-
-              <DialogFooter className="pt-2">
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   type="button"
                   variant="secondary"

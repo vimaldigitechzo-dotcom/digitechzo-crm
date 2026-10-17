@@ -922,49 +922,37 @@ export const LeadsPage: React.FC = () => {
 
         <div className="grid grid-cols-1 xs:grid-cols-3 sm:flex items-center gap-2 w-full sm:w-auto">
           {/* Category Dropdown */}
-          <select
+          <CustomSelect
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="w-full sm:w-auto h-8 rounded-input border border-border bg-white px-2.5 py-1 text-xs text-txt-primary shadow-subtle focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer truncate"
-            aria-label="Filter by category"
-          >
-            <option value="ALL">All Categories</option>
-            {uniqueCategories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setCategoryFilter(val)}
+            className="w-full sm:w-36"
+            options={[
+              { value: 'ALL', label: 'All Categories' },
+              ...uniqueCategories.map((cat) => ({ value: cat, label: cat })),
+            ]}
+          />
 
           {/* Source Dropdown */}
-          <select
+          <CustomSelect
             value={sourceFilter}
-            onChange={(e) => setSourceFilter(e.target.value)}
-            className="w-full sm:w-auto h-8 rounded-input border border-border bg-white px-2.5 py-1 text-xs text-txt-primary shadow-subtle focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer truncate"
-            aria-label="Filter by source"
-          >
-            <option value="ALL">All Sources</option>
-            {uniqueSources.map((src) => (
-              <option key={src} value={src}>
-                {src}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setSourceFilter(val)}
+            className="w-full sm:w-36"
+            options={[
+              { value: 'ALL', label: 'All Sources' },
+              ...uniqueSources.map((src) => ({ value: src, label: src })),
+            ]}
+          />
 
           {/* Owner Dropdown */}
-          <select
+          <CustomSelect
             value={ownerFilter}
-            onChange={(e) => setOwnerFilter(e.target.value)}
-            className="w-full sm:w-auto h-8 rounded-input border border-border bg-white px-2.5 py-1 text-xs text-txt-primary shadow-subtle focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer truncate"
-            aria-label="Filter by owner"
-          >
-            <option value="ALL">All Owners</option>
-            {uniqueOwners.map((own) => (
-              <option key={own} value={own}>
-                {own}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setOwnerFilter(val)}
+            className="w-full sm:w-36"
+            options={[
+              { value: 'ALL', label: 'All Owners' },
+              ...uniqueOwners.map((own) => ({ value: own, label: own })),
+            ]}
+          />
 
           {hasActiveFilters && (
             <Button
@@ -1316,7 +1304,7 @@ export const LeadsPage: React.FC = () => {
 
       {/* MODAL: CREATE NEW LEAD */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-section-title text-txt-primary">Create New Lead</DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
@@ -1324,19 +1312,22 @@ export const LeadsPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleAddLeadSubmit} className="space-y-3 py-2 text-xs">
-            {createError && (
-              <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
-                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span className="font-medium leading-relaxed">{createError}</span>
-              </div>
-            )}
+          <form onSubmit={handleAddLeadSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              {createError && (
+                <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span className="font-medium leading-relaxed">{createError}</span>
+                </div>
+              )}
 
             <div className="space-y-1">
               <label className="text-caption text-txt-secondary block font-medium">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
+                id="new-lead-fullname"
+                name="fullName"
                 type="text"
                 required
                 value={newLeadForm.fullName}
@@ -1608,9 +1599,10 @@ export const LeadsPage: React.FC = () => {
                   className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
+              </div>
             </div>
 
-            <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row gap-2 sm:gap-0">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -1651,13 +1643,14 @@ export const LeadsPage: React.FC = () => {
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleEditLeadSubmit} className="space-y-3 py-2 text-xs">
-              {editError && (
-                <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
-                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                  <span className="font-medium leading-relaxed">{editError}</span>
-                </div>
-              )}
+            <form onSubmit={handleEditLeadSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+                {editError && (
+                  <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
+                    <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                    <span className="font-medium leading-relaxed">{editError}</span>
+                  </div>
+                )}
 
               <div className="space-y-1">
                 <label className="text-caption text-txt-secondary block font-medium">
@@ -1832,8 +1825,9 @@ export const LeadsPage: React.FC = () => {
                   ]}
                 />
               </div>
+              </div>
 
-              <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row gap-2 sm:gap-0">
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1872,12 +1866,14 @@ export const LeadsPage: React.FC = () => {
             </DialogHeader>
 
             {deleteError && (
-              <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] text-xs text-[#DC2626]">
-                {deleteError}
+              <div className="px-4 py-2 sm:px-5">
+                <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] text-xs text-[#DC2626]">
+                  {deleteError}
+                </div>
               </div>
             )}
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="secondary"
@@ -1905,7 +1901,7 @@ export const LeadsPage: React.FC = () => {
 
       {/* MODAL: IMPORT CSV */}
       <Dialog open={isImportModalOpen} onOpenChange={setIsImportModalOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-xl">
           <DialogHeader>
             <DialogTitle className="text-section-title text-txt-primary flex items-center gap-2">
               <FileSpreadsheet className="h-5 w-5 text-[#57B71B]" /> Import Leads from CSV
@@ -1915,7 +1911,7 @@ export const LeadsPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-2 text-xs">
+          <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-4 text-xs">
             {/* Step 1: Download Template */}
             <div className="p-3 rounded-card bg-slate-50 border border-border flex items-center justify-between">
               <div>
@@ -2043,7 +2039,7 @@ export const LeadsPage: React.FC = () => {
             )}
           </div>
 
-          <DialogFooter className="pt-2">
+          <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
             <Button
               type="button"
               variant="secondary"

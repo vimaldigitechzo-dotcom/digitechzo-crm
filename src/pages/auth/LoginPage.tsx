@@ -50,8 +50,8 @@ export const LoginPage: React.FC = () => {
   };
 
   const handleUseAdminCredentials = () => {
-    setEmail('admin@digitechzo.com');
-    setPassword('AdminSecurePassword123!');
+    setEmail('vimaldigitechzo@gmail.com');
+    setPassword('VimalKK4186@');
     setError(null);
     setLoginBannerSuccess(null);
   };
@@ -141,7 +141,7 @@ export const LoginPage: React.FC = () => {
             <div className="rounded-btn bg-slate-50 border border-border p-2.5 text-xs text-txt-secondary flex items-center justify-between">
               <div>
                 <p className="font-semibold text-txt-primary text-[11px]">Seeded Admin Account</p>
-                <p className="text-[10px] text-txt-muted font-mono">admin@digitechzo.com</p>
+                <p className="text-[10px] text-txt-muted font-mono">vimaldigitechzo@gmail.com</p>
               </div>
               <Button
                 type="button"

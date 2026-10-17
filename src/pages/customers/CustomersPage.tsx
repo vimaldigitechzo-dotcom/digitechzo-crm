@@ -23,6 +23,8 @@ import { crmApi } from '@/lib/api';
 import { CustomerItem, CustomerStatus } from '@/types/crm';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { CategorySelect } from '@/components/leads/CategorySelect';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useCrmDirectory } from '@/hooks/useCrmDirectory';
 import {
   PlusCircle,
   Building2,
@@ -43,6 +45,7 @@ import {
 export const CustomersPage: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { teamUsers, teamOwnerNames, clients } = useCrmDirectory();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -65,6 +68,7 @@ export const CustomersPage: React.FC = () => {
     status: 'ACTIVE' as CustomerStatus,
     leadId: '',
     dealId: '',
+    ownerId: '',
     category: '',
     notes: '',
   });
@@ -93,11 +97,6 @@ export const CustomersPage: React.FC = () => {
     queryFn: () => crmApi.getCustomers({ limit: 100 }),
   });
 
-  const { data: leadsResponse } = useQuery({
-    queryKey: ['leads'],
-    queryFn: () => crmApi.getLeads({ limit: 100 }),
-  });
-
   const { data: dealsResponse } = useQuery({
     queryKey: ['deals'],
     queryFn: () => crmApi.getDeals({ limit: 100 }),
@@ -111,15 +110,6 @@ export const CustomersPage: React.FC = () => {
       (Array.isArray(customersResponse) ? customersResponse : [])
     );
   }, [customersResponse]);
-
-  const leads = useMemo(() => {
-    return (
-      leadsResponse?.items ||
-      leadsResponse?.leads ||
-      (Array.isArray(leadsResponse?.data) ? leadsResponse?.data : leadsResponse?.data?.items) ||
-      []
-    );
-  }, [leadsResponse]);
 
   const deals = useMemo(() => {
     return (
@@ -170,10 +160,11 @@ export const CustomersPage: React.FC = () => {
     });
   }, [rawCustomers]);
 
-  // Unique owners for filter
+  // Unique owners for filter combining customer managers and team directory
   const ownerOptions = useMemo(() => {
-    return Array.from(new Set(customers.map((c) => c.accountManager).filter(Boolean)));
-  }, [customers]);
+    const fromCustomers = customers.map((c) => c.accountManager).filter((m): m is string => Boolean(m));
+    return Array.from(new Set([...fromCustomers, ...teamOwnerNames]));
+  }, [customers, teamOwnerNames]);
 
   // Status Filter Options for FilterPills
   const statusFilterOptions: FilterOption[] = useMemo(() => {
@@ -283,6 +274,7 @@ export const CustomersPage: React.FC = () => {
         status: formState.status,
         leadId: formState.leadId || undefined,
         dealId: formState.dealId || undefined,
+        ownerId: formState.ownerId || undefined,
         notes: combinedNotes,
       });
 
@@ -299,6 +291,7 @@ export const CustomersPage: React.FC = () => {
         status: 'ACTIVE',
         leadId: '',
         dealId: '',
+        ownerId: '',
         category: '',
         notes: '',
       });
@@ -459,19 +452,15 @@ export const CustomersPage: React.FC = () => {
           {/* Owner Filter */}
           <div className="flex items-center gap-1.5 text-xs text-txt-secondary">
             <span>Owner:</span>
-            <select
+            <CustomSelect
               value={ownerFilter}
-              onChange={(e) => setOwnerFilter(e.target.value)}
-              aria-label="Filter by Owner"
-              className="h-8 rounded-button border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-            >
-              <option value="ALL">All Owners</option>
-              {ownerOptions.map((owner) => (
-                <option key={owner} value={owner}>
-                  {owner}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setOwnerFilter(val)}
+              className="w-36"
+              options={[
+                { value: 'ALL', label: 'All Owners' },
+                ...ownerOptions.map((owner) => ({ value: owner, label: owner })),
+              ]}
+            />
           </div>
 
           {(searchQuery || statusFilter !== 'ALL' || ownerFilter !== 'ALL') && (
@@ -709,9 +698,9 @@ export const CustomersPage: React.FC = () => {
 
       {/* Customer 360 Modal */}
       <Dialog open={!!selectedCustomer} onOpenChange={(open) => !open && setSelectedCustomer(null)}>
-        <DialogContent className="max-w-lg w-full p-5">
+        <DialogContent className="max-w-lg w-full">
           {selectedCustomer && (
-            <div className="space-y-4">
+            <>
               <DialogHeader>
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -726,6 +715,8 @@ export const CustomersPage: React.FC = () => {
                   {getStatusBadge(selectedCustomer.status)}
                 </div>
               </DialogHeader>
+
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-4 text-xs">
 
               {/* Account Summary Grid */}
               <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-card border border-border/60 text-xs">
@@ -845,8 +836,9 @@ export const CustomersPage: React.FC = () => {
                   </div>
                 )}
               </div>
+              </div>
 
-              <DialogFooter className="flex-row justify-between items-center pt-2 border-t border-border">
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   variant="outline"
                   size="sm"
@@ -880,14 +872,14 @@ export const CustomersPage: React.FC = () => {
                   </Button>
                 </div>
               </DialogFooter>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
 
       {/* Add Customer Modal */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-md w-full p-5">
+        <DialogContent className="max-w-md w-full">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Add Customer Account
@@ -897,14 +889,14 @@ export const CustomersPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleAddCustomerSubmit} className="space-y-3.5 pt-1">
+          <form onSubmit={handleAddCustomerSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+              {formError && (
+                <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
                 Company Name *
@@ -972,41 +964,72 @@ export const CustomersPage: React.FC = () => {
               </div>
             </div>
 
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
+                  Source Lead / Client
+                </label>
+                <span className="text-[10px] text-txt-muted">{clients.length} available</span>
+              </div>
+              <CustomSelect
+                value={formState.leadId}
+                onChange={(val) => {
+                  const selected = clients.find((c) => c.id === val);
+                  setFormState((prev) => ({
+                    ...prev,
+                    leadId: val,
+                    companyName: selected?.companyName || prev.companyName,
+                    contactName: selected?.contactName || prev.contactName,
+                    contactEmail: selected?.email || prev.contactEmail,
+                    contactPhone: selected?.phone || prev.contactPhone,
+                  }));
+                }}
+                placeholder="Select lead/prospect to import details..."
+                options={[
+                  { value: '', label: 'None / Direct Customer' },
+                  ...clients.map((c) => ({
+                    value: c.id,
+                    label: c.displayText,
+                  })),
+                ]}
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-2.5">
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Source Lead
+                  Account Manager / Owner
                 </label>
-                <select
-                  value={formState.leadId}
-                  onChange={(e) => setFormState({ ...formState, leadId: e.target.value })}
-                  className="w-full h-8 rounded-button border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-                >
-                  <option value="">None / Direct</option>
-                  {leads.map((l: any) => (
-                    <option key={l.id} value={l.id}>
-                      {l.companyName || l.fullName}
-                    </option>
-                  ))}
-                </select>
+                <CustomSelect
+                  value={formState.ownerId}
+                  onChange={(val) => setFormState({ ...formState, ownerId: val })}
+                  placeholder="Select manager..."
+                  options={[
+                    { value: '', label: 'Auto (Current User)' },
+                    ...teamUsers.map((u) => ({
+                      value: u.id,
+                      label: `${u.name} (${u.role})`,
+                    })),
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
                   Linked Deal
                 </label>
-                <select
+                <CustomSelect
                   value={formState.dealId}
-                  onChange={(e) => setFormState({ ...formState, dealId: e.target.value })}
-                  className="w-full h-8 rounded-button border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-                >
-                  <option value="">None</option>
-                  {deals.map((d: any) => (
-                    <option key={d.id} value={d.id}>
-                      {d.title}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setFormState({ ...formState, dealId: val })}
+                  placeholder="None"
+                  options={[
+                    { value: '', label: 'None' },
+                    ...deals.map((d: any) => ({
+                      value: d.id,
+                      label: d.title,
+                    })),
+                  ]}
+                />
               </div>
             </div>
 
@@ -1015,16 +1038,16 @@ export const CustomersPage: React.FC = () => {
                 <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
                   Status
                 </label>
-                <select
+                <CustomSelect
                   value={formState.status}
-                  onChange={(e) => setFormState({ ...formState, status: e.target.value as CustomerStatus })}
-                  className="w-full h-8 rounded-button border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-                >
-                  <option value="ACTIVE">Active</option>
-                  <option value="INACTIVE">Inactive</option>
-                  <option value="AT_RISK">At Risk</option>
-                  <option value="CHURNED">Churned</option>
-                </select>
+                  onChange={(val) => setFormState({ ...formState, status: val as CustomerStatus })}
+                  options={[
+                    { value: 'ACTIVE', label: 'Active' },
+                    { value: 'INACTIVE', label: 'Inactive' },
+                    { value: 'AT_RISK', label: 'At Risk' },
+                    { value: 'CHURNED', label: 'Churned' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
@@ -1052,8 +1075,9 @@ export const CustomersPage: React.FC = () => {
                 className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary placeholder:text-txt-muted focus:outline-none focus:ring-1 focus:ring-[#57B71B] resize-none"
               />
             </div>
+            </div>
 
-            <DialogFooter className="pt-2 border-t border-border">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
@@ -1085,7 +1109,7 @@ export const CustomersPage: React.FC = () => {
 
       {/* Edit Customer Modal */}
       <Dialog open={!!editingCustomer} onOpenChange={(open) => !open && setEditingCustomer(null)}>
-        <DialogContent className="max-w-md w-full p-5">
+        <DialogContent className="max-w-md w-full">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <Edit2 className="h-4 w-4 text-[#57B71B]" /> Edit Customer Account
@@ -1095,14 +1119,14 @@ export const CustomersPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleEditCustomerSubmit} className="space-y-3.5 pt-1">
+          <form onSubmit={handleEditCustomerSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+              {formError && (
+                <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
                 Company Name *
@@ -1170,16 +1194,16 @@ export const CustomersPage: React.FC = () => {
                 <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
                   Status
                 </label>
-                <select
+                <CustomSelect
                   value={editFormState.status}
-                  onChange={(e) => setEditFormState({ ...editFormState, status: e.target.value as CustomerStatus })}
-                  className="w-full h-8 rounded-button border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-                >
-                  <option value="ACTIVE">Active</option>
-                  <option value="INACTIVE">Inactive</option>
-                  <option value="AT_RISK">At Risk</option>
-                  <option value="CHURNED">Churned</option>
-                </select>
+                  onChange={(val) => setEditFormState({ ...editFormState, status: val as CustomerStatus })}
+                  options={[
+                    { value: 'ACTIVE', label: 'Active' },
+                    { value: 'INACTIVE', label: 'Inactive' },
+                    { value: 'AT_RISK', label: 'At Risk' },
+                    { value: 'CHURNED', label: 'Churned' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
@@ -1207,8 +1231,9 @@ export const CustomersPage: React.FC = () => {
                 className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary placeholder:text-txt-muted focus:outline-none focus:ring-1 focus:ring-[#57B71B] resize-none"
               />
             </div>
+            </div>
 
-            <DialogFooter className="pt-2 border-t border-border">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"

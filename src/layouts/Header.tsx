@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Bell, Search, LogOut, User as UserIcon, X } from 'lucide-react';
+import { Bell, Search, LogOut, User as UserIcon, X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,10 +13,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface HeaderProps {
-  onToggleSidebar: () => void;
+  onToggleSidebar?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
+export const Header: React.FC<HeaderProps> = () => {
   const { user, logout } = useAuth();
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -82,17 +82,8 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               </div>
             </div>
 
-            {/* Desktop / Tablet Search Input & Sidebar Toggle (>= lg) */}
-            <div className="relative w-full max-w-xs hidden lg:flex items-center gap-2">
-              <button
-                type="button"
-                onClick={onToggleSidebar}
-                className="hidden lg:flex items-center justify-center h-8 w-8 rounded-btn hover:bg-slate-100 text-txt-secondary cursor-pointer shrink-0 transition-colors"
-                title="Toggle Sidebar"
-                aria-label="Toggle Sidebar"
-              >
-                <Menu className="h-4 w-4" />
-              </button>
+            {/* Desktop / Tablet Search Input (>= lg) */}
+            <div className="relative w-full max-w-xs hidden lg:flex items-center">
               <div className="relative flex-1">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-txt-muted" />
                 <Input

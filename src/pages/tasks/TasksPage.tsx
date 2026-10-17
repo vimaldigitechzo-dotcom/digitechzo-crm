@@ -20,6 +20,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { crmApi } from '@/lib/api';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useCrmDirectory } from '@/hooks/useCrmDirectory';
 import { TaskItem, TaskActionType, TaskPriority, TaskStatus } from '@/types/crm';
 import { formatDate, cn, getLocalDateString, isTimeOver, parseTimeToDate, formatDisplayTime, getCurrentFormattedTime } from '@/lib/utils';
 import {
@@ -64,6 +66,7 @@ const TIME_SLOTS_OPTIONS = (() => {
 export const TasksPage: React.FC = () => {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { teamOwnerNames, clients } = useCrmDirectory();
 
   const urlFilter = searchParams.get('filter') || searchParams.get('status') || 'ALL';
   const [searchQuery, setSearchQuery] = useState('');
@@ -147,14 +150,7 @@ export const TasksPage: React.FC = () => {
     queryFn: () => crmApi.getTasks({ limit: 100 }),
   });
 
-  const { data: leadsResponse } = useQuery({
-    queryKey: ['leads'],
-    queryFn: () => crmApi.getLeads({ limit: 100 }),
-  });
 
-  const leads = useMemo(() => {
-    return leadsResponse?.items || leadsResponse?.leads || (Array.isArray(leadsResponse?.data) ? leadsResponse?.data : leadsResponse?.data?.items) || [];
-  }, [leadsResponse]);
 
   // Map Backend Tasks to frontend TaskItem models
   const rawTasks = useMemo(() => {
@@ -238,10 +234,11 @@ export const TasksPage: React.FC = () => {
     ];
   }, [tasks, totalCount, overdueCount, pendingCount, completedCount]);
 
-  // Unique owners
+  // Unique owners combining task assignees and CRM team directory
   const uniqueOwners = useMemo(() => {
-    return Array.from(new Set(tasks.map((t) => t.ownerName).filter(Boolean)));
-  }, [tasks]);
+    const fromTasks = tasks.map((t) => t.ownerName).filter(Boolean);
+    return Array.from(new Set([...fromTasks, ...teamOwnerNames]));
+  }, [tasks, teamOwnerNames]);
 
   // Filtered tasks
   const filteredTasks = useMemo(() => {
@@ -686,31 +683,29 @@ export const TasksPage: React.FC = () => {
 
           <div className="flex items-center gap-2 flex-wrap">
             {/* Priority Filter */}
-            <select
+            <CustomSelect
               value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Priorities</option>
-              <option value="URGENT">Urgent</option>
-              <option value="HIGH">High</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="LOW">Low</option>
-            </select>
+              onChange={(val) => setPriorityFilter(val)}
+              className="w-36"
+              options={[
+                { value: 'ALL', label: 'All Priorities' },
+                { value: 'URGENT', label: 'Urgent' },
+                { value: 'HIGH', label: 'High' },
+                { value: 'MEDIUM', label: 'Medium' },
+                { value: 'LOW', label: 'Low' },
+              ]}
+            />
 
             {/* Owner Filter */}
-            <select
+            <CustomSelect
               value={ownerFilter}
-              onChange={(e) => setOwnerFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Owners</option>
-              {uniqueOwners.map((owner) => (
-                <option key={owner} value={owner}>
-                  {owner}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setOwnerFilter(val)}
+              className="w-36"
+              options={[
+                { value: 'ALL', label: 'All Owners' },
+                ...uniqueOwners.map((owner) => ({ value: owner, label: owner })),
+              ]}
+            />
 
             {isFiltered && (
               <Button
@@ -1197,14 +1192,14 @@ export const TasksPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleCreateTask} className="space-y-3.5 pt-1 pb-0">
+          <form onSubmit={handleCreateTask} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5">
+              {formError && (
+                <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">
                 Task Description <span className="text-red-500 ml-0.5">*</span>
@@ -1222,53 +1217,56 @@ export const TasksPage: React.FC = () => {
             <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3">
               <div className="space-y-1">
                 <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Action Type</label>
-                <select
+                <CustomSelect
                   value={newTaskForm.actionType}
-                  onChange={(e) =>
-                    setNewTaskForm({ ...newTaskForm, actionType: e.target.value as TaskActionType })
+                  onChange={(val) =>
+                    setNewTaskForm({ ...newTaskForm, actionType: val as TaskActionType })
                   }
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle cursor-pointer"
-                >
-                  <option value="CALL">Call</option>
-                  <option value="WHATSAPP">WhatsApp</option>
-                  <option value="MEETING">Meeting / Demo</option>
-                  <option value="EMAIL">Email</option>
-                  <option value="PROPOSAL">Proposal</option>
-                  <option value="INTERNAL_REVIEW">Internal Review</option>
-                </select>
+                  options={[
+                    { value: 'CALL', label: 'Call' },
+                    { value: 'WHATSAPP', label: 'WhatsApp' },
+                    { value: 'MEETING', label: 'Meeting / Demo' },
+                    { value: 'EMAIL', label: 'Email' },
+                    { value: 'PROPOSAL', label: 'Proposal' },
+                    { value: 'INTERNAL_REVIEW', label: 'Internal Review' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Priority</label>
-                <select
+                <CustomSelect
                   value={newTaskForm.priority}
-                  onChange={(e) =>
-                    setNewTaskForm({ ...newTaskForm, priority: e.target.value as TaskPriority })
+                  onChange={(val) =>
+                    setNewTaskForm({ ...newTaskForm, priority: val as TaskPriority })
                   }
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle cursor-pointer"
-                >
-                  <option value="URGENT">Urgent</option>
-                  <option value="HIGH">High</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="LOW">Low</option>
-                </select>
+                  options={[
+                    { value: 'URGENT', label: 'Urgent' },
+                    { value: 'HIGH', label: 'High' },
+                    { value: 'MEDIUM', label: 'Medium' },
+                    { value: 'LOW', label: 'Low' },
+                  ]}
+                />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Related Prospect / Lead</label>
-              <select
+              <div className="flex items-center justify-between h-5">
+                <label className="text-xs font-semibold text-txt-primary flex items-center">Related Prospect / Client</label>
+                <span className="text-[10px] text-txt-muted">{clients.length} available</span>
+              </div>
+              <CustomSelect
                 value={newTaskForm.leadId}
-                onChange={(e) => setNewTaskForm({ ...newTaskForm, leadId: e.target.value })}
-                className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle cursor-pointer"
-              >
-                <option value="">None / General Task</option>
-                {leads.map((lead: any) => (
-                  <option key={lead.id} value={lead.id}>
-                    {lead.companyName ? `${lead.companyName}${lead.fullName ? ` (${lead.fullName})` : ''}` : lead.fullName || 'Prospect'} {lead.phone ? `• ${lead.phone}` : ''}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setNewTaskForm({ ...newTaskForm, leadId: val })}
+                placeholder="None / General Task"
+                options={[
+                  { value: '', label: 'None / General Task' },
+                  ...clients.map((c) => ({
+                    value: c.id,
+                    label: c.displayText,
+                  })),
+                ]}
+              />
             </div>
 
             <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3 items-start">
@@ -1312,32 +1310,24 @@ export const TasksPage: React.FC = () => {
                     )}
                   />
                 ) : (
-                  <select
+                  <CustomSelect
                     value={newTaskForm.dueTime}
                     required
-                    onChange={(e) => {
-                      setNewTaskForm({ ...newTaskForm, dueTime: e.target.value });
+                    onChange={(val) => {
+                      setNewTaskForm({ ...newTaskForm, dueTime: val });
                       if (formError) setFormError(null);
                     }}
-                    className={cn(
-                      'w-full h-8 px-2 text-xs rounded-input border bg-white text-txt-primary focus:outline-none focus:ring-1 shadow-subtle cursor-pointer',
-                      newTaskForm.dueTime && isTimeOver(newTaskForm.dueDate, newTaskForm.dueTime)
-                        ? 'border-red-500 text-red-600 focus:ring-red-500 focus:border-red-500 bg-red-50/40'
-                        : 'border-border focus:ring-primary focus:border-primary'
-                    )}
-                  >
-                    <option value="">-- Choose time (e.g. 10:00 AM) --</option>
-                    {newTaskForm.dueTime && !TIME_SLOTS_OPTIONS.some((s) => s.value === newTaskForm.dueTime) && (
-                      <option value={newTaskForm.dueTime}>
-                        {formatDisplayTime(newTaskForm.dueTime)} (Current selection)
-                      </option>
-                    )}
-                    {TIME_SLOTS_OPTIONS.map((slot) => (
-                      <option key={slot.value} value={slot.value}>
-                        {slot.label}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="-- Choose time (e.g. 10:00 AM) --"
+                    options={[
+                      ...(newTaskForm.dueTime && !TIME_SLOTS_OPTIONS.some((s) => s.value === newTaskForm.dueTime)
+                        ? [{ value: newTaskForm.dueTime, label: `${formatDisplayTime(newTaskForm.dueTime)} (Current selection)` }]
+                        : []),
+                      ...TIME_SLOTS_OPTIONS.map((slot) => ({
+                        value: slot.value,
+                        label: slot.label,
+                      })),
+                    ]}
+                  />
                 )}
               </div>
             </div>
@@ -1412,8 +1402,9 @@ export const TasksPage: React.FC = () => {
                 Tomorrow 10:00 AM
               </button>
             </div>
+            </div>
 
-            <DialogFooter className="pt-3.5 border-t border-border flex items-center justify-end gap-2 sm:space-x-0">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
@@ -1464,7 +1455,7 @@ export const TasksPage: React.FC = () => {
               </div>
             </DialogHeader>
 
-            <div className="space-y-3 py-2 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="p-3 bg-slate-50 rounded-card border border-border space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-txt-muted font-medium">Status</span>
@@ -1495,7 +1486,7 @@ export const TasksPage: React.FC = () => {
               </div>
             </div>
 
-            <DialogFooter className="flex-row justify-between sm:justify-between items-center pt-3.5 border-t border-border">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between sm:justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
@@ -1539,41 +1530,43 @@ export const TasksPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleLogOutcomeSubmit} className="space-y-3 pt-2 pb-0 text-xs">
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">Outcome Status</label>
-              <select
-                value={outcomeForm.outcome}
-                onChange={(e) => setOutcomeForm({ ...outcomeForm, outcome: e.target.value })}
-                disabled={isSubmitting}
-                className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
-              >
-                <option value="CONNECTED_INTERESTED">Connected - Interested & Exploring</option>
-                <option value="CONNECTED_CALLBACK">Connected - Requested Callback</option>
-                <option value="CONNECTED_MEETING_BOOKED">Connected - Discovery Meeting Booked</option>
-                <option value="MESSAGE_SENT">Message / Pitch Sent</option>
-                <option value="NO_ANSWER">No Answer / Left Voicemail</option>
-                <option value="BUSY">Busy</option>
-                <option value="CONNECTED_NOT_INTERESTED">Connected - Not Interested</option>
-                <option value="COMPLETED">Task Completed</option>
-              </select>
+          <form onSubmit={handleLogOutcomeSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">Outcome Status</label>
+                <CustomSelect
+                  value={outcomeForm.outcome}
+                  onChange={(val) => setOutcomeForm({ ...outcomeForm, outcome: val })}
+                  disabled={isSubmitting}
+                  options={[
+                    { value: 'CONNECTED_INTERESTED', label: 'Connected - Interested & Exploring' },
+                    { value: 'CONNECTED_CALLBACK', label: 'Connected - Requested Callback' },
+                    { value: 'CONNECTED_MEETING_BOOKED', label: 'Connected - Discovery Meeting Booked' },
+                    { value: 'MESSAGE_SENT', label: 'Message / Pitch Sent' },
+                    { value: 'NO_ANSWER', label: 'No Answer / Left Voicemail' },
+                    { value: 'BUSY', label: 'Busy' },
+                    { value: 'CONNECTED_NOT_INTERESTED', label: 'Connected - Not Interested' },
+                    { value: 'COMPLETED', label: 'Task Completed' },
+                  ]}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-caption text-txt-secondary block font-medium">
+                  Outcome Notes <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
+                </label>
+                <textarea
+                  rows={3}
+                  value={outcomeForm.notes}
+                  onChange={(e) => setOutcomeForm({ ...outcomeForm, notes: e.target.value })}
+                  placeholder="What was discussed or concluded?"
+                  disabled={isSubmitting}
+                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Outcome Notes <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
-              </label>
-              <textarea
-                rows={3}
-                value={outcomeForm.notes}
-                onChange={(e) => setOutcomeForm({ ...outcomeForm, notes: e.target.value })}
-                placeholder="What was discussed or concluded?"
-                disabled={isSubmitting}
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-            </div>
-
-            <DialogFooter className="pt-3.5 border-t border-border flex items-center justify-end gap-2 sm:space-x-0">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"

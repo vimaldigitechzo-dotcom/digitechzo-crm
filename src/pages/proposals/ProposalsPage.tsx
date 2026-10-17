@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHeader } from '@/components/common/PageHeader';
@@ -20,6 +20,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { crmApi } from '@/lib/api';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useCrmDirectory } from '@/hooks/useCrmDirectory';
 import { ProposalItem, ProposalStatus } from '@/types/crm';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import {
@@ -39,6 +41,7 @@ import {
 
 export const ProposalsPage: React.FC = () => {
   const queryClient = useQueryClient();
+  const { teamUsers, teamOwnerNames, clients, clientNames } = useCrmDirectory();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -59,6 +62,7 @@ export const ProposalsPage: React.FC = () => {
   const [newProposalForm, setNewProposalForm] = useState({
     title: '',
     leadId: '',
+    ownerId: '',
     dealId: '',
     amount: 500000,
     validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -77,11 +81,6 @@ export const ProposalsPage: React.FC = () => {
     queryFn: () => crmApi.getProposals({ limit: 100 }),
   });
 
-  const { data: leadsResponse } = useQuery({
-    queryKey: ['leads'],
-    queryFn: () => crmApi.getLeads({ limit: 100 }),
-  });
-
   const { data: dealsResponse } = useQuery({
     queryKey: ['deals'],
     queryFn: () => crmApi.getDeals({ limit: 100 }),
@@ -96,15 +95,6 @@ export const ProposalsPage: React.FC = () => {
     );
   }, [proposalsResponse]);
 
-  const leads = useMemo(() => {
-    return (
-      leadsResponse?.items ||
-      leadsResponse?.leads ||
-      (Array.isArray(leadsResponse?.data) ? leadsResponse?.data : leadsResponse?.data?.items) ||
-      []
-    );
-  }, [leadsResponse]);
-
   const deals = useMemo(() => {
     return (
       dealsResponse?.deals ||
@@ -113,12 +103,10 @@ export const ProposalsPage: React.FC = () => {
     );
   }, [dealsResponse]);
 
-  // Set default leadId when leads load
-  useEffect(() => {
-    if (!newProposalForm.leadId && leads.length > 0) {
-      setNewProposalForm((prev) => ({ ...prev, leadId: leads[0].id }));
-    }
-  }, [leads, newProposalForm.leadId]);
+  // Selected client for create proposal modal
+  const selectedClient = useMemo(() => {
+    return clients.find((c) => c.id === newProposalForm.leadId);
+  }, [clients, newProposalForm.leadId]);
 
   // Map Backend proposals to frontend ProposalItem models
   const proposals: ProposalItem[] = useMemo(() => {
@@ -176,14 +164,16 @@ export const ProposalsPage: React.FC = () => {
   const draftCount = useMemo(() => proposals.filter((p) => p.status === 'DRAFT').length, [proposals]);
   const declinedCount = useMemo(() => proposals.filter((p) => p.status === 'DECLINED').length, [proposals]);
 
-  // Unique clients and owners derived from data
+  // Unique clients and owners derived from data + CRM directory
   const uniqueClients = useMemo(() => {
-    return Array.from(new Set(proposals.map((p) => p.companyName)));
-  }, [proposals]);
+    const fromProposals = proposals.map((p) => p.companyName).filter(Boolean);
+    return Array.from(new Set([...fromProposals, ...clientNames]));
+  }, [proposals, clientNames]);
 
   const uniqueOwners = useMemo(() => {
-    return Array.from(new Set(proposals.map((p) => p.ownerName)));
-  }, [proposals]);
+    const fromProposals = proposals.map((p) => p.ownerName).filter(Boolean);
+    return Array.from(new Set([...fromProposals, ...teamOwnerNames]));
+  }, [proposals, teamOwnerNames]);
 
   // Filter options for pills
   const filterOptions: FilterOption[] = useMemo(() => {
@@ -201,7 +191,10 @@ export const ProposalsPage: React.FC = () => {
   const filteredProposals = useMemo(() => {
     return proposals.filter((p) => {
       if (statusFilter !== 'ALL' && p.status !== statusFilter) return false;
-      if (clientFilter !== 'ALL' && p.companyName !== clientFilter) return false;
+      if (clientFilter !== 'ALL') {
+        const matchesClient = p.companyName === clientFilter || p.clientName === clientFilter;
+        if (!matchesClient) return false;
+      }
       if (ownerFilter !== 'ALL' && p.ownerName !== ownerFilter) return false;
 
       if (searchQuery.trim()) {
@@ -263,11 +256,12 @@ export const ProposalsPage: React.FC = () => {
         title: newProposalForm.title.trim(),
         leadId: newProposalForm.leadId || undefined,
         dealId: newProposalForm.dealId || undefined,
+        ownerId: newProposalForm.ownerId || undefined,
         subtotal: Number(newProposalForm.amount) || 0,
         totalAmount: Number(newProposalForm.amount) || 0,
         validUntil: newProposalForm.validUntil ? new Date(newProposalForm.validUntil).toISOString() : undefined,
         description: newProposalForm.scopeNotes.trim() || undefined,
-      });
+      } as any);
 
       await queryClient.invalidateQueries({ queryKey: ['proposals'] });
       await queryClient.invalidateQueries({ queryKey: ['leads'] });
@@ -277,7 +271,8 @@ export const ProposalsPage: React.FC = () => {
       setIsCreateModalOpen(false);
       setNewProposalForm({
         title: '',
-        leadId: leads[0]?.id || '',
+        leadId: '',
+        ownerId: '',
         dealId: '',
         amount: 500000,
         validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -487,32 +482,28 @@ export const ProposalsPage: React.FC = () => {
 
           <div className="flex items-center gap-2 flex-wrap">
             {/* Client Filter */}
-            <select
-              value={clientFilter}
-              onChange={(e) => setClientFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Clients</option>
-              {uniqueClients.map((client) => (
-                <option key={client} value={client}>
-                  {client}
-                </option>
-              ))}
-            </select>
+            <div className="w-[140px]">
+              <CustomSelect
+                value={clientFilter}
+                onChange={setClientFilter}
+                options={[
+                  { value: 'ALL', label: 'All Clients' },
+                  ...uniqueClients.map((client) => ({ value: client, label: client })),
+                ]}
+              />
+            </div>
 
             {/* Owner Filter */}
-            <select
-              value={ownerFilter}
-              onChange={(e) => setOwnerFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Owners</option>
-              {uniqueOwners.map((owner) => (
-                <option key={owner} value={owner}>
-                  {owner}
-                </option>
-              ))}
-            </select>
+            <div className="w-[130px]">
+              <CustomSelect
+                value={ownerFilter}
+                onChange={setOwnerFilter}
+                options={[
+                  { value: 'ALL', label: 'All Owners' },
+                  ...uniqueOwners.map((owner) => ({ value: owner, label: owner })),
+                ]}
+              />
+            </div>
 
             {isFiltered && (
               <Button
@@ -784,14 +775,14 @@ export const ProposalsPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleCreateProposal} className="space-y-3 py-1">
+          <form onSubmit={handleCreateProposal} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              {formError && (
+                <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="text-xs font-semibold text-txt-primary">
                 Proposal Title <span className="text-red-500">*</span>
@@ -806,37 +797,88 @@ export const ProposalsPage: React.FC = () => {
               />
             </div>
 
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-txt-primary">Client / Prospect</label>
+                <span className="text-[10px] text-txt-muted">{clients.length} clients available</span>
+              </div>
+              <CustomSelect
+                value={newProposalForm.leadId}
+                onChange={(val) => {
+                  const chosen = clients.find((c) => c.id === val);
+                  setNewProposalForm((prev) => ({
+                    ...prev,
+                    leadId: val,
+                    title: !prev.title || prev.title.startsWith('Commercial Proposal -')
+                      ? chosen ? `Commercial Proposal - ${chosen.displayName}` : prev.title
+                      : prev.title,
+                  }));
+                }}
+                placeholder="Select client or prospect..."
+                options={[
+                  { value: '', label: 'None / Direct Prospect' },
+                  ...clients.map((c) => ({
+                    value: c.id,
+                    label: c.displayText,
+                  })),
+                ]}
+              />
+
+              {/* Selected client detailed card */}
+              {selectedClient && (
+                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-btn text-[11px] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-txt-primary">{selectedClient.companyName}</span>
+                    <Badge variant={selectedClient.type === 'customer' ? 'success' : 'brand'} className="text-[10px] py-0 px-1.5">
+                      {selectedClient.type === 'customer' ? 'Customer Account' : 'Prospect Lead'}
+                    </Badge>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-3 text-txt-muted">
+                    {selectedClient.contactName && (
+                      <span>Contact: <strong className="text-txt-primary font-medium">{selectedClient.contactName}</strong></span>
+                    )}
+                    {selectedClient.phone && (
+                      <span>Phone: <strong className="text-txt-primary font-medium">{selectedClient.phone}</strong></span>
+                    )}
+                    {selectedClient.email && (
+                      <span>Email: <strong className="text-txt-primary font-medium">{selectedClient.email}</strong></span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary">Client / Prospect</label>
-                <select
-                  value={newProposalForm.leadId}
-                  onChange={(e) => setNewProposalForm({ ...newProposalForm, leadId: e.target.value })}
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
-                >
-                  <option value="">None / Direct</option>
-                  {leads.map((lead: any) => (
-                    <option key={lead.id} value={lead.id}>
-                      {lead.companyName ? `${lead.companyName}${lead.fullName ? ` (${lead.fullName})` : ''}` : lead.fullName || 'Prospect'} {lead.phone ? `• ${lead.phone}` : ''}
-                    </option>
-                  ))}
-                </select>
+                <label className="text-xs font-semibold text-txt-primary">Assigned Owner / BDE</label>
+                <CustomSelect
+                  value={newProposalForm.ownerId}
+                  onChange={(val) => setNewProposalForm({ ...newProposalForm, ownerId: val })}
+                  placeholder="Select owner..."
+                  options={[
+                    { value: '', label: 'Auto (Current User)' },
+                    ...teamUsers.map((u) => ({
+                      value: u.id,
+                      label: `${u.name} (${u.role})`,
+                    })),
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-txt-primary">Related Deal</label>
-                <select
+                <CustomSelect
                   value={newProposalForm.dealId}
-                  onChange={(e) => setNewProposalForm({ ...newProposalForm, dealId: e.target.value })}
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
-                >
-                  <option value="">None (Lead Only)</option>
-                  {deals.map((deal: any) => (
-                    <option key={deal.id} value={deal.id}>
-                      {deal.title} ({formatCurrency(Number(deal.amount || 0))})
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setNewProposalForm({ ...newProposalForm, dealId: val })}
+                  placeholder="None (Direct Proposal)"
+                  options={[
+                    { value: '', label: 'None (Direct Proposal)' },
+                    ...deals.map((deal: any) => ({
+                      value: deal.id,
+                      label: `${deal.title} (${formatCurrency(Number(deal.amount || 0))})`,
+                    })),
+                  ]}
+                />
               </div>
             </div>
 
@@ -877,8 +919,9 @@ export const ProposalsPage: React.FC = () => {
                 className="w-full p-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle resize-none"
               />
             </div>
+            </div>
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
@@ -932,7 +975,7 @@ export const ProposalsPage: React.FC = () => {
               </div>
             </DialogHeader>
 
-            <div className="space-y-3 py-2 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="p-3 bg-slate-50 rounded-card border border-border space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-txt-muted font-medium">Title</span>
@@ -980,7 +1023,7 @@ export const ProposalsPage: React.FC = () => {
               )}
             </div>
 
-            <DialogFooter className="flex-row justify-between sm:justify-between items-center pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between sm:justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"

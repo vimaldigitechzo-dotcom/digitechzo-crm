@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/dialog';
 import { crmApi } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { useCrmDirectory } from '@/hooks/useCrmDirectory';
 import {
   MeetingItem,
   MeetingStatus,
@@ -83,6 +85,7 @@ const TIME_SLOTS_OPTIONS = (() => {
 export const MeetingsPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { teamOwnerNames, clients } = useCrmDirectory();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -304,10 +307,11 @@ export const MeetingsPage: React.FC = () => {
     ];
   }, [meetings.length, upcomingCount, completedCount, noShowCount, cancelledCount]);
 
-  // Unique hosts
+  // Unique hosts combining meetings and CRM directory
   const uniqueHosts = useMemo(() => {
-    return Array.from(new Set(meetings.map((m) => m.hostName).filter(Boolean)));
-  }, [meetings]);
+    const fromMeetings = meetings.map((m) => m.hostName).filter(Boolean);
+    return Array.from(new Set([...fromMeetings, ...teamOwnerNames]));
+  }, [meetings, teamOwnerNames]);
 
   // Filtered meetings
   const filteredMeetings = useMemo(() => {
@@ -698,31 +702,29 @@ export const MeetingsPage: React.FC = () => {
 
           <div className="flex items-center gap-2 flex-wrap">
             {/* Host Filter */}
-            <select
+            <CustomSelect
               value={hostFilter}
-              onChange={(e) => setHostFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Hosts</option>
-              {uniqueHosts.map((h) => (
-                <option key={h} value={h}>
-                  {h}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setHostFilter(val)}
+              className="w-36"
+              options={[
+                { value: 'ALL', label: 'All Hosts' },
+                ...uniqueHosts.map((h) => ({ value: h, label: h })),
+              ]}
+            />
 
             {/* Type Filter */}
-            <select
+            <CustomSelect
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-secondary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer shadow-subtle"
-            >
-              <option value="ALL">All Types</option>
-              <option value="DEMO">Technical Demo</option>
-              <option value="DISCOVERY">Discovery Session</option>
-              <option value="MEETING">Commercial Meeting</option>
-              <option value="FOLLOW_UP">Proposal Review</option>
-            </select>
+              onChange={(val) => setTypeFilter(val)}
+              className="w-40"
+              options={[
+                { value: 'ALL', label: 'All Types' },
+                { value: 'DEMO', label: 'Technical Demo' },
+                { value: 'DISCOVERY', label: 'Discovery Session' },
+                { value: 'MEETING', label: 'Commercial Meeting' },
+                { value: 'FOLLOW_UP', label: 'Proposal Review' },
+              ]}
+            />
 
             {isFiltered && (
               <Button
@@ -1096,7 +1098,7 @@ export const MeetingsPage: React.FC = () => {
 
       {/* 5. Schedule Demo Modal */}
       <Dialog open={isScheduleModalOpen} onOpenChange={setIsScheduleModalOpen}>
-        <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-base font-bold text-txt-primary">
               Schedule Meeting / Demo
@@ -1106,14 +1108,14 @@ export const MeetingsPage: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          {formError && (
-            <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{formError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleCreateMeeting} className="space-y-3.5 pt-1 pb-0">
+          <form onSubmit={handleCreateMeeting} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5">
+              {formError && (
+                <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
             <div className="space-y-1">
               <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">
                 Meeting Title <span className="text-red-500 ml-0.5">*</span>
@@ -1129,56 +1131,59 @@ export const MeetingsPage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Related Prospect / Lead</label>
-              <select
+              <div className="flex items-center justify-between h-5">
+                <label className="text-xs font-semibold text-txt-primary flex items-center">Related Prospect / Client</label>
+                <span className="text-[10px] text-txt-muted">{clients.length} available</span>
+              </div>
+              <CustomSelect
                 value={newMeetingForm.leadId}
-                onChange={(e) => setNewMeetingForm({ ...newMeetingForm, leadId: e.target.value })}
-                className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle cursor-pointer"
-              >
-                <option value="">None / General Session</option>
-                {leads.map((lead: any) => (
-                  <option key={lead.id} value={lead.id}>
-                    {lead.companyName ? `${lead.companyName}${lead.fullName ? ` (${lead.fullName})` : ''}` : lead.fullName || 'Prospect'} {lead.phone ? `• ${lead.phone}` : ''}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setNewMeetingForm({ ...newMeetingForm, leadId: val })}
+                placeholder="None / General Session"
+                options={[
+                  { value: '', label: 'None / General Session' },
+                  ...clients.map((c) => ({
+                    value: c.id,
+                    label: c.displayText,
+                  })),
+                ]}
+              />
             </div>
 
             <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3">
               <div className="space-y-1">
                 <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Session Modality</label>
-                <select
+                <CustomSelect
                   value={newMeetingForm.meetingType}
-                  onChange={(e) =>
+                  onChange={(val) =>
                     setNewMeetingForm({
                       ...newMeetingForm,
-                      meetingType: e.target.value as MeetingType,
+                      meetingType: val as MeetingType,
                     })
                   }
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle cursor-pointer"
-                >
-                  <option value="DEMO">Technical Demo</option>
-                  <option value="DISCOVERY">Discovery Session</option>
-                  <option value="MEETING">Commercial Meeting</option>
-                  <option value="FOLLOW_UP">Proposal Review</option>
-                </select>
+                  options={[
+                    { value: 'DEMO', label: 'Technical Demo' },
+                    { value: 'DISCOVERY', label: 'Discovery Session' },
+                    { value: 'MEETING', label: 'Commercial Meeting' },
+                    { value: 'FOLLOW_UP', label: 'Proposal Review' },
+                  ]}
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">Duration</label>
-                <select
+                <CustomSelect
                   value={newMeetingForm.duration}
-                  onChange={(e) =>
-                    setNewMeetingForm({ ...newMeetingForm, duration: e.target.value })
+                  onChange={(val) =>
+                    setNewMeetingForm({ ...newMeetingForm, duration: val })
                   }
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle cursor-pointer"
-                >
-                  <option value="30 min">30 min</option>
-                  <option value="45 min">45 min</option>
-                  <option value="60 min">60 min (1 hr)</option>
-                  <option value="90 min">90 min (1.5 hrs)</option>
-                  <option value="2 hours">2 hours</option>
-                </select>
+                  options={[
+                    { value: '30 min', label: '30 min' },
+                    { value: '45 min', label: '45 min' },
+                    { value: '60 min', label: '60 min (1 hr)' },
+                    { value: '90 min', label: '90 min (1.5 hrs)' },
+                    { value: '2 hours', label: '2 hours' },
+                  ]}
+                />
               </div>
             </div>
 
@@ -1222,29 +1227,21 @@ export const MeetingsPage: React.FC = () => {
                     )}
                   />
                 ) : (
-                  <select
+                  <CustomSelect
                     value={newMeetingForm.time}
                     required
-                    onChange={(e) => handleStartTimeChange(e.target.value)}
-                    className={cn(
-                      'w-full h-8 px-2 text-xs rounded-input border bg-white text-txt-primary focus:outline-none focus:ring-1 shadow-subtle cursor-pointer',
-                      newMeetingForm.time && isTimeOver(newMeetingForm.date, newMeetingForm.time)
-                        ? 'border-red-500 text-red-600 focus:ring-red-500 focus:border-red-500 bg-red-50/40'
-                        : 'border-border focus:ring-primary focus:border-primary'
-                    )}
-                  >
-                    <option value="">-- Choose time (e.g. 10:00 AM) --</option>
-                    {newMeetingForm.time && !TIME_SLOTS_OPTIONS.some((s) => s.value === newMeetingForm.time) && (
-                      <option value={newMeetingForm.time}>
-                        {formatDisplayTime(newMeetingForm.time)} (Current selection)
-                      </option>
-                    )}
-                    {TIME_SLOTS_OPTIONS.map((slot) => (
-                      <option key={slot.value} value={slot.value}>
-                        {slot.label}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => handleStartTimeChange(val)}
+                    placeholder="-- Choose time (e.g. 10:00 AM) --"
+                    options={[
+                      ...(newMeetingForm.time && !TIME_SLOTS_OPTIONS.some((s) => s.value === newMeetingForm.time)
+                        ? [{ value: newMeetingForm.time, label: `${formatDisplayTime(newMeetingForm.time)} (Current selection)` }]
+                        : []),
+                      ...TIME_SLOTS_OPTIONS.map((slot) => ({
+                        value: slot.value,
+                        label: slot.label,
+                      })),
+                    ]}
+                  />
                 )}
               </div>
             </div>
@@ -1493,7 +1490,9 @@ export const MeetingsPage: React.FC = () => {
               />
             </div>
 
-            <DialogFooter className="pt-3.5 border-t border-border flex items-center justify-end gap-2 sm:space-x-0">
+            </div>
+
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
@@ -1541,59 +1540,61 @@ export const MeetingsPage: React.FC = () => {
               </DialogDescription>
             </DialogHeader>
 
-            {formError && (
-              <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                <span>{formError}</span>
-              </div>
-            )}
+            <form onSubmit={handleSaveOutcome} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3">
+                {formError && (
+                  <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{formError}</span>
+                  </div>
+                )}
 
-            <form onSubmit={handleSaveOutcome} className="space-y-3 py-1">
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary">Attendance Status</label>
-                <select
-                  value={outcomeForm.status}
-                  onChange={(e) =>
-                    setOutcomeForm({ ...outcomeForm, status: e.target.value as MeetingStatus })
-                  }
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle"
-                >
-                  <option value="COMPLETED">Completed</option>
-                  <option value="NO_SHOW">No-Show</option>
-                  <option value="CANCELLED">Cancelled</option>
-                </select>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-txt-primary">Attendance Status</label>
+                  <CustomSelect
+                    value={outcomeForm.status}
+                    onChange={(val) =>
+                      setOutcomeForm({ ...outcomeForm, status: val as MeetingStatus })
+                    }
+                    options={[
+                      { value: 'COMPLETED', label: 'Completed' },
+                      { value: 'NO_SHOW', label: 'No-Show' },
+                      { value: 'CANCELLED', label: 'Cancelled' },
+                    ]}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-txt-primary">
+                    Outcome Summary <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    required
+                    placeholder="Summary of client reception, validated requirements, and commercial intent..."
+                    value={outcomeForm.outcomeSummary}
+                    onChange={(e) =>
+                      setOutcomeForm({ ...outcomeForm, outcomeSummary: e.target.value })
+                    }
+                    className="w-full p-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle resize-none"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-txt-primary">Next Action Notes</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Dispatch customized proposal within 48 hours"
+                    value={outcomeForm.nextStepNotes}
+                    onChange={(e) =>
+                      setOutcomeForm({ ...outcomeForm, nextStepNotes: e.target.value })
+                    }
+                    className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary">
-                  Outcome Summary <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  rows={2}
-                  required
-                  placeholder="Summary of client reception, validated requirements, and commercial intent..."
-                  value={outcomeForm.outcomeSummary}
-                  onChange={(e) =>
-                    setOutcomeForm({ ...outcomeForm, outcomeSummary: e.target.value })
-                  }
-                  className="w-full p-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle resize-none"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary">Next Action Notes</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Dispatch customized proposal within 48 hours"
-                  value={outcomeForm.nextStepNotes}
-                  onChange={(e) =>
-                    setOutcomeForm({ ...outcomeForm, nextStepNotes: e.target.value })
-                  }
-                  className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle"
-                />
-              </div>
-
-              <DialogFooter className="pt-2">
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   type="button"
                   variant="outline"
@@ -1646,7 +1647,7 @@ export const MeetingsPage: React.FC = () => {
               </div>
             </DialogHeader>
 
-            <div className="space-y-3 py-2 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="p-3 bg-slate-50 rounded-card border border-border space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-txt-muted font-medium">Status</span>
@@ -1725,7 +1726,7 @@ export const MeetingsPage: React.FC = () => {
               )}
             </div>
 
-            <DialogFooter className="flex-row justify-between sm:justify-between items-center pt-2">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between sm:justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
