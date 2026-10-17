@@ -97,6 +97,8 @@ export const MeetingsPage: React.FC = () => {
   const [selectedMeeting, setSelectedMeeting] = useState<MeetingItem | null>(null);
   const [urlValidationError, setUrlValidationError] = useState<string | null>(null);
   const [shareValidationError, setShareValidationError] = useState<string | null>(null);
+  const [isCustomMessage, setIsCustomMessage] = useState(false);
+  const [customMessageText, setCustomMessageText] = useState('');
 
   // Form states (starts with empty time so user selects allocated time)
   const [newMeetingForm, setNewMeetingForm] = useState({
@@ -110,6 +112,33 @@ export const MeetingsPage: React.FC = () => {
     notes: '',
   });
 
+  const defaultIntroText = useMemo(() => {
+    const formattedStartTime = newMeetingForm.time
+      ? formatDisplayTime(newMeetingForm.time)
+      : '[Start Time]';
+    const platform = getMeetingPlatformInfo(newMeetingForm.meetingUrl);
+    const platformName = platform.isOnline
+      ? (platform.platformName === 'Google Meet' ? 'Google Meet' : platform.platformName)
+      : 'Google Meet';
+    return `As informed, I’ll be available to meet you all today. I’ve created a ${platformName} for the discussion. Sharing the meeting link below, please join at ${formattedStartTime}.`;
+  }, [newMeetingForm.time, newMeetingForm.meetingUrl]);
+
+  const handleStartTimeChange = (newTime: string) => {
+    setNewMeetingForm((prev) => ({ ...prev, time: newTime }));
+    if (formError) setFormError(null);
+    if (shareValidationError) setShareValidationError(null);
+
+    // Keep the time in custom text synchronized if the user is editing it
+    if (isCustomMessage && customMessageText) {
+      const formatted = newTime ? formatDisplayTime(newTime) : '[Start Time]';
+      const updated = customMessageText.replace(
+        /(join at\s+)[^.\n]+/i,
+        `$1${formatted}`
+      );
+      setCustomMessageText(updated);
+    }
+  };
+
   const handleOpenScheduleModal = () => {
     setNewMeetingForm({
       title: '',
@@ -122,6 +151,8 @@ export const MeetingsPage: React.FC = () => {
       meetingUrl: '',
     });
     setIsManualTime(false);
+    setIsCustomMessage(false);
+    setCustomMessageText('');
     setUrlValidationError(null);
     setShareValidationError(null);
     setFormError(null);
@@ -1182,10 +1213,7 @@ export const MeetingsPage: React.FC = () => {
                     type="time"
                     required
                     value={newMeetingForm.time}
-                    onChange={(e) => {
-                      setNewMeetingForm({ ...newMeetingForm, time: e.target.value });
-                      if (formError) setFormError(null);
-                    }}
+                    onChange={(e) => handleStartTimeChange(e.target.value)}
                     className={cn(
                       'w-full h-8 px-2 text-xs rounded-input border bg-white text-txt-primary focus:outline-none focus:ring-1 shadow-subtle cursor-pointer',
                       newMeetingForm.time && isTimeOver(newMeetingForm.date, newMeetingForm.time)
@@ -1197,10 +1225,7 @@ export const MeetingsPage: React.FC = () => {
                   <select
                     value={newMeetingForm.time}
                     required
-                    onChange={(e) => {
-                      setNewMeetingForm({ ...newMeetingForm, time: e.target.value });
-                      if (formError) setFormError(null);
-                    }}
+                    onChange={(e) => handleStartTimeChange(e.target.value)}
                     className={cn(
                       'w-full h-8 px-2 text-xs rounded-input border bg-white text-txt-primary focus:outline-none focus:ring-1 shadow-subtle cursor-pointer',
                       newMeetingForm.time && isTimeOver(newMeetingForm.date, newMeetingForm.time)
@@ -1250,8 +1275,8 @@ export const MeetingsPage: React.FC = () => {
                   const d = new Date(Date.now() + 30 * 60 * 1000);
                   const hh = String(d.getHours()).padStart(2, '0');
                   const mm = String(d.getMinutes()).padStart(2, '0');
-                  setNewMeetingForm((p) => ({ ...p, date: getLocalDateString(d), time: `${hh}:${mm}` }));
-                  if (formError) setFormError(null);
+                  setNewMeetingForm((p) => ({ ...p, date: getLocalDateString(d) }));
+                  handleStartTimeChange(`${hh}:${mm}`);
                 }}
                 className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
               >
@@ -1263,8 +1288,8 @@ export const MeetingsPage: React.FC = () => {
                   const d = new Date(Date.now() + 60 * 60 * 1000);
                   const hh = String(d.getHours()).padStart(2, '0');
                   const mm = String(d.getMinutes()).padStart(2, '0');
-                  setNewMeetingForm((p) => ({ ...p, date: getLocalDateString(d), time: `${hh}:${mm}` }));
-                  if (formError) setFormError(null);
+                  setNewMeetingForm((p) => ({ ...p, date: getLocalDateString(d) }));
+                  handleStartTimeChange(`${hh}:${mm}`);
                 }}
                 className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
               >
@@ -1275,8 +1300,8 @@ export const MeetingsPage: React.FC = () => {
                 onClick={() => {
                   const tomorrow = new Date();
                   tomorrow.setDate(tomorrow.getDate() + 1);
-                  setNewMeetingForm((p) => ({ ...p, date: getLocalDateString(tomorrow), time: '11:00' }));
-                  if (formError) setFormError(null);
+                  setNewMeetingForm((p) => ({ ...p, date: getLocalDateString(tomorrow) }));
+                  handleStartTimeChange('11:00');
                 }}
                 className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
               >
@@ -1354,6 +1379,7 @@ export const MeetingsPage: React.FC = () => {
                       time: newMeetingForm.time,
                       duration: newMeetingForm.duration,
                       meetingUrl: newMeetingForm.meetingUrl.trim(),
+                      customIntroMessage: isCustomMessage && customMessageText.trim() ? customMessageText.trim() : undefined,
                     });
                   }}
                   className="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-6 w-6 rounded hover:bg-slate-100 text-[#25D366] active:scale-95 transition-all cursor-pointer shrink-0"
@@ -1372,6 +1398,77 @@ export const MeetingsPage: React.FC = () => {
                   <AlertCircle className="h-3 w-3 shrink-0" />
                   {urlValidationError}
                 </p>
+              )}
+            </div>
+
+            {/* WhatsApp Invitation Text (Automated with Manual Type Option) */}
+            <div className="space-y-1.5 p-2.5 rounded-card bg-slate-50/80 border border-slate-200/80">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-semibold text-txt-primary flex items-center gap-1.5">
+                  <span>WhatsApp Invitation Message</span>
+                  <span className="text-[10px] text-txt-muted font-normal">
+                    {isCustomMessage ? '(Manual Custom)' : '(Automated)'}
+                  </span>
+                </label>
+                <div className="flex items-center gap-2">
+                  {isCustomMessage && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCustomMessage(false);
+                        setCustomMessageText('');
+                      }}
+                      className="text-[10px] text-txt-muted hover:text-txt-primary hover:underline cursor-pointer"
+                    >
+                      Reset to auto
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isCustomMessage) {
+                        setIsCustomMessage(true);
+                        setCustomMessageText(defaultIntroText);
+                      } else {
+                        setIsCustomMessage(false);
+                      }
+                    }}
+                    className="text-[11px] text-[#57B71B] hover:text-[#469815] font-semibold hover:underline cursor-pointer"
+                  >
+                    {isCustomMessage ? 'Use automated text' : '✏️ Type manual text'}
+                  </button>
+                </div>
+              </div>
+
+              {isCustomMessage ? (
+                <div className="space-y-1">
+                  <textarea
+                    rows={3}
+                    placeholder="Type your manual WhatsApp message here..."
+                    value={customMessageText}
+                    onChange={(e) => setCustomMessageText(e.target.value)}
+                    className="w-full p-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle resize-none leading-relaxed"
+                  />
+                  <p className="text-[10px] text-txt-muted">
+                    This manual text will be sent as the opening message when you share via WhatsApp.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-start justify-between p-2 rounded-btn bg-white border border-slate-200/60 text-[11px] text-txt-secondary leading-relaxed">
+                  <p className="line-clamp-2 italic text-txt-secondary">
+                    "{defaultIntroText}"
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomMessage(true);
+                      setCustomMessageText(defaultIntroText);
+                    }}
+                    className="text-[10px] text-[#57B71B] hover:text-[#469815] font-semibold hover:underline shrink-0 ml-2 cursor-pointer whitespace-nowrap pt-0.5"
+                  >
+                    Edit
+                  </button>
+                </div>
               )}
             </div>
 

@@ -287,6 +287,7 @@ export function formatWhatsAppMeetingMessage(meeting: {
   endTime?: string | Date;
   meetingUrl?: string;
   location?: string;
+  customIntroMessage?: string;
 }): string {
   const title = (meeting.title || 'Discussion').trim();
   let urlOrLoc = (meeting.meetingUrl || meeting.location || '').trim();
@@ -325,15 +326,20 @@ export function formatWhatsAppMeetingMessage(meeting: {
     const finalUrl = normalizeMeetingUrl(urlOrLoc);
     const platformName = platform.platformName === 'Google Meet' ? 'Google Meet' : platform.platformName;
     const headerTitle = platform.platformName === 'Google Meet' ? 'Google Meet joining info' : `${platform.platformName} joining info`;
-    introLine = `As informed, I’ll be available to meet you all today. I’ve created a ${platformName} for the discussion. Sharing the meeting link below, please join at ${times.formattedStartTime}.`;
     joiningInfoSection = `${headerTitle}\nVideo call link: ${finalUrl}`;
+    introLine = `As informed, I’ll be available to meet you all today. I’ve created a ${platformName} for the discussion. Sharing the meeting link below, please join at ${times.formattedStartTime}.`;
   } else if (urlOrLoc) {
-    introLine = `As informed, I’ll be available to meet you all today. I’ve scheduled a meeting for our discussion. Please join at ${times.formattedStartTime}.`;
     joiningInfoSection = `Meeting location\nLocation: ${urlOrLoc}`;
+    introLine = `As informed, I’ll be available to meet you all today. I’ve scheduled a meeting for our discussion. Please join at ${times.formattedStartTime}.`;
   } else {
     const autoUrl = generateAutomatedMeetUrl();
-    introLine = `As informed, I’ll be available to meet you all today. I’ve created a Google Meet for the discussion. Sharing the meeting link below, please join at ${times.formattedStartTime}.`;
     joiningInfoSection = `Google Meet joining info\nVideo call link: ${autoUrl}`;
+    introLine = `As informed, I’ll be available to meet you all today. I’ve created a Google Meet for the discussion. Sharing the meeting link below, please join at ${times.formattedStartTime}.`;
+  }
+
+  // If manual custom intro text is provided, override introLine with the custom text
+  if (meeting.customIntroMessage && meeting.customIntroMessage.trim()) {
+    introLine = meeting.customIntroMessage.trim();
   }
 
   const parts = [
