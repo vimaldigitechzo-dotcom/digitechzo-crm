@@ -682,7 +682,7 @@ export const TasksPage: React.FC = () => {
       )}
 
       {/* 3. Task Metric Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
         <MetricCard
           label="Total Active"
           value={totalCount}
@@ -695,7 +695,7 @@ export const TasksPage: React.FC = () => {
         <MetricCard
           label="Overdue"
           value={overdueCount}
-          subtext="Needs immediate call"
+          subtext="Needs attention"
           subtextVariant="danger"
           icon={Clock}
           iconVariant="danger"
@@ -703,9 +703,9 @@ export const TasksPage: React.FC = () => {
           className={filterType === 'OVERDUE' ? 'border-[#DC2626] ring-1 ring-[#DC2626]/30' : ''}
         />
         <MetricCard
-          label="Due Today / Pending"
+          label="Due / Pending"
           value={pendingCount}
-          subtext="Scheduled for action"
+          subtext="Scheduled action"
           subtextVariant="warning"
           icon={CheckCircle2}
           iconVariant="warning"
@@ -740,7 +740,7 @@ export const TasksPage: React.FC = () => {
             <CustomSelect
               value={priorityFilter}
               onChange={(val) => setPriorityFilter(val)}
-              className="w-36"
+              className="w-full xs:w-36"
               options={[
                 { value: 'ALL', label: 'All Priorities' },
                 { value: 'URGENT', label: 'Urgent' },
@@ -754,7 +754,7 @@ export const TasksPage: React.FC = () => {
             <CustomSelect
               value={ownerFilter}
               onChange={(val) => setOwnerFilter(val)}
-              className="w-full sm:w-36"
+              className="w-full xs:w-36"
               options={[
                 { value: 'ALL', label: 'All Owners' },
                 ...uniqueOwners.map((owner) => ({ value: owner, label: owner })),
@@ -854,36 +854,39 @@ export const TasksPage: React.FC = () => {
                       </div>
 
                       {/* Title & Metadata */}
-                      <div className="space-y-0.5 min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
                           <button
                             type="button"
                             onClick={() => setSelectedTask(task)}
+                            title={task.title}
                             className={cn(
-                              'font-bold text-xs sm:text-sm text-txt-primary hover:text-[#57B71B] transition-colors truncate text-left cursor-pointer',
+                              'font-bold text-xs sm:text-sm text-txt-primary hover:text-[#57B71B] transition-colors line-clamp-1 break-words text-left cursor-pointer min-w-0 flex-1',
                               isCompleted ? 'line-through text-txt-muted' : ''
                             )}
                           >
                             {task.title}
                           </button>
-                          <StatusBadge status={task.status} type="task" />
-                          <StatusBadge status={task.priority} type="priority" />
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <StatusBadge status={task.status} type="task" />
+                            <StatusBadge status={task.priority} type="priority" />
+                          </div>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-txt-secondary">
                           {task.leadName && (
                             <Link
                               to={task.leadId ? `/leads/${task.leadId}` : '/leads'}
-                              className="flex items-center gap-1 truncate font-medium text-txt-secondary hover:text-[#57B71B] transition-colors"
+                              className="flex items-center gap-1 max-w-[170px] xs:max-w-[210px] sm:max-w-xs min-w-0 font-medium text-txt-secondary hover:text-[#57B71B] transition-colors"
                             >
                               <Building2 className="h-3 w-3 text-txt-muted shrink-0" />
-                              <span>{task.leadName}</span>
+                              <span className="truncate" title={task.leadName}>{task.leadName}</span>
                             </Link>
                           )}
                           {task.ownerName && (
-                            <span className="flex items-center gap-1 text-txt-muted truncate">
+                            <span className="flex items-center gap-1 text-txt-muted min-w-0 max-w-[120px] xs:max-w-[150px]">
                               <User className="h-3 w-3 shrink-0" />
-                              <span>{task.ownerName}</span>
+                              <span className="truncate" title={task.ownerName}>{task.ownerName}</span>
                             </span>
                           )}
                         </div>
@@ -1002,8 +1005,9 @@ export const TasksPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setSelectedTask(task)}
+                            title={task.title}
                             className={cn(
-                              'font-bold text-xs text-txt-primary hover:text-[#57B71B] transition-colors truncate text-left block w-full',
+                              'font-bold text-xs text-txt-primary hover:text-[#57B71B] transition-colors line-clamp-1 break-words text-left block w-full',
                               isCompleted ? 'line-through text-txt-muted' : ''
                             )}
                           >
@@ -1012,10 +1016,10 @@ export const TasksPage: React.FC = () => {
                           {task.leadName && (
                             <Link
                               to={task.leadId ? `/leads/${task.leadId}` : '/leads'}
-                              className="flex items-center gap-1 text-[11px] text-txt-secondary hover:text-[#57B71B] transition-colors mt-0.5 truncate"
+                              className="flex items-center gap-1 text-[11px] text-txt-secondary hover:text-[#57B71B] transition-colors mt-0.5 min-w-0 max-w-full"
                             >
                               <Building2 className="h-3 w-3 text-txt-muted shrink-0" />
-                              <span className="truncate">{task.leadName}</span>
+                              <span className="truncate" title={task.leadName}>{task.leadName}</span>
                             </Link>
                           )}
                         </div>
@@ -1495,7 +1499,7 @@ export const TasksPage: React.FC = () => {
       {/* 7. Task Detail Preview Modal */}
       <Dialog open={!!selectedTask} onOpenChange={(open) => !open && setSelectedTask(null)}>
         {selectedTask && (
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md p-4 sm:p-5 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
             <DialogHeader>
               <div className="flex items-center gap-2">
                 <div className={cn('p-1.5 rounded-btn border', getActionTypeBg(selectedTask.actionType))}>
