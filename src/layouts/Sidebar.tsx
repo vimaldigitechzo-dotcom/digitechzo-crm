@@ -212,9 +212,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }}
         className={cn(
           'lg:hidden fixed inset-y-0 left-0 w-64 h-[100dvh] flex flex-col border-r select-none z-50 shadow-2xl transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-x-0' : '-translate-x-full pointer-events-none'
+          isOpen ? 'translate-x-0' : '-translate-x-full pointer-events-none invisible'
         )}
         aria-label="Mobile Navigation"
+        aria-hidden={!isOpen}
       >
         {/* Mobile Expanded Header */}
         <div

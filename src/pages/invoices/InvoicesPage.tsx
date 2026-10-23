@@ -2207,7 +2207,7 @@ export const InvoicesPage: React.FC = () => {
                     type="text"
                     value={sender.name}
                     onChange={(e) => setSender({ ...sender, name: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
@@ -2216,18 +2216,19 @@ export const InvoicesPage: React.FC = () => {
                     type="email"
                     value={sender.email}
                     onChange={(e) => setSender({ ...sender, email: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="text-[11px] font-semibold text-slate-700 block mb-1">Street Address</label>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={sender.address}
                   onChange={(e) => setSender({ ...sender, address: e.target.value })}
-                  className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                  placeholder="Enter business address, city, state, postal code..."
+                  className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all resize-y break-words leading-relaxed"
                 />
               </div>
 
@@ -2238,7 +2239,7 @@ export const InvoicesPage: React.FC = () => {
                     type="text"
                     value={sender.phone}
                     onChange={(e) => setSender({ ...sender, phone: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
@@ -2247,7 +2248,7 @@ export const InvoicesPage: React.FC = () => {
                     type="text"
                     value={sender.taxId}
                     onChange={(e) => setSender({ ...sender, taxId: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
@@ -2287,7 +2288,7 @@ export const InvoicesPage: React.FC = () => {
                         showToast(`Filled client details for ${selected.fullName}`);
                       }
                     }}
-                    placeholder="Select an existing CRM Lead / Company..."
+                    placeholder="Select CRM Lead / Company..."
                     options={leads.map((lead: any) => ({
                       value: lead.id,
                       label: lead.companyName ? `${lead.companyName} (${lead.fullName})` : lead.fullName,
@@ -2305,7 +2306,7 @@ export const InvoicesPage: React.FC = () => {
                     type="text"
                     value={client.name}
                     onChange={(e) => setClient({ ...client, name: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
@@ -2314,7 +2315,7 @@ export const InvoicesPage: React.FC = () => {
                     type="text"
                     value={client.contact}
                     onChange={(e) => setClient({ ...client, contact: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
@@ -2326,7 +2327,7 @@ export const InvoicesPage: React.FC = () => {
                     type="email"
                     value={client.email}
                     onChange={(e) => setClient({ ...client, email: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
@@ -2335,18 +2336,19 @@ export const InvoicesPage: React.FC = () => {
                     type="text"
                     value={client.phone}
                     onChange={(e) => setClient({ ...client, phone: e.target.value })}
-                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 overflow-x-auto focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="text-[11px] font-semibold text-slate-700 block mb-1">Billing Address</label>
-                <input
-                  type="text"
+                <textarea
+                  rows={2}
                   value={client.address}
                   onChange={(e) => setClient({ ...client, address: e.target.value })}
-                  className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
+                  placeholder="Enter client billing address, city, state, postal code..."
+                  className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all resize-y break-words leading-relaxed"
                 />
               </div>
             </div>
@@ -2768,7 +2770,7 @@ export const InvoicesPage: React.FC = () => {
                         setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, description: val } : it)));
                       }}
                       placeholder="Service or product description..."
-                      className="w-full h-7 rounded border border-border bg-white px-2 text-xs font-semibold text-txt-primary"
+                      className="w-full h-7 rounded border border-border bg-white px-2 text-xs font-semibold text-txt-primary overflow-x-auto"
                     />
 
                     <input
@@ -2779,7 +2781,7 @@ export const InvoicesPage: React.FC = () => {
                         setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, subdesc: val } : it)));
                       }}
                       placeholder="Detailed line scope/deliverables (optional)..."
-                      className="w-full h-7 rounded border border-border bg-white px-2 text-[11px] text-txt-muted"
+                      className="w-full h-7 rounded border border-border bg-white px-2 text-[11px] text-txt-muted overflow-x-auto"
                     />
 
                     {/* Standard Numeric Fields: Qty, Full Amount, Advanced Amount */}
@@ -2810,7 +2812,7 @@ export const InvoicesPage: React.FC = () => {
                               const val = e.target.value === '' ? 1 : parseFloat(e.target.value) || 1;
                               setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, quantity: val } : it)));
                             }}
-                            className="w-full h-7 rounded border border-border bg-white px-2 text-xs text-txt-primary text-center font-tabular"
+                            className="w-full h-7 rounded border border-border bg-white px-2 text-xs text-txt-primary text-center font-tabular overflow-x-auto"
                           />
                         </div>
                       )}
@@ -2844,7 +2846,7 @@ export const InvoicesPage: React.FC = () => {
                               setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, price: val } : it)));
                             }}
                             placeholder="0"
-                            className="w-full h-7 rounded border border-border bg-white px-2 text-xs text-txt-primary font-tabular"
+                            className="w-full h-7 rounded border border-border bg-white px-2 text-xs text-txt-primary font-tabular overflow-x-auto"
                           />
                         </div>
                       )}
@@ -2896,7 +2898,7 @@ export const InvoicesPage: React.FC = () => {
                                 setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, advanceAmount: val } : it)));
                               }}
                               placeholder="0"
-                              className="w-full h-7 rounded border border-emerald-300 bg-emerald-50/40 px-2 pr-6 text-xs font-semibold text-emerald-800 font-tabular"
+                              className="w-full h-7 rounded border border-emerald-300 bg-emerald-50/40 px-2 pr-6 text-xs font-semibold text-emerald-800 font-tabular overflow-x-auto"
                             />
                             {typeof item.advanceAmount === 'number' && item.advanceAmount > 0 && (
                               <button
@@ -2959,7 +2961,7 @@ export const InvoicesPage: React.FC = () => {
                                   );
                                 }}
                                 placeholder={col.defaultValue !== undefined ? String(col.defaultValue) : `Enter ${col.label.toLowerCase()}...`}
-                                className="w-full h-7 rounded border border-border bg-white px-2 text-xs text-txt-primary"
+                                className="w-full h-7 rounded border border-border bg-white px-2 text-xs text-txt-primary overflow-x-auto"
                               />
                             </div>
                           );
@@ -3066,11 +3068,14 @@ export const InvoicesPage: React.FC = () => {
                             }, 50);
                           }
                         }}
-                        className="w-full h-9 rounded-input border border-border bg-white px-2.5 text-xs text-left flex items-center justify-between gap-2 shadow-subtle hover:border-[#57B71B] focus:outline-none focus:ring-1 focus:ring-[#57B71B] transition-all cursor-pointer"
+                        className="w-full h-9 rounded-input border border-border bg-white px-2.5 text-xs text-left flex items-center justify-between gap-2 shadow-subtle hover:border-[#57B71B] focus:outline-none focus:ring-1 focus:ring-[#57B71B] transition-all cursor-pointer min-w-0"
                       >
-                        <div className="flex items-center gap-2 truncate">
+                        <div className="flex items-center gap-2 truncate min-w-0 flex-1 overflow-hidden">
                           <Landmark className="h-4 w-4 text-[#57B71B] shrink-0" />
-                          <span className="text-txt-primary font-bold truncate">
+                          <span
+                            className="text-txt-primary font-bold truncate min-w-0 overflow-x-auto scrollbar-none"
+                            title={payment.bank.bankName?.trim() ? payment.bank.bankName.trim() : 'Select or Add Bank Account'}
+                          >
                             {payment.bank.bankName?.trim() ? payment.bank.bankName.trim() : 'Select or Add Bank Account'}
                           </span>
                           {payment.bank.accountNumber && (
@@ -4730,7 +4735,7 @@ export const InvoicesPage: React.FC = () => {
                           showToast(`Signatory set to: ${fullName}`);
                         }
                       }}
-                      placeholder="-- Select CRM Team Member or Role --"
+                      placeholder="Select CRM Signatory / Role..."
                       options={[
                         ...(user ? [{ value: '__me', label: `👤 Current User (${user.name} - ${user.role})` }] : []),
                         { value: '__default_director', label: '👔 Managing Director (Digitechzo Director)' },
@@ -4758,7 +4763,7 @@ export const InvoicesPage: React.FC = () => {
                         value={signature.name}
                         onChange={(e) => setSignature({ ...signature, name: e.target.value })}
                         placeholder="e.g. Digitechzo Director"
-                        className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs font-semibold text-txt-primary"
+                        className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs font-semibold text-txt-primary overflow-x-auto"
                       />
                     </div>
                     <div>
@@ -4770,7 +4775,7 @@ export const InvoicesPage: React.FC = () => {
                         value={signature.role}
                         onChange={(e) => setSignature({ ...signature, role: e.target.value })}
                         placeholder="e.g. Managing Director"
-                        className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary"
+                        className="w-full h-8 rounded-input border border-border bg-white px-2 text-xs text-txt-primary overflow-x-auto"
                       />
                     </div>
                   </div>

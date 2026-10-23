@@ -139,7 +139,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
       >
         <span
           className={cn(
-            'truncate flex-1 text-left min-w-0',
+            'truncate flex-1 text-left min-w-0 overflow-x-auto scrollbar-none',
             !selectedOption ? 'text-txt-muted' : 'text-txt-primary'
           )}
           title={selectedOption ? selectedOption.label : placeholder}
