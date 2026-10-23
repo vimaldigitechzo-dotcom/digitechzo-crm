@@ -644,7 +644,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
         <div className="relative w-full overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth">
           <div
             className={`flex gap-3 items-start ${
-              mobileStageFilter !== 'ALL' ? 'w-full flex-col sm:flex-row sm:min-w-[1400px]' : 'w-max sm:min-w-[1400px]'
+              mobileStageFilter !== 'ALL' ? 'w-full flex-col sm:flex-row sm:min-w-[1550px]' : 'w-max sm:min-w-[1550px]'
             }`}
           >
             {(mobileStageFilter !== 'ALL' ? stages.filter((s) => s.id === mobileStageFilter) : stages).map((stage) => {
@@ -657,8 +657,8 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   key={stage.id}
                   className={`rounded-card border flex flex-col gap-2.5 p-2.5 shrink-0 snap-center min-w-0 ${
                     mobileStageFilter !== 'ALL'
-                      ? 'w-full sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
-                      : 'w-[82vw] max-w-[290px] sm:w-auto sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
+                      ? 'w-full sm:flex-1 sm:min-w-[245px] sm:max-w-[300px]'
+                      : 'w-[84vw] max-w-[310px] sm:w-auto sm:flex-1 sm:min-w-[245px] sm:max-w-[300px]'
                   } ${
                     isWonStage
                       ? 'bg-emerald-50/40 border-emerald-200'
@@ -787,14 +787,14 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                             </div>
 
                             {/* Card Footer: Close Date & Owner Avatar */}
-                            <div className="flex items-center justify-between text-[10px] text-txt-muted pt-0.5 min-w-0 gap-2">
+                            <div className="flex flex-wrap items-center justify-between text-[10px] text-txt-muted pt-1 border-t border-border/50 min-w-0 gap-x-2 gap-y-1">
                               <div className="flex items-center gap-1 tabular-nums shrink-0">
                                 <Calendar className="h-3 w-3 text-txt-muted shrink-0" />
                                 <span>{deal.expectedCloseDate || '—'}</span>
                               </div>
 
                               <div
-                                className="flex items-center gap-1 min-w-0 max-w-[65%] justify-end overflow-hidden"
+                                className="flex items-center gap-1 min-w-0 max-w-full justify-end ml-auto"
                                 title={deal.ownerName}
                               >
                                 <Avatar className="h-4 w-4 shrink-0">
@@ -805,7 +805,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                                       .join('')}
                                   </AvatarFallback>
                                 </Avatar>
-                                <span className="truncate min-w-0 text-txt-secondary">{deal.ownerName}</span>
+                                <span className="text-txt-secondary font-medium whitespace-normal break-words leading-tight">{deal.ownerName}</span>
                               </div>
                             </div>
                           </div>
@@ -915,13 +915,13 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-txt-muted pt-0.5 min-w-0 gap-2">
+                    <div className="flex flex-wrap items-center justify-between text-[11px] text-txt-muted pt-1 border-t border-border/60 min-w-0 gap-x-2 gap-y-1">
                       <div className="flex items-center gap-1 tabular-nums shrink-0">
                         <Calendar className="h-3 w-3 text-txt-muted shrink-0" />
                         <span>{deal.expectedCloseDate || '—'}</span>
                       </div>
                       <div
-                        className="flex items-center gap-1.5 min-w-0 max-w-[65%] justify-end overflow-hidden"
+                        className="flex items-center gap-1.5 min-w-0 max-w-full justify-end ml-auto"
                         title={deal.ownerName}
                       >
                         <Avatar className="h-4 w-4 shrink-0">
@@ -932,7 +932,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                               .join('')}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="truncate min-w-0 text-txt-secondary">{deal.ownerName}</span>
+                        <span className="text-txt-secondary font-medium whitespace-normal break-words leading-tight">{deal.ownerName}</span>
                       </div>
                     </div>
                   </div>
@@ -1142,9 +1142,9 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
                     Account Owner
                   </span>
-                  <span className="font-medium text-txt-primary flex items-center gap-1.5 truncate" title={selectedDeal.ownerName}>
+                  <span className="font-medium text-txt-primary flex items-center gap-1.5" title={selectedDeal.ownerName}>
                     <UserIcon className="h-3.5 w-3.5 text-txt-muted shrink-0" />
-                    <span className="truncate">{selectedDeal.ownerName}</span>
+                    <span className="break-words">{selectedDeal.ownerName}</span>
                   </span>
                 </div>
               </div>
