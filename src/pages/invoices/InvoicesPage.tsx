@@ -1857,192 +1857,157 @@ export const InvoicesPage: React.FC = () => {
       )}
 
       {/* Top Header & Quick Actions Bar */}
-      <div className="no-print flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-900 text-white p-3.5 sm:p-4 rounded-2xl shadow-lg border border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#57B71B] to-emerald-400 text-white shadow-md shrink-0">
-            <CreditCard className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-sm sm:text-lg font-extrabold text-white tracking-tight leading-tight">
-                Digitechzo <span className="text-[#57B71B]">Invoice Studio</span>
-              </h1>
-              <span className="hidden sm:inline-block px-2 py-0.5 text-[9.5px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                PRO BILLING ENGINE
-              </span>
+      <div className="no-print bg-[#0B0F19] text-white p-4 sm:p-5 rounded-2xl shadow-xl border border-slate-800/80">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#57B71B] to-[#449414] text-white shadow-md shadow-[#57B71B]/20 shrink-0">
+              <CreditCard className="h-5 w-5" />
             </div>
-            <p className="text-[11px] text-slate-400 truncate sm:whitespace-normal">
-              Design, customize & dispatch modern tax-compliant invoices
-            </p>
-          </div>
-        </div>
-
-        {/* View Mode & Actions Container */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
-          {/* Mobile Segmented Switcher (< 1024px) */}
-          <div className="lg:hidden w-full flex bg-slate-800 p-0.5 rounded-xl border border-slate-700/80">
-            <button
-              type="button"
-              onClick={() => setStudioViewMode('editor')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                studioViewMode !== 'preview'
-                  ? 'bg-[#57B71B] text-white shadow-xs'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Layout className="h-3.5 w-3.5" />
-              <span>Editor Only</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setStudioViewMode('preview')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                studioViewMode === 'preview'
-                  ? 'bg-[#57B71B] text-white shadow-xs'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <FileText className="h-3.5 w-3.5" />
-              <span>Full Preview</span>
-            </button>
-          </div>
-
-          {/* Desktop View Mode Switcher (>= 1024px) */}
-          <div className="hidden lg:flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 mr-1 shadow-inner">
-            <button
-              type="button"
-              onClick={() => setStudioViewMode('editor')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                studioViewMode === 'editor'
-                  ? 'bg-[#57B71B] text-white shadow-xs font-bold'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
-              }`}
-              title="Full Width Spacious Editor"
-            >
-              <Layout className="h-3.5 w-3.5" />
-              <span>Editor Only</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setStudioViewMode('split')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                studioViewMode === 'split'
-                  ? 'bg-[#57B71B] text-white shadow-xs font-bold'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
-              }`}
-              title="Side-by-Side Split View"
-            >
-              <Columns className="h-3.5 w-3.5" />
-              <span>Side-by-Side</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setStudioViewMode('preview')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                studioViewMode === 'preview'
-                  ? 'bg-[#57B71B] text-white shadow-xs font-bold'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
-              }`}
-              title="Full Width Live Invoice Paper Preview"
-            >
-              <FileText className="h-3.5 w-3.5" />
-              <span>Full Preview</span>
-            </button>
-          </div>
-
-          {/* Action Buttons Toolbar */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            {/* Download PDF Button */}
-            <button
-              type="button"
-              onClick={handleDownloadPdf}
-              disabled={isExportingPdf}
-              className="flex-initial flex items-center justify-center gap-1.5 h-8.5 px-3.5 rounded-xl text-xs font-bold bg-[#57B71B] hover:bg-[#49a016] text-white transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
-              title="Download high-resolution PDF document"
-            >
-              {isExportingPdf ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <Download className="h-3.5 w-3.5" />
-              )}
-              <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
-            </button>
-
-            {/* Download PNG Button */}
-            <button
-              type="button"
-              onClick={handleDownloadImage}
-              disabled={isExportingImage}
-              className="flex-initial flex items-center justify-center gap-1.5 h-8.5 px-3 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all shadow-xs active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
-              title="Download invoice as PNG image"
-            >
-              {isExportingImage ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <Download className="h-3.5 w-3.5" />
-              )}
-              <span>{isExportingImage ? 'Exporting...' : 'PNG'}</span>
-            </button>
-
-            {/* Save Invoice */}
-            <button
-              type="button"
-              onClick={() => handleSaveInvoice()}
-              disabled={isSavingInvoice}
-              className="flex-initial flex items-center justify-center gap-1.5 h-8.5 px-3 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition-all shadow-xs cursor-pointer disabled:opacity-50 shrink-0"
-              title="Save Invoice to Database & History"
-            >
-              <Bookmark className="h-3.5 w-3.5 text-emerald-400" />
-              <span>{isSavingInvoice ? 'Saving...' : 'Save'}</span>
-            </button>
-
-            {/* Draft */}
-            <button
-              type="button"
-              onClick={() => handleSaveInvoice('DRAFT')}
-              disabled={isSavingInvoice}
-              className="flex-initial flex items-center justify-center gap-1 h-8.5 px-2.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors cursor-pointer disabled:opacity-50"
-              title="Save as Draft"
-            >
-              Draft
-            </button>
-
-            {/* History */}
-            <button
-              type="button"
-              onClick={() => setIsHistoryModalOpen(true)}
-              className="flex-initial flex items-center justify-center gap-1 h-8.5 px-2.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors cursor-pointer"
-              title="View Saved Invoices History"
-            >
-              <FolderOpen className="h-3.5 w-3.5 text-blue-400" />
-              <span>History</span>
-              {savedInvoices.length > 0 && (
-                <span className="ml-0.5 px-1.5 py-0.2 text-[9.5px] font-bold rounded-full bg-blue-500 text-white">
-                  {savedInvoices.length}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base sm:text-xl font-extrabold text-white tracking-tight leading-tight">
+                  Digitechzo <span className="text-[#57B71B]">Invoice Studio</span>
+                </h1>
+                <span className="inline-block px-2.5 py-0.5 text-[9.5px] font-bold tracking-wider rounded-full bg-[#57B71B]/15 text-[#57B71B] border border-[#57B71B]/30">
+                  PRO BILLING ENGINE
                 </span>
-              )}
-            </button>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Design, customize & dispatch modern tax-compliant invoices
+              </p>
+            </div>
+          </div>
 
-            {/* Print / Browser PDF */}
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="flex-initial flex items-center justify-center gap-1.5 h-8.5 px-3 rounded-xl text-xs font-bold bg-white text-slate-900 hover:bg-slate-100 transition-all shadow-xs cursor-pointer active:scale-95"
-              title="Print or Save as PDF via browser"
-            >
-              <Printer className="h-3.5 w-3.5 text-slate-700" />
-              <span>Print</span>
-            </button>
+          {/* Controls: View Switcher + Actions */}
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+            {/* View Mode Switcher (Editor | Split | Preview) */}
+            <div className="inline-flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-800 shadow-inner">
+              <button
+                type="button"
+                onClick={() => setStudioViewMode('editor')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  studioViewMode === 'editor'
+                    ? 'bg-[#57B71B] text-white shadow-xs font-bold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Layout className="h-3.5 w-3.5" />
+                <span>Editor</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setStudioViewMode('split')}
+                className={`hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  studioViewMode === 'split'
+                    ? 'bg-[#57B71B] text-white shadow-xs font-bold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Columns className="h-3.5 w-3.5" />
+                <span>Split View</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setStudioViewMode('preview')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  studioViewMode === 'preview'
+                    ? 'bg-[#57B71B] text-white shadow-xs font-bold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>Preview</span>
+              </button>
+            </div>
 
-            {/* Reset Form */}
-            <button
-              type="button"
-              onClick={handleResetForm}
-              className="flex items-center justify-center h-8.5 w-8.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors cursor-pointer shrink-0"
-              title="Reset Form to Defaults"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-            </button>
+            {/* Action Buttons Toolbar */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              {/* Primary: Download PDF */}
+              <button
+                type="button"
+                onClick={handleDownloadPdf}
+                disabled={isExportingPdf}
+                className="flex items-center justify-center gap-1.5 h-9 px-3.5 rounded-xl text-xs font-bold bg-[#57B71B] hover:bg-[#49a016] text-white shadow-sm shadow-[#57B71B]/25 active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+              >
+                {isExportingPdf ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Download className="h-3.5 w-3.5" />
+                )}
+                <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
+              </button>
+
+              {/* PNG */}
+              <button
+                type="button"
+                onClick={handleDownloadImage}
+                disabled={isExportingImage}
+                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+              >
+                {isExportingImage ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Download className="h-3.5 w-3.5" />
+                )}
+                <span>PNG</span>
+              </button>
+
+              {/* Print */}
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
+              >
+                <Printer className="h-3.5 w-3.5 text-slate-300" />
+                <span>Print</span>
+              </button>
+
+              {/* Save */}
+              <button
+                type="button"
+                onClick={() => handleSaveInvoice()}
+                disabled={isSavingInvoice}
+                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+              >
+                <Bookmark className="h-3.5 w-3.5 text-[#57B71B]" />
+                <span>{isSavingInvoice ? 'Saving...' : 'Save'}</span>
+              </button>
+
+              {/* Draft */}
+              <button
+                type="button"
+                onClick={() => handleSaveInvoice('DRAFT')}
+                disabled={isSavingInvoice}
+                className="flex items-center justify-center h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+              >
+                <span>Draft</span>
+              </button>
+
+              {/* History */}
+              <button
+                type="button"
+                onClick={() => setIsHistoryModalOpen(true)}
+                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
+              >
+                <FolderOpen className="h-3.5 w-3.5 text-[#57B71B]" />
+                <span>History</span>
+                {savedInvoices.length > 0 && (
+                  <span className="ml-0.5 px-1.5 py-0.2 text-[9.5px] font-bold rounded-full bg-[#57B71B] text-white">
+                    {savedInvoices.length}
+                  </span>
+                )}
+              </button>
+
+              {/* Reset */}
+              <button
+                type="button"
+                onClick={handleResetForm}
+                className="flex items-center justify-center h-9 w-9 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
+                title="Reset Form"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -2068,59 +2033,61 @@ export const InvoicesPage: React.FC = () => {
           }`}
         >
           {/* Card 1: Sender (Your Business) & Logo */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-[#57B71B]" />
-                <span>Sender (Your Business Profile)</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <Building2 className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Sender (Your Business Profile)</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
-            <div className="p-3.5 space-y-3 text-xs">
+            <div className="p-4 space-y-3.5 text-xs">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleSaveCompanyProfile}
-                  className="flex-1 h-7 rounded-btn border border-border bg-white hover:bg-slate-50 text-[11px] font-semibold text-txt-secondary flex items-center justify-center gap-1 cursor-pointer"
+                  className="flex-1 h-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Bookmark className="h-3 w-3 text-[#57B71B]" /> Save Profile
+                  <Bookmark className="h-3.5 w-3.5 text-[#57B71B]" /> Save Profile
                 </button>
                 <button
                   type="button"
                   onClick={handleLoadCompanyProfile}
-                  className="flex-1 h-7 rounded-btn border border-border bg-white hover:bg-slate-50 text-[11px] font-semibold text-txt-secondary flex items-center justify-center gap-1 cursor-pointer"
+                  className="flex-1 h-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <FolderOpen className="h-3 w-3 text-blue-500" /> Load Profile
+                  <FolderOpen className="h-3.5 w-3.5 text-[#57B71B]" /> Load Profile
                 </button>
               </div>
 
               {/* Logo Upload Dropzone & Size Controls */}
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-[11px] font-semibold text-txt-secondary">Company Logo</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-[11px] font-bold text-slate-700">Company Logo</label>
                   {sender.logo && (
-                    <span className="text-[10px] text-txt-muted font-medium">
+                    <span className="text-[10px] text-slate-500 font-medium">
                       Height: <strong className="text-[#57B71B] font-bold">{sender.logoHeight || 48}px</strong>
                     </span>
                   )}
                 </div>
 
-                <div className="border border-dashed border-slate-300 rounded-btn p-3 bg-slate-50 text-center flex flex-col items-center justify-center relative hover:border-[#57B71B] transition-colors">
+                <div className="border-2 border-dashed border-slate-200 hover:border-[#57B71B] rounded-xl p-4 bg-slate-50/60 hover:bg-emerald-50/20 transition-all text-center flex flex-col items-center justify-center relative group">
                   {sender.logo ? (
-                    <div className="w-full space-y-2.5">
-                      <div className="relative group w-full flex items-center justify-between bg-white p-2 rounded-md border border-slate-200">
-                        <div className="flex items-center gap-2 overflow-hidden">
+                    <div className="w-full space-y-3">
+                      <div className="relative w-full flex items-center justify-between bg-white p-2.5 rounded-lg border border-slate-200 shadow-2xs">
+                        <div className="flex items-center gap-2.5 overflow-hidden">
                           <img
                             src={sender.logo}
                             alt="Company Logo"
                             style={{ height: `${Math.min(sender.logoHeight || 48, 56)}px` }}
                             className="max-w-[140px] object-contain rounded"
                           />
-                          <span className="text-[10px] text-txt-muted truncate">Custom Logo</span>
+                          <span className="text-[11px] text-slate-600 font-medium truncate">Custom Logo</span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <label
-                            className="h-6 px-2 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 text-[10px] font-semibold flex items-center cursor-pointer transition-colors"
+                            className="h-7 px-2.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-semibold flex items-center cursor-pointer transition-colors"
                             title="Replace Logo"
                           >
                             Replace
@@ -2129,7 +2096,7 @@ export const InvoicesPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setSender((p: any) => ({ ...p, logo: '' }))}
-                            className="h-6 w-6 rounded bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center cursor-pointer transition-colors"
+                            className="h-7 w-7 rounded-md bg-rose-50 text-rose-600 hover:bg-rose-100 flex items-center justify-center cursor-pointer transition-colors"
                             title="Remove Logo"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -2138,9 +2105,9 @@ export const InvoicesPage: React.FC = () => {
                       </div>
 
                       {/* Logo Height Controller */}
-                      <div className="bg-white p-2.5 rounded-md border border-slate-200 text-left space-y-2">
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 text-left space-y-2.5">
                         <div className="flex items-center justify-between">
-                          <label className="text-[10.5px] font-bold text-slate-700 flex items-center gap-1">
+                          <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
                             <span>Logo Display Height</span>
                           </label>
                           <div className="flex items-center gap-1">
@@ -2174,7 +2141,7 @@ export const InvoicesPage: React.FC = () => {
                         />
 
                         {/* Preset quick buttons */}
-                        <div className="flex items-center justify-between gap-1 pt-0.5">
+                        <div className="flex items-center justify-between gap-1.5 pt-0.5">
                           {[
                             { label: 'Small', h: 36 },
                             { label: 'Medium', h: 48 },
@@ -2185,78 +2152,83 @@ export const InvoicesPage: React.FC = () => {
                               key={preset.label}
                               type="button"
                               onClick={() => setSender((p: any) => ({ ...p, logoHeight: preset.h }))}
-                              className={`flex-1 py-0.5 rounded text-[10px] font-semibold transition-colors cursor-pointer border ${
+                              className={`flex-1 py-1 rounded-md text-[11px] font-semibold transition-colors cursor-pointer border ${
                                 (sender.logoHeight || 48) === preset.h
                                   ? 'bg-[#57B71B] text-white border-[#57B71B]'
                                   : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                               }`}
                             >
-                              <span className="hidden sm:inline">{preset.label} </span>
-                              <span>{preset.h}px</span>
+                              <span>{preset.label}</span>
                             </button>
                           ))}
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <label className="cursor-pointer flex flex-col items-center">
-                      <Upload className="h-5 w-5 text-txt-muted mb-1" />
-                      <span className="text-[11px] font-semibold text-txt-primary">Click to upload company logo</span>
-                      <span className="text-[10px] text-txt-muted">PNG, JPG, SVG, WebP (Auto-optimized & resized)</span>
+                    <label className="cursor-pointer flex flex-col items-center py-2">
+                      <div className="w-10 h-10 rounded-full bg-slate-100 group-hover:bg-[#57B71B]/10 text-slate-400 group-hover:text-[#57B71B] flex items-center justify-center transition-colors mb-2">
+                        <Upload className="h-5 w-5" />
+                      </div>
+                      <span className="text-xs font-bold text-slate-700 group-hover:text-[#57B71B] transition-colors">
+                        Click to upload company logo
+                      </span>
+                      <span className="text-[11px] text-slate-400 mt-0.5">
+                        PNG, JPG, SVG, WebP (Auto-optimized & resized)
+                      </span>
                       <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
                     </label>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Business Name</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Business Name</label>
                   <input
                     type="text"
                     value={sender.name}
                     onChange={(e) => setSender({ ...sender, name: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Email Address</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Email Address</label>
                   <input
                     type="email"
                     value={sender.email}
                     onChange={(e) => setSender({ ...sender, email: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Street Address</label>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">Street Address</label>
                 <input
                   type="text"
                   value={sender.address}
                   onChange={(e) => setSender({ ...sender, address: e.target.value })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                  className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Phone Number</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Phone Number</label>
                   <input
                     type="text"
                     value={sender.phone}
                     onChange={(e) => setSender({ ...sender, phone: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">GST / Tax ID</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">GST / Tax ID</label>
                   <input
                     type="text"
                     value={sender.taxId}
                     onChange={(e) => setSender({ ...sender, taxId: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
@@ -2264,20 +2236,22 @@ export const InvoicesPage: React.FC = () => {
           </details>
 
           {/* Card 2: Bill To (Client Information) */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-blue-500" />
-                <span>Bill To (Client Information)</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <User className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Bill To (Client Information)</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
-            <div className="p-3.5 space-y-3 text-xs">
+            <div className="p-4 space-y-3.5 text-xs">
               {/* Quick Select from CRM Leads */}
               {leads.length > 0 && (
-                <div>
-                  <label className="text-[11px] font-bold text-[#57B71B] flex items-center gap-1 mb-1">
-                    <Sparkles className="h-3 w-3" /> Quick Auto-Fill from CRM Leads:
+                <div className="p-3 bg-emerald-50/40 rounded-xl border border-emerald-100">
+                  <label className="text-[11px] font-bold text-[#57B71B] flex items-center gap-1.5 mb-1.5">
+                    <Sparkles className="h-3.5 w-3.5" /> Quick Auto-Fill from CRM Leads:
                   </label>
                   <CustomSelect
                     value=""
@@ -2303,70 +2277,72 @@ export const InvoicesPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">
                     Client Name / Business
                   </label>
                   <input
                     type="text"
                     value={client.name}
                     onChange={(e) => setClient({ ...client, name: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Contact Person</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Contact Person</label>
                   <input
                     type="text"
                     value={client.contact}
                     onChange={(e) => setClient({ ...client, contact: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Client Email</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Client Email</label>
                   <input
                     type="email"
                     value={client.email}
                     onChange={(e) => setClient({ ...client, email: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Client Phone</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Client Phone</label>
                   <input
                     type="text"
                     value={client.phone}
                     onChange={(e) => setClient({ ...client, phone: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                    className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-txt-secondary block mb-0.5">Billing Address</label>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">Billing Address</label>
                 <input
                   type="text"
                   value={client.address}
                   onChange={(e) => setClient({ ...client, address: e.target.value })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary"
+                  className="w-full h-8.5 rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#57B71B]/20 focus:border-[#57B71B] transition-all"
                 />
               </div>
             </div>
           </details>
 
           {/* Card 3: Invoice Number, Due Dates & Status */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <FileSignature className="h-4 w-4 text-purple-500" />
-                <span>Invoice Number, Dates & Status</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <FileSignature className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Invoice Number, Dates & Status</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
             <div className="p-3.5 space-y-3 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
