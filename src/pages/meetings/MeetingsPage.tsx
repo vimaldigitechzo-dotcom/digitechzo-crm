@@ -1143,8 +1143,8 @@ export const MeetingsPage: React.FC = () => {
 
       {/* 5. Schedule Demo Modal */}
       <Dialog open={isScheduleModalOpen} onOpenChange={setIsScheduleModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md overflow-hidden">
+          <DialogHeader className="pr-8 sm:pr-10">
             <DialogTitle className="text-base font-bold text-txt-primary">
               Schedule Meeting / Demo
             </DialogTitle>
@@ -1537,13 +1537,13 @@ export const MeetingsPage: React.FC = () => {
 
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsScheduleModalOpen(false)}
-                className="h-8 px-4 text-xs cursor-pointer min-w-[72px]"
+                className="w-full sm:w-auto h-8 px-4 text-xs cursor-pointer min-w-[72px]"
                 disabled={isSubmitting}
               >
                 Cancel
@@ -1551,7 +1551,7 @@ export const MeetingsPage: React.FC = () => {
               <Button
                 type="submit"
                 size="sm"
-                className="h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -1574,12 +1574,12 @@ export const MeetingsPage: React.FC = () => {
         onOpenChange={(open) => !open && setOutcomeModalMeeting(null)}
       >
         {outcomeModalMeeting && (
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md overflow-hidden">
+            <DialogHeader className="pr-8 sm:pr-10">
               <DialogTitle className="text-base font-bold text-txt-primary">
                 Log Attendance & Outcome
               </DialogTitle>
-              <DialogDescription className="text-xs text-txt-muted">
+              <DialogDescription className="text-xs text-txt-muted break-words">
                 Record attendance status, demonstration feedback, and next steps for{' '}
                 {outcomeModalMeeting.title}.
               </DialogDescription>
@@ -1639,13 +1639,13 @@ export const MeetingsPage: React.FC = () => {
                 </div>
               </div>
 
-              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setOutcomeModalMeeting(null)}
-                  className="h-8 text-xs cursor-pointer"
+                  className="w-full sm:w-auto h-8 text-xs cursor-pointer"
                   disabled={isSubmitting}
                 >
                   Cancel
@@ -1653,7 +1653,7 @@ export const MeetingsPage: React.FC = () => {
                 <Button
                   type="submit"
                   size="sm"
-                  className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
+                  className="w-full sm:w-auto h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -1677,59 +1677,57 @@ export const MeetingsPage: React.FC = () => {
         onOpenChange={(open) => !open && setSelectedMeeting(null)}
       >
         {selectedMeeting && (
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <div className="flex items-center gap-2">
-                <div className="min-w-0">
-                  <DialogTitle className="text-base font-bold text-txt-primary truncate">
-                    {selectedMeeting.title}
-                  </DialogTitle>
-                  <DialogDescription className="text-xs text-txt-muted">
-                    {selectedMeeting.meetingType.replace('_', ' ')} session with{' '}
-                    {selectedMeeting.companyName}
-                  </DialogDescription>
-                </div>
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md overflow-hidden">
+            <DialogHeader className="pr-8 sm:pr-10">
+              <div className="min-w-0">
+                <DialogTitle className="text-base font-bold text-txt-primary break-words leading-snug">
+                  {selectedMeeting.title}
+                </DialogTitle>
+                <DialogDescription className="text-xs text-txt-muted mt-0.5 break-words">
+                  {selectedMeeting.meetingType.replace('_', ' ')} session with{' '}
+                  {selectedMeeting.companyName}
+                </DialogDescription>
               </div>
             </DialogHeader>
 
             <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
               <div className="p-3 bg-slate-50 rounded-card border border-border space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Status</span>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Status</span>
                   {getStatusBadge(selectedMeeting.status)}
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Prospect</span>
-                  <span className="font-semibold text-txt-primary">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Prospect</span>
+                  <span className="font-semibold text-txt-primary truncate">
                     {selectedMeeting.leadName}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Company</span>
-                  <span className="font-semibold text-txt-primary">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Company</span>
+                  <span className="font-semibold text-txt-primary truncate">
                     {selectedMeeting.companyName}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Scheduled Time</span>
-                  <span className="font-semibold text-txt-primary tabular-nums">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Scheduled Time</span>
+                  <span className="font-semibold text-txt-primary tabular-nums truncate">
                     {selectedMeeting.date} at {selectedMeeting.time} ({selectedMeeting.duration})
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Host</span>
-                  <span className="font-semibold text-txt-primary">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Host</span>
+                  <span className="font-semibold text-txt-primary truncate">
                     {selectedMeeting.hostName}
                   </span>
                 </div>
                 {selectedMeeting.meetingUrl && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-txt-muted font-medium">Meeting URL</span>
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="text-txt-muted font-medium shrink-0">Meeting URL</span>
                     <a
                       href={selectedMeeting.meetingUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-mono text-[11px] text-primary hover:underline truncate max-w-[200px]"
+                      className="font-mono text-[11px] text-primary hover:underline truncate max-w-[170px] sm:max-w-[220px]"
                     >
                       {selectedMeeting.meetingUrl}
                     </a>
@@ -1742,7 +1740,7 @@ export const MeetingsPage: React.FC = () => {
                   <span className="text-[11px] font-bold text-txt-muted uppercase tracking-wider">
                     Agenda / Notes
                   </span>
-                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed">
+                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed break-words">
                     {selectedMeeting.description}
                   </p>
                 </div>
@@ -1753,7 +1751,7 @@ export const MeetingsPage: React.FC = () => {
                   <span className="text-[11px] font-bold text-txt-muted uppercase tracking-wider">
                     Recorded Outcome
                   </span>
-                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed">
+                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed break-words">
                     {selectedMeeting.outcomeSummary}
                   </p>
                 </div>
@@ -1764,25 +1762,25 @@ export const MeetingsPage: React.FC = () => {
                   <span className="text-[11px] font-bold text-txt-muted uppercase tracking-wider">
                     Next Action Notes
                   </span>
-                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed">
+                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed break-words">
                     {selectedMeeting.nextStepNotes}
                   </p>
                 </div>
               )}
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between sm:justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0 bg-slate-50/95 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 text-xs cursor-pointer"
+                className="w-full sm:w-auto h-8 text-xs cursor-pointer"
                 onClick={() => setSelectedMeeting(null)}
               >
                 Close
               </Button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
                 <WhatsAppShareButton
                   meeting={selectedMeeting}
                   variant="solid"
@@ -1790,7 +1788,7 @@ export const MeetingsPage: React.FC = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="h-8 text-xs font-semibold cursor-pointer"
+                  className="flex-1 sm:flex-initial h-8 text-xs font-semibold cursor-pointer"
                   onClick={() => {
                     const m = selectedMeeting;
                     setSelectedMeeting(null);
@@ -1802,7 +1800,7 @@ export const MeetingsPage: React.FC = () => {
                 {selectedMeeting.meetingUrl && (
                   <Button
                     size="sm"
-                    className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
+                    className="flex-1 sm:flex-initial h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
                     asChild
                   >
                     <a

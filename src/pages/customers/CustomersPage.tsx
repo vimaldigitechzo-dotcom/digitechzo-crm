@@ -448,20 +448,17 @@ export const CustomersPage: React.FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {/* Owner Filter */}
-          <div className="flex items-center gap-1.5 text-xs text-txt-secondary">
-            <span>Owner:</span>
-            <CustomSelect
-              value={ownerFilter}
-              onChange={(val) => setOwnerFilter(val)}
-              className="w-36"
-              options={[
-                { value: 'ALL', label: 'All Owners' },
-                ...ownerOptions.map((owner) => ({ value: owner, label: owner })),
-              ]}
-            />
-          </div>
+          <CustomSelect
+            value={ownerFilter}
+            onChange={(val) => setOwnerFilter(val)}
+            className="w-full sm:w-36"
+            options={[
+              { value: 'ALL', label: 'All Owners' },
+              ...ownerOptions.map((owner) => ({ value: owner, label: owner })),
+            ]}
+          />
 
           {(searchQuery || statusFilter !== 'ALL' || ownerFilter !== 'ALL') && (
             <Button

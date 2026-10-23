@@ -754,7 +754,7 @@ export const TasksPage: React.FC = () => {
             <CustomSelect
               value={ownerFilter}
               onChange={(val) => setOwnerFilter(val)}
-              className="w-36"
+              className="w-full sm:w-36"
               options={[
                 { value: 'ALL', label: 'All Owners' },
                 ...uniqueOwners.map((owner) => ({ value: owner, label: owner })),
