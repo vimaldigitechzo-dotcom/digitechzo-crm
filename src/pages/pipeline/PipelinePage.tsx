@@ -641,7 +641,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
         </div>
       ) : viewMode === 'kanban' ? (
         /* KANBAN BOARD VIEW */
-        <div className="relative w-full overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth -mx-1 px-1">
+        <div className="relative w-full overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth">
           <div
             className={`flex gap-3 items-start ${
               mobileStageFilter !== 'ALL' ? 'w-full flex-col sm:flex-row sm:min-w-[1400px]' : 'w-max sm:min-w-[1400px]'
@@ -655,7 +655,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               return (
                 <div
                   key={stage.id}
-                  className={`rounded-card border flex flex-col gap-2.5 p-2.5 shrink-0 snap-center ${
+                  className={`rounded-card border flex flex-col gap-2.5 p-2.5 shrink-0 snap-center min-w-0 ${
                     mobileStageFilter !== 'ALL'
                       ? 'w-full sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
                       : 'w-[82vw] max-w-[290px] sm:w-auto sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
@@ -668,13 +668,16 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   }`}
                 >
                   {/* Column Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-border/80">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="font-semibold text-xs text-txt-primary truncate">
+                  <div className="flex items-center justify-between pb-2 border-b border-border/80 gap-1.5 min-w-0">
+                    <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                      <span
+                        className="font-semibold text-xs text-txt-primary line-clamp-2 leading-tight break-words min-w-0 flex-1"
+                        title={stage.name}
+                      >
                         {stage.name}
                       </span>
                       <span
-                        className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full tabular-nums shrink-0 ${
+                        className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full tabular-nums shrink-0 self-start mt-0.5 ${
                           isWonStage
                             ? 'bg-emerald-100 text-emerald-800'
                             : isLostStage
@@ -686,13 +689,13 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                       </span>
                     </div>
 
-                    <span className="text-[11px] font-bold text-txt-muted tabular-nums shrink-0 ml-1">
+                    <span className="text-[11px] font-bold text-txt-muted tabular-nums shrink-0 self-start mt-0.5 ml-1">
                       {formatCurrency(stage.totalValue)}
                     </span>
                   </div>
 
                   {/* Stage Cards Container (Stable - No Drag & Drop) */}
-                  <div className="space-y-2 min-h-[140px] flex-1 rounded">
+                  <div className="space-y-2 min-h-[140px] flex-1 rounded min-w-0">
                     {stageDeals.length === 0 ? (
                       <div className="h-28 flex flex-col items-center justify-center border border-dashed border-border rounded-btn text-center p-2 text-txt-muted text-[11px]">
                         <span>No active deals</span>
@@ -706,11 +709,14 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                           <div
                             key={deal.id}
                             onClick={() => setSelectedDeal(deal)}
-                            className="bg-white rounded-card border border-border p-3 space-y-2 shadow-card hover:border-primary/60 hover:shadow-subtle transition-all cursor-pointer group select-none"
+                            className="bg-white rounded-card border border-border p-3 space-y-2 shadow-card hover:border-primary/60 hover:shadow-subtle transition-all cursor-pointer group select-none min-w-0 overflow-hidden"
                           >
                             {/* Deal Header: Title */}
-                            <div className="flex items-start justify-between gap-1.5">
-                              <h4 className="text-xs font-semibold text-txt-primary line-clamp-2 leading-snug group-hover:text-primary transition-colors flex-1">
+                            <div className="flex items-start justify-between gap-1.5 min-w-0">
+                              <h4
+                                className="text-xs font-semibold text-txt-primary line-clamp-2 break-words leading-snug group-hover:text-primary transition-colors flex-1 min-w-0"
+                                title={deal.title}
+                              >
                                 {deal.title}
                               </h4>
                               <div className="flex items-center gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
@@ -725,82 +731,87 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                                   </button>
                                 )}
                                 <ActionMenu
-                                items={[
-                                  {
-                                    label: 'View Deal',
-                                    icon: ExternalLink,
-                                    onClick: () => setSelectedDeal(deal),
-                                  },
-                                  {
-                                    label: 'Advance Stage',
-                                    icon: TrendingUp,
-                                    onClick: () => handleAdvanceStage(deal),
-                                  },
-                                  {
-                                    label: 'Edit Deal',
-                                    icon: Edit,
-                                    onClick: () => handleOpenEditModal(deal),
-                                  },
-                                  {
-                                    label: 'Mark Won',
-                                    icon: CheckCircle2,
-                                    onClick: () => handleMarkWon(deal),
-                                  },
-                                  {
-                                    label: 'Mark Lost',
-                                    icon: AlertCircle,
-                                    onClick: () => handleOpenLostModal(deal),
-                                  },
-                                  {
-                                    label: 'Delete Deal',
-                                    icon: Trash2,
-                                    variant: 'danger',
-                                    onClick: () => handleDeleteDeal(deal),
-                                  },
-                                ]}
-                              />
-                            </div>
-                          </div>
-
-                          {/* Company / Prospect Contact */}
-                          <div className="flex items-center gap-1 text-[11px] text-txt-muted">
-                            <Building className="h-3 w-3 shrink-0" />
-                            <span className="truncate">{deal.companyName || deal.leadName}</span>
-                          </div>
-
-                          {/* Commercial Metric: Amount & Win Probability */}
-                          <div className="pt-1.5 border-t border-border flex items-center justify-between">
-                            <span className="text-xs font-bold text-txt-primary tabular-nums">
-                              {formatCurrency(deal.amount, deal.currency)}
-                            </span>
-                            <span className="inline-flex items-center px-1.5 py-0.2 rounded-badge text-[10px] font-semibold bg-slate-100 text-txt-secondary border border-border tabular-nums">
-                              {deal.probability}% win
-                            </span>
-                          </div>
-
-                          {/* Card Footer: Close Date & Owner Avatar */}
-                          <div className="flex items-center justify-between text-[10px] text-txt-muted pt-0.5">
-                            <div className="flex items-center gap-1 tabular-nums">
-                              <Calendar className="h-3 w-3 text-txt-muted" />
-                              <span>{deal.expectedCloseDate || '—'}</span>
+                                  items={[
+                                    {
+                                      label: 'View Deal',
+                                      icon: ExternalLink,
+                                      onClick: () => setSelectedDeal(deal),
+                                    },
+                                    {
+                                      label: 'Advance Stage',
+                                      icon: TrendingUp,
+                                      onClick: () => handleAdvanceStage(deal),
+                                    },
+                                    {
+                                      label: 'Edit Deal',
+                                      icon: Edit,
+                                      onClick: () => handleOpenEditModal(deal),
+                                    },
+                                    {
+                                      label: 'Mark Won',
+                                      icon: CheckCircle2,
+                                      onClick: () => handleMarkWon(deal),
+                                    },
+                                    {
+                                      label: 'Mark Lost',
+                                      icon: AlertCircle,
+                                      onClick: () => handleOpenLostModal(deal),
+                                    },
+                                    {
+                                      label: 'Delete Deal',
+                                      icon: Trash2,
+                                      variant: 'danger',
+                                      onClick: () => handleDeleteDeal(deal),
+                                    },
+                                  ]}
+                                />
+                              </div>
                             </div>
 
-                            <div className="flex items-center gap-1">
-                              <Avatar className="h-4 w-4">
-                                <AvatarFallback className="bg-primary-soft text-primary text-[8px] font-bold">
-                                  {deal.ownerName
-                                    .split(' ')
-                                    .map((n) => n[0])
-                                    .join('')}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span className="truncate max-w-[70px]">{deal.ownerName}</span>
+                            {/* Company / Prospect Contact */}
+                            <div className="flex items-center gap-1 text-[11px] text-txt-muted min-w-0 overflow-hidden">
+                              <Building className="h-3 w-3 shrink-0" />
+                              <span className="truncate min-w-0 flex-1" title={deal.companyName || deal.leadName}>
+                                {deal.companyName || deal.leadName}
+                              </span>
+                            </div>
+
+                            {/* Commercial Metric: Amount & Win Probability */}
+                            <div className="pt-1.5 border-t border-border flex items-center justify-between gap-2 min-w-0">
+                              <span className="text-xs font-bold text-txt-primary tabular-nums shrink-0">
+                                {formatCurrency(deal.amount, deal.currency)}
+                              </span>
+                              <span className="inline-flex items-center px-1.5 py-0.2 rounded-badge text-[10px] font-semibold bg-slate-100 text-txt-secondary border border-border tabular-nums shrink-0">
+                                {deal.probability}% win
+                              </span>
+                            </div>
+
+                            {/* Card Footer: Close Date & Owner Avatar */}
+                            <div className="flex items-center justify-between text-[10px] text-txt-muted pt-0.5 min-w-0 gap-2">
+                              <div className="flex items-center gap-1 tabular-nums shrink-0">
+                                <Calendar className="h-3 w-3 text-txt-muted shrink-0" />
+                                <span>{deal.expectedCloseDate || '—'}</span>
+                              </div>
+
+                              <div
+                                className="flex items-center gap-1 min-w-0 max-w-[65%] justify-end overflow-hidden"
+                                title={deal.ownerName}
+                              >
+                                <Avatar className="h-4 w-4 shrink-0">
+                                  <AvatarFallback className="bg-primary-soft text-primary text-[8px] font-bold">
+                                    {deal.ownerName
+                                      .split(' ')
+                                      .map((n) => n[0])
+                                      .join('')}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="truncate min-w-0 text-txt-secondary">{deal.ownerName}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  )}
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               );
@@ -826,16 +837,21 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   <div
                     key={deal.id}
                     onClick={() => setSelectedDeal(deal)}
-                    className="p-3.5 space-y-2.5 hover:bg-slate-50/80 transition-colors cursor-pointer"
+                    className="p-3 sm:p-3.5 space-y-2.5 hover:bg-slate-50/80 transition-colors cursor-pointer min-w-0 overflow-hidden"
                   >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <h4 className="font-semibold text-xs text-txt-primary truncate">
+                    <div className="flex items-start justify-between gap-2 min-w-0">
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        <h4
+                          className="font-semibold text-xs text-txt-primary line-clamp-2 break-words leading-tight"
+                          title={deal.title}
+                        >
                           {deal.title}
                         </h4>
-                        <div className="flex items-center gap-1.5 text-[11px] text-txt-muted mt-0.5">
+                        <div className="flex items-center gap-1.5 text-[11px] text-txt-muted mt-0.5 min-w-0 overflow-hidden">
                           <Building className="h-3 w-3 shrink-0" />
-                          <span className="truncate">{deal.companyName || deal.leadName}</span>
+                          <span className="truncate min-w-0 flex-1" title={deal.companyName || deal.leadName}>
+                            {deal.companyName || deal.leadName}
+                          </span>
                         </div>
                       </div>
                       <div onClick={(e) => e.stopPropagation()}>
@@ -877,10 +893,10 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60">
-                      <div className="flex items-center gap-1.5 flex-wrap">
+                    <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60 min-w-0 gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                         <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded-badge text-[10px] font-semibold border ${
+                          className={`inline-flex items-center px-2 py-0.5 rounded-badge text-[10px] font-semibold border shrink-0 ${
                             isWon
                               ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                               : isLost
@@ -890,22 +906,25 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                         >
                           {currentStage?.name || 'Open'}
                         </span>
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-badge text-[10px] font-semibold bg-slate-100 text-txt-secondary border border-border tabular-nums">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-badge text-[10px] font-semibold bg-slate-100 text-txt-secondary border border-border tabular-nums shrink-0">
                           {deal.probability}% win
                         </span>
                       </div>
-                      <span className="font-bold text-xs text-txt-primary tabular-nums">
+                      <span className="font-bold text-xs text-txt-primary tabular-nums shrink-0">
                         {formatCurrency(deal.amount, deal.currency)}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-txt-muted pt-0.5">
-                      <div className="flex items-center gap-1 tabular-nums">
-                        <Calendar className="h-3 w-3 text-txt-muted" />
+                    <div className="flex items-center justify-between text-[11px] text-txt-muted pt-0.5 min-w-0 gap-2">
+                      <div className="flex items-center gap-1 tabular-nums shrink-0">
+                        <Calendar className="h-3 w-3 text-txt-muted shrink-0" />
                         <span>{deal.expectedCloseDate || '—'}</span>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Avatar className="h-4 w-4">
+                      <div
+                        className="flex items-center gap-1.5 min-w-0 max-w-[65%] justify-end overflow-hidden"
+                        title={deal.ownerName}
+                      >
+                        <Avatar className="h-4 w-4 shrink-0">
                           <AvatarFallback className="bg-primary-soft text-primary text-[8px] font-bold">
                             {deal.ownerName
                               .split(' ')
@@ -913,7 +932,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                               .join('')}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="truncate max-w-[100px]">{deal.ownerName}</span>
+                        <span className="truncate min-w-0 text-txt-secondary">{deal.ownerName}</span>
                       </div>
                     </div>
                   </div>
@@ -1069,40 +1088,40 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
       {/* 5. Deal Detail Preview Modal */}
       <Dialog open={!!selectedDeal} onOpenChange={(open) => !open && setSelectedDeal(null)}>
         {selectedDeal && (
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <div className="flex items-center justify-between gap-3 pr-6">
-                <div>
-                  <DialogTitle className="text-base font-bold text-txt-primary">
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+            <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+              <div className="flex items-start justify-between gap-2 min-w-0">
+                <div className="min-w-0 flex-1">
+                  <DialogTitle className="text-base font-bold text-txt-primary leading-tight break-words" title={selectedDeal.title}>
                     {selectedDeal.title}
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-txt-muted mt-0.5">
+                  <DialogDescription className="text-xs text-txt-muted mt-0.5 truncate" title={selectedDeal.companyName || selectedDeal.leadName}>
                     {selectedDeal.companyName || selectedDeal.leadName}
                   </DialogDescription>
                 </div>
-                <div className="text-right">
+                <div className="text-right shrink-0">
                   <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
                     Amount
                   </span>
-                  <span className="text-lg font-bold text-txt-primary tabular-nums">
+                  <span className="text-base sm:text-lg font-bold text-txt-primary tabular-nums">
                     {formatCurrency(selectedDeal.amount, selectedDeal.currency)}
                   </span>
                 </div>
               </div>
             </DialogHeader>
 
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {/* Stage Progress Bar / Card */}
               <div className="p-3 rounded-card bg-slate-50 border border-border space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider shrink-0">
                     Current Stage
                   </span>
-                  <span className="text-xs font-semibold text-primary">
+                  <span className="text-xs font-semibold text-primary truncate text-right">
                     {stages.find((s) => s.id === selectedDeal.stageId)?.name || selectedDeal.stageName || 'Open'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-txt-secondary pt-1">
+                <div className="flex items-center justify-between text-[11px] text-txt-secondary pt-1 flex-wrap gap-1">
                   <span>Win Probability: <strong>{selectedDeal.probability}%</strong></span>
                   <span>Target Date: <strong>{selectedDeal.expectedCloseDate || '—'}</strong></span>
                 </div>
@@ -1110,22 +1129,22 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
 
               {/* Deal Commercial Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-card bg-white border border-border">
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 min-w-0">
                   <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
                     Contact Prospect
                   </span>
-                  <span className="font-medium text-txt-primary block">
+                  <span className="font-medium text-txt-primary block truncate" title={selectedDeal.leadName}>
                     {selectedDeal.leadName}
                   </span>
                 </div>
 
-                <div className="space-y-0.5">
+                <div className="space-y-0.5 min-w-0">
                   <span className="text-[10px] font-semibold text-txt-muted uppercase tracking-wider block">
                     Account Owner
                   </span>
-                  <span className="font-medium text-txt-primary flex items-center gap-1.5">
-                    <UserIcon className="h-3.5 w-3.5 text-txt-muted" />
-                    {selectedDeal.ownerName}
+                  <span className="font-medium text-txt-primary flex items-center gap-1.5 truncate" title={selectedDeal.ownerName}>
+                    <UserIcon className="h-3.5 w-3.5 text-txt-muted shrink-0" />
+                    <span className="truncate">{selectedDeal.ownerName}</span>
                   </span>
                 </div>
               </div>
@@ -1134,25 +1153,25 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               {selectedDeal.status === 'WON' && (
                 <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded text-emerald-800 text-xs">
                   <span className="font-semibold">Deal Won</span>
-                  {selectedDeal.wonNotes && <p className="mt-0.5">{selectedDeal.wonNotes}</p>}
+                  {selectedDeal.wonNotes && <p className="mt-0.5 break-words">{selectedDeal.wonNotes}</p>}
                 </div>
               )}
 
               {selectedDeal.status === 'LOST' && (
                 <div className="p-2.5 bg-rose-50 border border-rose-200 rounded text-rose-800 text-xs">
                   <span className="font-semibold">Deal Lost: {selectedDeal.lostReasonLabel || 'Closed Lost'}</span>
-                  {selectedDeal.lostReasonNotes && <p className="mt-0.5">{selectedDeal.lostReasonNotes}</p>}
+                  {selectedDeal.lostReasonNotes && <p className="mt-0.5 break-words">{selectedDeal.lostReasonNotes}</p>}
                 </div>
               )}
 
               {/* Stage Advancement Quick CTA */}
-              <div className="flex items-center gap-2 pt-1 flex-wrap">
+              <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 pt-1">
                 <Button
                   size="sm"
                   onClick={() => handleAdvanceStage(selectedDeal)}
-                  className="flex-1 h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer"
+                  className="col-span-2 sm:flex-1 h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer"
                 >
-                  <TrendingUp className="mr-1.5 h-3.5 w-3.5" /> Advance to Next Stage
+                  <TrendingUp className="mr-1.5 h-3.5 w-3.5 shrink-0" /> Advance Stage
                 </Button>
                 <Button
                   variant="outline"
@@ -1160,7 +1179,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   onClick={() => handleMarkWon(selectedDeal)}
                   className="h-8 text-xs border-emerald-300 text-emerald-700 hover:bg-emerald-50 cursor-pointer"
                 >
-                  <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" /> Mark Won
+                  <CheckCircle2 className="mr-1.5 h-3.5 w-3.5 shrink-0" /> Won
                 </Button>
                 <Button
                   variant="outline"
@@ -1168,20 +1187,20 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   onClick={() => handleOpenLostModal(selectedDeal)}
                   className="h-8 text-xs border-rose-300 text-rose-700 hover:bg-rose-50 cursor-pointer"
                 >
-                  <XCircle className="mr-1.5 h-3.5 w-3.5" /> Mark Lost
+                  <XCircle className="mr-1.5 h-3.5 w-3.5 shrink-0" /> Lost
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleOpenEditModal(selectedDeal)}
-                  className="h-8 text-xs cursor-pointer"
+                  className="col-span-2 sm:col-span-1 h-8 text-xs cursor-pointer"
                 >
-                  <Edit className="mr-1.5 h-3.5 w-3.5" /> Edit
+                  <Edit className="mr-1.5 h-3.5 w-3.5 shrink-0" /> Edit
                 </Button>
               </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex items-center justify-end mt-auto">
               <Button
                 variant="secondary"
                 size="sm"
