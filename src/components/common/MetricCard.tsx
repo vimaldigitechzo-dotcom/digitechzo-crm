@@ -52,29 +52,32 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       )}
       onClick={onClick}
     >
-      <CardContent className="p-2.5 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
+      <CardContent className="p-2 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
         <div className="space-y-0.5 min-w-0 flex-1">
           <p
             title={label}
-            className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-tight leading-tight line-clamp-1 xs:line-clamp-2 break-words"
+            className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-tight leading-tight line-clamp-2 break-words"
           >
             {label}
           </p>
-          <div className="text-xl sm:text-2xl font-bold tracking-tight text-txt-primary tabular-nums leading-tight">
+          <div
+            title={String(value)}
+            className="text-base xs:text-lg sm:text-2xl font-bold tracking-tight text-txt-primary tabular-nums leading-tight truncate"
+          >
             {value}
           </div>
           {subtext && (
             <p
               title={subtext}
-              className={cn("text-[10px] sm:text-[11px] font-medium leading-tight line-clamp-1 xs:line-clamp-2 break-words", subtextVariantClasses[subtextVariant])}
+              className={cn("text-[10px] sm:text-[11px] font-medium leading-tight line-clamp-2 break-words", subtextVariantClasses[subtextVariant])}
             >
               {subtext}
             </p>
           )}
         </div>
         {Icon && (
-          <div className={cn("hidden min-[360px]:flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn shrink-0 ml-1.5 sm:ml-3", iconColors.bg, iconColors.text)}>
-            <Icon className="h-4 w-4" />
+          <div className={cn("hidden min-[400px]:flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-btn shrink-0 ml-1.5 sm:ml-2.5", iconColors.bg, iconColors.text)}>
+            <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </div>
         )}
       </CardContent>

@@ -484,7 +484,7 @@ export const ProposalsPage: React.FC = () => {
       )}
 
       {/* 2. Compact Metric Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
         <MetricCard
           label="Total Quoted Value"
           value={formatCurrency(totalValue)}
@@ -763,46 +763,54 @@ export const ProposalsPage: React.FC = () => {
             {filteredProposals.map((p) => (
               <div
                 key={p.id}
-                className="rounded-card border border-border bg-white p-3.5 space-y-2.5 shadow-none"
+                className="rounded-card border border-border bg-white p-3 sm:p-3.5 space-y-2.5 shadow-none min-w-0 overflow-hidden"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
+                <div className="flex items-center justify-between gap-2 min-w-0">
+                  <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
                     <button
                       type="button"
                       onClick={() => setSelectedProposal(p)}
-                      className="font-bold text-xs text-primary font-mono flex items-center gap-1"
+                      className="font-bold text-xs text-primary font-mono flex items-center gap-1 shrink-0"
                     >
-                      <FileText className="h-3.5 w-3.5" />
-                      <span>{p.quoteNumber}</span>
+                      <FileText className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">{p.quoteNumber}</span>
                     </button>
-                    <Badge variant="neutral" className="text-[10px] font-mono">
+                    <Badge variant="neutral" className="text-[10px] font-mono shrink-0">
                       {p.versionLabel}
                     </Badge>
                   </div>
-                  {getStatusBadge(p.status)}
+                  <div className="shrink-0">
+                    {getStatusBadge(p.status)}
+                  </div>
                 </div>
 
-                <div>
-                  <h4 className="font-bold text-xs text-txt-primary">{p.title}</h4>
+                <div className="space-y-0.5 min-w-0 overflow-hidden">
+                  <h4
+                    className="font-bold text-xs text-txt-primary line-clamp-2 break-words leading-tight"
+                    title={p.title}
+                  >
+                    {p.title}
+                  </h4>
                   <Link
                     to="/leads"
-                    className="font-medium text-xs text-txt-secondary hover:text-[#57B71B] block mt-0.5"
+                    className="font-medium text-xs text-txt-secondary hover:text-[#57B71B] block truncate"
+                    title={p.companyName}
                   >
                     {p.companyName}
                   </Link>
                   {p.dealTitle && (
-                    <p className="text-[11px] text-txt-muted mt-0.5">{p.dealTitle}</p>
+                    <p className="text-[11px] text-txt-muted truncate" title={p.dealTitle}>{p.dealTitle}</p>
                   )}
                 </div>
 
-                <div className="flex items-center justify-between text-xs bg-slate-50 p-2 rounded-btn border border-slate-100">
-                  <span className="text-txt-muted text-[11px]">Quoted Amount</span>
-                  <span className="font-bold text-txt-primary tabular-nums">{formatCurrency(p.amount)}</span>
+                <div className="flex items-center justify-between text-xs bg-slate-50 p-2 rounded-btn border border-slate-100 min-w-0 gap-2">
+                  <span className="text-txt-muted text-[11px] shrink-0">Quoted Amount</span>
+                  <span className="font-bold text-txt-primary tabular-nums shrink-0">{formatCurrency(p.amount)}</span>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-[11px] text-txt-muted">Valid: {p.validUntil ? formatDate(p.validUntil) : '—'}</span>
-                  <div className="flex items-center gap-1.5">
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs min-w-0 gap-2">
+                  <span className="text-[11px] text-txt-muted truncate min-w-0 flex-1">Valid: {p.validUntil ? formatDate(p.validUntil) : '—'}</span>
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <Button
                       size="sm"
                       variant="secondary"
@@ -1015,59 +1023,59 @@ export const ProposalsPage: React.FC = () => {
       {/* 6. Proposal Detail / Preview Modal */}
       <Dialog open={!!selectedProposal} onOpenChange={(open) => !open && setSelectedProposal(null)}>
         {selectedProposal && (
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+            <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-btn border bg-emerald-50 border-emerald-200/60 text-[#57B71B]">
+                <div className="p-1.5 rounded-btn border bg-emerald-50 border-emerald-200/60 text-[#57B71B] shrink-0">
                   <FileText className="h-4 w-4" />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1 overflow-hidden">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <DialogTitle className="text-base font-bold text-txt-primary font-mono">
+                    <DialogTitle className="text-base font-bold text-txt-primary font-mono truncate" title={selectedProposal.quoteNumber}>
                       {selectedProposal.quoteNumber}
                     </DialogTitle>
                     {getStatusBadge(selectedProposal.status)}
                   </div>
-                  <DialogDescription className="text-xs text-txt-muted">
+                  <DialogDescription className="text-xs text-txt-muted truncate" title={`${selectedProposal.versionLabel} • ${selectedProposal.companyName}`}>
                     {selectedProposal.versionLabel} • {selectedProposal.companyName}
                   </DialogDescription>
                 </div>
               </div>
             </DialogHeader>
 
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs touch-pan-y">
               <div className="p-3 bg-slate-50 rounded-card border border-border space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Title</span>
-                  <span className="font-semibold text-txt-primary">{selectedProposal.title}</span>
+                <div className="flex justify-between items-start gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Title</span>
+                  <span className="font-semibold text-txt-primary text-right break-words flex-1">{selectedProposal.title}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Client / Company</span>
-                  <span className="font-semibold text-txt-primary">{selectedProposal.companyName}</span>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Client / Company</span>
+                  <span className="font-semibold text-txt-primary text-right truncate flex-1">{selectedProposal.companyName}</span>
                 </div>
                 {selectedProposal.dealTitle && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-txt-muted font-medium">Associated Deal</span>
-                    <span className="font-medium text-txt-primary truncate max-w-[200px]">
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="text-txt-muted font-medium shrink-0">Associated Deal</span>
+                    <span className="font-medium text-txt-primary text-right truncate flex-1">
                       {selectedProposal.dealTitle}
                     </span>
                   </div>
                 )}
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Quoted Total</span>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Quoted Total</span>
                   <span className="font-bold text-txt-primary text-sm tabular-nums">
                     {formatCurrency(selectedProposal.amount)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Valid Until</span>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Valid Until</span>
                   <span className="font-medium text-txt-primary tabular-nums">
                     {selectedProposal.validUntil ? formatDate(selectedProposal.validUntil) : '—'}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-txt-muted font-medium">Prepared By</span>
-                  <span className="font-semibold text-txt-primary">{selectedProposal.ownerName}</span>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-txt-muted font-medium shrink-0">Prepared By</span>
+                  <span className="font-semibold text-txt-primary text-right truncate flex-1">{selectedProposal.ownerName}</span>
                 </div>
               </div>
 
@@ -1076,32 +1084,32 @@ export const ProposalsPage: React.FC = () => {
                   <span className="text-[11px] font-bold text-txt-muted uppercase tracking-wider">
                     Scope of Work / Deliverables
                   </span>
-                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed text-xs">
+                  <p className="p-2.5 bg-white rounded-btn border border-border text-txt-secondary leading-relaxed text-xs break-words">
                     {selectedProposal.scopeNotes}
                   </p>
                 </div>
               )}
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-row justify-between sm:justify-between items-center shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 text-xs cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs cursor-pointer"
                 onClick={() => setSelectedProposal(null)}
               >
                 Close
               </Button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-end gap-1.5 w-full sm:w-auto">
                 <Button
                   size="sm"
                   variant="outline"
                   className="h-8 text-xs cursor-pointer"
                   onClick={() => handleCreateRevision(selectedProposal)}
                 >
-                  <RotateCcw className="h-3 w-3 mr-1" />
+                  <RotateCcw className="h-3 w-3 mr-1 shrink-0" />
                   New Revision
                 </Button>
 
@@ -1111,8 +1119,8 @@ export const ProposalsPage: React.FC = () => {
                     className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
                     onClick={() => handleUpdateStatus(selectedProposal.id, 'ACCEPTED')}
                   >
-                    <Check className="h-3 w-3 mr-1" />
-                    Mark Accepted
+                    <Check className="h-3 w-3 mr-1 shrink-0" />
+                    Accept
                   </Button>
                 )}
 
@@ -1123,8 +1131,8 @@ export const ProposalsPage: React.FC = () => {
                     className="h-8 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 cursor-pointer"
                     onClick={() => handleUpdateStatus(selectedProposal.id, 'DECLINED')}
                   >
-                    <XCircle className="h-3 w-3 mr-1" />
-                    Mark Declined
+                    <XCircle className="h-3 w-3 mr-1 shrink-0" />
+                    Decline
                   </Button>
                 )}
               </div>
