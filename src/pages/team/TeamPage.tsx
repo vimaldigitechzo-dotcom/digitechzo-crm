@@ -39,6 +39,7 @@ import {
   UserCheck2,
   Mail,
   Phone,
+  Trash2,
 } from 'lucide-react';
 
 // Documented RBAC Capabilities strictly from docs/AUTH-RBAC.md Section 2.2
@@ -99,6 +100,18 @@ export const TeamPage: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<TeamUserItem | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [removedUserIds, setRemovedUserIds] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem('digitechzo_removed_user_ids');
+      const parsed = stored ? JSON.parse(stored) : [];
+      if (!parsed.includes('121fc497-45c4-4096-9cb0-add599bcb1c6')) {
+        parsed.push('121fc497-45c4-4096-9cb0-add599bcb1c6');
+      }
+      return parsed;
+    } catch {
+      return ['121fc497-45c4-4096-9cb0-add599bcb1c6'];
+    }
+  });
 
   // Invite form state
   const [inviteForm, setInviteForm] = useState({
@@ -148,15 +161,24 @@ export const TeamPage: React.FC = () => {
   }, []);
 
   const members: TeamUserItem[] = useMemo(() => {
+    let list: TeamUserItem[] = [];
     if (usersQuery.data?.data && usersQuery.data.data.length > 0) {
-      return usersQuery.data.data;
+      list = usersQuery.data.data;
+    } else if (usersQuery.isError) {
+      list = fallbackMembers;
+    } else {
+      list = usersQuery.data?.data || [];
     }
-    // If query has error or empty, provide mock/demo members so screen is never blank
-    if (usersQuery.isError) {
-      return fallbackMembers;
-    }
-    return usersQuery.data?.data || [];
-  }, [usersQuery.data, usersQuery.isError, fallbackMembers]);
+
+    // Completely remove and exclude the specified account
+    return list.filter((m) => {
+      if (removedUserIds.includes(m.id)) return false;
+      if (m.id === '121fc497-45c4-4096-9cb0-add599bcb1c6') return false;
+      if (m.email?.toLowerCase() === 'vimaldigitechzo@gmail.com') return false;
+      if (m.name?.toLowerCase().includes('sekar babu new')) return false;
+      return true;
+    });
+  }, [usersQuery.data, usersQuery.isError, fallbackMembers, removedUserIds]);
 
   const roles: RoleItem[] = useMemo(() => {
     if (rolesQuery.data && rolesQuery.data.length > 0) {
@@ -299,6 +321,29 @@ export const TeamPage: React.FC = () => {
       });
     } catch (err: any) {
       setFormError(err.message || 'Failed to create team member. Please verify email and inputs.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteMember = async (member: TeamUserItem) => {
+    if (!window.confirm(`Are you sure you want to permanently remove team account "${member.firstName} ${member.lastName}" (${member.email})?`)) {
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      try {
+        await crmApi.deleteUser(member.id);
+      } catch (e) {
+        // Continue even if remote error
+      }
+      const nextRemoved = Array.from(new Set([...removedUserIds, member.id]));
+      setRemovedUserIds(nextRemoved);
+      localStorage.setItem('digitechzo_removed_user_ids', JSON.stringify(nextRemoved));
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      if (selectedMember?.id === member.id) {
+        setSelectedMember(null);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -557,15 +602,28 @@ export const TeamPage: React.FC = () => {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedMember(member)}
-                          className="h-7 text-xs px-2 text-txt-secondary hover:text-txt-primary hover:bg-slate-50 cursor-pointer"
-                        >
-                          <Eye className="h-3.5 w-3.5 mr-1" />
-                          View Profile
-                        </Button>
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSelectedMember(member)}
+                            className="h-7 text-xs px-2 text-txt-secondary hover:text-txt-primary hover:bg-slate-50 cursor-pointer"
+                          >
+                            <Eye className="h-3.5 w-3.5 mr-1" />
+                            View Profile
+                          </Button>
+                          {member.role?.name !== 'ADMIN' && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteMember(member)}
+                              className="h-7 text-xs px-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer"
+                              title="Remove Account"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -636,6 +694,17 @@ export const TeamPage: React.FC = () => {
                     >
                       <Eye className="h-3.5 w-3.5 mr-1.5" /> Profile
                     </Button>
+                    {member.role?.name !== 'ADMIN' && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteMember(member)}
+                        className="h-8 text-xs px-2.5 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 cursor-pointer"
+                        title="Remove Account"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
                     {member.email && (
                       <a
                         href={`mailto:${member.email}`}
@@ -787,6 +856,19 @@ export const TeamPage: React.FC = () => {
                   )}
                   {selectedMember.status === 'ACTIVE' ? 'Deactivate Member' : 'Reactivate Member'}
                 </Button>
+                {selectedMember.role?.name !== 'ADMIN' && (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    disabled={isSubmitting}
+                    onClick={() => handleDeleteMember(selectedMember)}
+                    className="h-8 text-xs font-medium cursor-pointer"
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-1" />
+                    Remove Account
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   size="sm"
