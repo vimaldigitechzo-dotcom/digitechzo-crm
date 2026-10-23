@@ -873,20 +873,20 @@ export const TasksPage: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-txt-secondary">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-txt-secondary">
                           {task.leadName && (
                             <Link
                               to={task.leadId ? `/leads/${task.leadId}` : '/leads'}
-                              className="flex items-center gap-1 max-w-[170px] xs:max-w-[210px] sm:max-w-xs min-w-0 font-medium text-txt-secondary hover:text-[#57B71B] transition-colors"
+                              className="flex items-center gap-1 min-w-0 font-medium text-txt-secondary hover:text-[#57B71B] transition-colors"
                             >
                               <Building2 className="h-3 w-3 text-txt-muted shrink-0" />
-                              <span className="truncate" title={task.leadName}>{task.leadName}</span>
+                              <span className="break-words" title={task.leadName}>{task.leadName}</span>
                             </Link>
                           )}
                           {task.ownerName && (
-                            <span className="flex items-center gap-1 text-txt-muted min-w-0 max-w-[120px] xs:max-w-[150px]">
+                            <span className="flex items-center gap-1 text-txt-muted min-w-0">
                               <User className="h-3 w-3 shrink-0" />
-                              <span className="truncate" title={task.ownerName}>{task.ownerName}</span>
+                              <span className="break-words font-medium" title={task.ownerName}>{task.ownerName}</span>
                             </span>
                           )}
                         </div>
@@ -1019,7 +1019,7 @@ export const TasksPage: React.FC = () => {
                               className="flex items-center gap-1 text-[11px] text-txt-secondary hover:text-[#57B71B] transition-colors mt-0.5 min-w-0 max-w-full"
                             >
                               <Building2 className="h-3 w-3 text-txt-muted shrink-0" />
-                              <span className="truncate" title={task.leadName}>{task.leadName}</span>
+                              <span className="break-words" title={task.leadName}>{task.leadName}</span>
                             </Link>
                           )}
                         </div>
@@ -1527,9 +1527,9 @@ export const TasksPage: React.FC = () => {
                   <StatusBadge status={selectedTask.priority} type="priority" />
                 </div>
                 {selectedTask.leadName && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-txt-muted font-medium">Related Prospect</span>
-                    <span className="font-semibold text-txt-primary truncate max-w-[200px]">
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="text-txt-muted font-medium shrink-0">Related Prospect</span>
+                    <span className="font-semibold text-txt-primary break-words text-right">
                       {selectedTask.leadName}
                     </span>
                   </div>

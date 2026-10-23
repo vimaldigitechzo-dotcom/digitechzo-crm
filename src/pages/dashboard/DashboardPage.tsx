@@ -548,30 +548,30 @@ export const DashboardPage: React.FC = () => {
                     >
                       <div className="min-w-0 max-w-full space-y-0.5 flex-1 overflow-hidden">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-txt-primary hover:text-[#57B71B] transition-colors truncate max-w-full">
+                          <span className="text-xs font-bold text-txt-primary hover:text-[#57B71B] transition-colors break-words max-w-full">
                             {lead.fullName}
                           </span>
                           <StatusBadge status={lead.status} type="lead" />
                         </div>
                         <p
-                          className="text-[11px] text-txt-secondary truncate max-w-full min-w-0 flex items-center gap-1 overflow-hidden"
+                          className="text-[11px] text-txt-secondary flex flex-wrap items-center gap-1 min-w-0"
                           title={`${lead.companyName || 'Individual'} • ${lead.serviceInterest || 'General Inquiry'}`}
                         >
                           <span className="shrink-0 font-medium">{lead.companyName || 'Individual'}</span>
                           <span className="text-txt-muted/60 shrink-0">&bull;</span>
-                          <span className="text-txt-muted truncate min-w-0">{lead.serviceInterest || 'General Inquiry'}</span>
+                          <span className="text-txt-muted break-words min-w-0">{lead.serviceInterest || 'General Inquiry'}</span>
                         </p>
                       </div>
 
                       <div className="text-left sm:text-right shrink-0 pt-1 sm:pt-0 border-t border-slate-100 sm:border-0 min-w-0 max-w-full">
                         {lead.nextAction?.dueDate ? (
-                          <span className="text-[11px] text-[#57B71B] font-semibold block truncate">
+                          <span className="text-[11px] text-[#57B71B] font-semibold block break-words">
                             Next: {lead.nextAction.type || 'Follow-up'} ({formatDate(lead.nextAction.dueDate)})
                           </span>
                         ) : (
-                          <span className="text-[11px] text-txt-muted block truncate">No action scheduled</span>
+                          <span className="text-[11px] text-txt-muted block">No action scheduled</span>
                         )}
-                        <span className="text-[10px] text-txt-muted block mt-0.5 truncate">
+                        <span className="text-[10px] text-txt-muted block mt-0.5 break-words">
                           Owner: {lead.ownerName || lead.owner?.name || 'Unassigned'}
                         </span>
                       </div>

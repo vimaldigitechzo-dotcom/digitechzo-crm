@@ -644,11 +644,11 @@ export const ProposalsPage: React.FC = () => {
                       </TableCell>
                       <TableCell className="py-2.5">
                         <div className="text-xs">
-                          <span className="font-semibold text-txt-primary block leading-tight truncate max-w-xs">
+                          <span className="font-semibold text-txt-primary block leading-tight break-words">
                             {p.title}
                           </span>
                           {p.scopeNotes && (
-                            <span className="text-[11px] text-txt-muted truncate block max-w-xs">
+                            <span className="text-[11px] text-txt-muted break-words block mt-0.5">
                               {p.scopeNotes}
                             </span>
                           )}
@@ -658,12 +658,12 @@ export const ProposalsPage: React.FC = () => {
                         <div className="text-xs">
                           <Link
                             to="/leads"
-                            className="font-semibold text-txt-primary hover:text-[#57B71B] transition-colors block leading-tight truncate max-w-xs"
+                            className="font-semibold text-txt-primary hover:text-[#57B71B] transition-colors block leading-tight break-words"
                           >
                             {p.companyName}
                           </Link>
                           {p.dealTitle ? (
-                            <span className="text-[11px] text-txt-secondary truncate block max-w-xs">
+                            <span className="text-[11px] text-txt-secondary break-words block mt-0.5">
                               {p.dealTitle}
                             </span>
                           ) : (
@@ -793,13 +793,13 @@ export const ProposalsPage: React.FC = () => {
                   </h4>
                   <Link
                     to="/leads"
-                    className="font-medium text-xs text-txt-secondary hover:text-[#57B71B] block truncate"
+                    className="font-medium text-xs text-txt-secondary hover:text-[#57B71B] block break-words"
                     title={p.companyName}
                   >
                     {p.companyName}
                   </Link>
                   {p.dealTitle && (
-                    <p className="text-[11px] text-txt-muted truncate" title={p.dealTitle}>{p.dealTitle}</p>
+                    <p className="text-[11px] text-txt-muted break-words" title={p.dealTitle}>{p.dealTitle}</p>
                   )}
                 </div>
 
@@ -1075,7 +1075,7 @@ export const ProposalsPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center gap-2">
                   <span className="text-txt-muted font-medium shrink-0">Prepared By</span>
-                  <span className="font-semibold text-txt-primary text-right truncate flex-1">{selectedProposal.ownerName}</span>
+                  <span className="font-semibold text-txt-primary text-right break-words flex-1">{selectedProposal.ownerName}</span>
                 </div>
               </div>
 
