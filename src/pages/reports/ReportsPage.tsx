@@ -419,10 +419,11 @@ export const ReportsPage: React.FC = () => {
               variant="outline"
               size="sm"
               onClick={handleExportCsv}
-              className="h-8 text-xs font-semibold border-border text-txt-primary hover:bg-slate-50 transition-colors shadow-none ml-auto"
+              className="h-8 text-xs font-semibold border-border text-txt-primary hover:bg-slate-50 transition-colors shadow-none ml-auto shrink-0"
             >
-              <Download className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
-              Export Summary (CSV)
+              <Download className="mr-1.5 h-3.5 w-3.5 text-txt-muted shrink-0" />
+              <span className="hidden xs:inline">Export Summary (CSV)</span>
+              <span className="xs:hidden">Export (CSV)</span>
             </Button>
           </div>
         }
@@ -446,7 +447,7 @@ export const ReportsPage: React.FC = () => {
       )}
 
       {/* 2. Compact View Switcher Tabs (Mobile-Friendly Horizontal Scroll) */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-3 border-b border-border pb-2.5 sm:pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 border-b border-border pb-2.5 sm:pb-3">
         <div className="flex items-center gap-1.5 overflow-x-auto scroll-smooth py-0.5 max-w-full [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {tabOptions.map((opt) => {
             const isActive = opt.id === activeTab;
@@ -467,32 +468,32 @@ export const ReportsPage: React.FC = () => {
             );
           })}
         </div>
-        <div className="text-[11px] text-txt-muted font-medium shrink-0">
+        <div className="text-[10px] sm:text-[11px] text-txt-muted font-medium break-words leading-tight">
           Live data: <span className="font-semibold text-txt-secondary">{deals.length}</span> deals &bull; <span className="font-semibold text-txt-secondary">{leads.length}</span> leads &bull; <span className="font-semibold text-txt-secondary">{tasks.length}</span> tasks
         </div>
       </div>
 
       {/* 3. Executive KPI Metric Row (4 Compact Cards) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
         {/* Metric 1: Active Pipeline Value */}
         <Card
           onClick={() => navigate('/pipeline')}
           title="Click to view Pipeline Deals"
           className="cursor-pointer border-border hover:border-[#16A34A]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
+          <CardContent className="p-2.5 xs:p-3 sm:p-4 flex items-center justify-between gap-1.5 xs:gap-2">
             <div className="min-w-0 flex-1 space-y-0.5">
-              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight whitespace-normal group-hover:text-txt-primary transition-colors">
+              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight line-clamp-1 break-words group-hover:text-txt-primary transition-colors" title="Active Pipeline">
                 Active Pipeline
               </p>
-              <div className="text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular">
+              <div className="text-sm xs:text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular truncate">
                 {formatCurrency(activePipelineValue)}
               </div>
-              <p className="text-[10px] sm:text-[11px] text-[#16A34A] font-medium leading-tight whitespace-normal flex items-center gap-1">
+              <p className="text-[9.5px] xs:text-[10px] sm:text-[11px] text-[#16A34A] font-medium leading-tight line-clamp-2 break-words">
                 {activeDeals.length} active opportunities
               </p>
             </div>
-            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn bg-[#F0FDF4] text-[#16A34A] shrink-0 transition-transform group-hover:scale-105">
+            <div className="hidden min-[420px]:flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn bg-[#F0FDF4] text-[#16A34A] shrink-0 transition-transform group-hover:scale-105">
               <TrendingUp className="h-4 w-4" />
             </div>
           </CardContent>
@@ -504,19 +505,19 @@ export const ReportsPage: React.FC = () => {
           title="Click to view Executive Overview"
           className="cursor-pointer border-border hover:border-[#7C3AED]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
+          <CardContent className="p-2.5 xs:p-3 sm:p-4 flex items-center justify-between gap-1.5 xs:gap-2">
             <div className="min-w-0 flex-1 space-y-0.5">
-              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight whitespace-normal group-hover:text-txt-primary transition-colors">
+              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight line-clamp-1 break-words group-hover:text-txt-primary transition-colors" title="Weighted Forecast">
                 Weighted Forecast
               </p>
-              <div className="text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular">
+              <div className="text-sm xs:text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular truncate">
                 {formatCurrency(weightedForecast)}
               </div>
-              <p className="text-[10px] sm:text-[11px] text-txt-secondary font-medium leading-tight whitespace-normal">
+              <p className="text-[9.5px] xs:text-[10px] sm:text-[11px] text-txt-secondary font-medium leading-tight line-clamp-2 break-words">
                 Probability-adjusted
               </p>
             </div>
-            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn bg-[#F5F3FF] text-[#7C3AED] shrink-0 transition-transform group-hover:scale-105">
+            <div className="hidden min-[420px]:flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn bg-[#F5F3FF] text-[#7C3AED] shrink-0 transition-transform group-hover:scale-105">
               <Target className="h-4 w-4" />
             </div>
           </CardContent>
@@ -528,19 +529,19 @@ export const ReportsPage: React.FC = () => {
           title="Click to view Leads"
           className="cursor-pointer border-border hover:border-[#2563EB]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
+          <CardContent className="p-2.5 xs:p-3 sm:p-4 flex items-center justify-between gap-1.5 xs:gap-2">
             <div className="min-w-0 flex-1 space-y-0.5">
-              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight whitespace-normal group-hover:text-txt-primary transition-colors">
+              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight line-clamp-1 break-words group-hover:text-txt-primary transition-colors" title="Ingested Leads">
                 Ingested Leads
               </p>
-              <div className="text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular">
+              <div className="text-sm xs:text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular truncate">
                 {leads.length} Leads
               </div>
-              <p className="text-[10px] sm:text-[11px] text-[#2563EB] font-medium leading-tight whitespace-normal">
+              <p className="text-[9.5px] xs:text-[10px] sm:text-[11px] text-[#2563EB] font-medium leading-tight line-clamp-2 break-words">
                 {leads.length > 0 ? 'Live database' : 'No leads recorded'}
               </p>
             </div>
-            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn bg-[#EFF6FF] text-[#2563EB] shrink-0 transition-transform group-hover:scale-105">
+            <div className="hidden min-[420px]:flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn bg-[#EFF6FF] text-[#2563EB] shrink-0 transition-transform group-hover:scale-105">
               <Users className="h-4 w-4" />
             </div>
           </CardContent>
@@ -552,17 +553,17 @@ export const ReportsPage: React.FC = () => {
           title="Click to view Follow-up Tasks"
           className="cursor-pointer border-border hover:border-[#D97706]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
+          <CardContent className="p-2.5 xs:p-3 sm:p-4 flex items-center justify-between gap-1.5 xs:gap-2">
             <div className="min-w-0 flex-1 space-y-0.5">
-              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight whitespace-normal group-hover:text-txt-primary transition-colors">
+              <p className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-wider leading-tight line-clamp-1 break-words group-hover:text-txt-primary transition-colors" title="Follow-up Queue">
                 Follow-up Queue
               </p>
-              <div className="text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular">
+              <div className="text-sm xs:text-base sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular truncate">
                 {tasks.length} Tasks
               </div>
               <p
                 className={cn(
-                  'text-[10px] sm:text-[11px] font-medium leading-tight whitespace-normal',
+                  'text-[9.5px] xs:text-[10px] sm:text-[11px] font-medium leading-tight line-clamp-2 break-words',
                   overdueTasks.length > 0 ? 'text-[#DC2626] font-semibold' : 'text-[#D97706]'
                 )}
               >
@@ -573,7 +574,7 @@ export const ReportsPage: React.FC = () => {
             </div>
             <div
               className={cn(
-                'flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn shrink-0 transition-transform group-hover:scale-105',
+                'hidden min-[420px]:flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn shrink-0 transition-transform group-hover:scale-105',
                 overdueTasks.length > 0 ? 'bg-[#FEF2F2] text-[#DC2626]' : 'bg-[#FFFBEB] text-[#D97706]'
               )}
             >
@@ -607,20 +608,22 @@ export const ReportsPage: React.FC = () => {
                 />
               ) : (
                 activeStagesBreakdown.map((stage) => (
-                  <div key={stage.stageId} className="space-y-1.5 p-3 rounded-btn border border-border/70 bg-white">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1 sm:gap-0">
-                      <div className="flex items-center gap-2 min-w-0">
+                  <div key={stage.stageId} className="space-y-1.5 p-2.5 sm:p-3 rounded-btn border border-border/70 bg-white">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-1.5 sm:gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-1">
                         <span className="h-2 w-2 rounded-full bg-[#57B71B] shrink-0" />
-                        <span className="font-bold text-txt-primary truncate">{stage.stageName}</span>
-                        <span className="text-[11px] text-txt-muted font-normal">
+                        <span className="font-bold text-xs text-txt-primary break-words line-clamp-1 flex-1 min-w-0" title={stage.stageName}>
+                          {stage.stageName}
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] text-txt-muted font-normal shrink-0">
                           ({stage.count} deal{stage.count > 1 ? 's' : ''})
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 font-tabular shrink-0">
+                      <div className="flex items-center gap-1.5 font-tabular shrink-0 self-end sm:self-auto">
                         <span className="font-bold text-txt-primary text-xs">
                           {formatCurrency(stage.totalValue)}
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-txt-secondary font-semibold">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-txt-secondary font-semibold">
                           {stage.sharePercentage.toFixed(1)}%
                         </span>
                       </div>
@@ -639,11 +642,11 @@ export const ReportsPage: React.FC = () => {
                       {stage.deals.map((deal) => (
                         <span
                           key={deal.id}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-slate-50 border border-border text-txt-secondary font-medium"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-slate-50 border border-border text-txt-secondary font-medium max-w-full"
                         >
-                          <Building2 className="h-2.5 w-2.5 text-txt-muted" />
-                          <span className="truncate max-w-[140px] sm:max-w-[200px]">{deal.companyName}</span>
-                          <span className="text-txt-muted font-tabular">({formatCurrency(deal.amount)})</span>
+                          <Building2 className="h-2.5 w-2.5 text-txt-muted shrink-0" />
+                          <span className="truncate max-w-[110px] xs:max-w-[150px] sm:max-w-[200px]" title={deal.companyName}>{deal.companyName}</span>
+                          <span className="text-txt-muted font-tabular shrink-0">({formatCurrency(deal.amount)})</span>
                         </span>
                       ))}
                     </div>
@@ -675,31 +678,33 @@ export const ReportsPage: React.FC = () => {
               ) : (
                 sourceBreakdown.map((sb) => (
                   <div key={sb.source} className="p-2.5 rounded-btn border border-border/70 bg-white space-y-1.5">
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between text-xs gap-2">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
                         <span
                           className={cn(
-                            'px-1.5 py-0.2 rounded text-[10px] font-bold uppercase tracking-wider',
+                            'px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider truncate',
                             sb.source === 'META_ADS' && 'bg-blue-50 text-blue-700 border border-blue-200',
                             sb.source === 'GOOGLE_ADS' && 'bg-amber-50 text-amber-700 border border-amber-200',
                             sb.source === 'WEBSITE_FORM' && 'bg-emerald-50 text-emerald-700 border border-emerald-200',
                             sb.source === 'WHATSAPP' && 'bg-green-50 text-green-700 border border-green-200'
                           )}
+                          title={sb.label}
                         >
                           {sb.label}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 font-tabular text-xs">
-                        <span className="font-bold text-txt-primary">{sb.count} lead</span>
+                      <div className="flex items-center gap-1.5 font-tabular text-xs shrink-0">
+                        <span className="font-bold text-txt-primary">{sb.count} lead{sb.count !== 1 ? 's' : ''}</span>
                         <span className="text-[11px] text-txt-muted">({sb.percentage.toFixed(0)}%)</span>
                       </div>
                     </div>
 
                     {/* Channel Lead Detail */}
-                    <div className="text-[11px] text-txt-secondary space-y-0.5 pt-0.5">
+                    <div className="text-[11px] text-txt-secondary space-y-1 pt-0.5">
                       {sb.leads.map((l) => (
-                        <p key={l.id} className="truncate text-txt-muted">
-                          &bull; <span className="font-semibold text-txt-primary">{l.companyName}</span> ({l.serviceInterest})
+                        <p key={l.id} className="text-[10px] sm:text-[11px] text-txt-muted leading-tight break-words line-clamp-2" title={`${l.companyName} (${l.serviceInterest})`}>
+                          &bull; <span className="font-semibold text-txt-primary">{l.companyName}</span>{' '}
+                          <span className="text-txt-muted">({l.serviceInterest})</span>
                         </p>
                       ))}
                     </div>
@@ -846,15 +851,15 @@ export const ReportsPage: React.FC = () => {
                 {/* Mobile View Cards (<768px) */}
                 <div className="md:hidden divide-y divide-border">
                   {filteredRepMetrics.map((rep) => (
-                    <div key={rep.id} className="p-3.5 space-y-2.5 bg-white">
+                    <div key={rep.id} className="p-3 sm:p-3.5 space-y-2.5 bg-white">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#57B71B]/15 text-[#57B71B] font-bold text-xs shrink-0">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[#57B71B]/15 text-[#57B71B] font-bold text-xs shrink-0">
                             {rep.name.charAt(0)}
                           </div>
-                          <div className="min-w-0">
-                            <p className="font-bold text-xs text-txt-primary truncate">{rep.name}</p>
-                            <span className="text-[10px] font-semibold text-txt-muted uppercase">
+                          <div className="min-w-0 flex-1">
+                            <p className="font-bold text-xs text-txt-primary truncate" title={rep.name}>{rep.name}</p>
+                            <span className="text-[9.5px] sm:text-[10px] font-semibold text-txt-muted uppercase truncate block" title={`${rep.role} • ${rep.teamName}`}>
                               {rep.role} &bull; {rep.teamName}
                             </span>
                           </div>
@@ -867,24 +872,24 @@ export const ReportsPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-1.5 pt-1 border-t border-border/50 text-center">
-                        <div className="bg-slate-50 p-1.5 rounded-btn">
-                          <span className="text-[10px] text-txt-muted block">Leads</span>
-                          <span className="font-bold text-xs text-txt-primary font-tabular">{rep.assignedLeadsCount}</span>
+                      <div className="grid grid-cols-4 gap-1 sm:gap-1.5 pt-1 border-t border-border/50 text-center">
+                        <div className="bg-slate-50 p-1 sm:p-1.5 rounded-btn min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Leads">Leads</span>
+                          <span className="font-bold text-xs text-txt-primary font-tabular truncate block">{rep.assignedLeadsCount}</span>
                         </div>
-                        <div className="bg-slate-50 p-1.5 rounded-btn">
-                          <span className="text-[10px] text-txt-muted block">Deals</span>
-                          <span className="font-bold text-xs text-txt-primary font-tabular">{rep.activeDealsCount}</span>
+                        <div className="bg-slate-50 p-1 sm:p-1.5 rounded-btn min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Deals">Deals</span>
+                          <span className="font-bold text-xs text-txt-primary font-tabular truncate block">{rep.activeDealsCount}</span>
                         </div>
-                        <div className="bg-slate-50 p-1.5 rounded-btn">
-                          <span className="text-[10px] text-txt-muted block">Tasks</span>
-                          <span className={cn("font-bold text-xs font-tabular", rep.overdueTasksCount > 0 ? "text-[#DC2626]" : "text-txt-primary")}>
+                        <div className="bg-slate-50 p-1 sm:p-1.5 rounded-btn min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Tasks">Tasks</span>
+                          <span className={cn("font-bold text-xs font-tabular truncate block", rep.overdueTasksCount > 0 ? "text-[#DC2626]" : "text-txt-primary")}>
                             {rep.activeTasksCount}
                           </span>
                         </div>
-                        <div className="bg-slate-50 p-1.5 rounded-btn">
-                          <span className="text-[10px] text-txt-muted block">Activities</span>
-                          <span className="font-bold text-xs text-txt-primary font-tabular">{rep.loggedActivitiesCount}</span>
+                        <div className="bg-slate-50 p-1 sm:p-1.5 rounded-btn min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Activities">Activities</span>
+                          <span className="font-bold text-xs text-txt-primary font-tabular truncate block">{rep.loggedActivitiesCount}</span>
                         </div>
                       </div>
                     </div>
@@ -892,29 +897,29 @@ export const ReportsPage: React.FC = () => {
 
                   {/* Mobile Team Total Summary Card */}
                   {repFilter === 'ALL' && (
-                    <div className="p-3.5 bg-slate-50 border-t-2 border-border space-y-2">
+                    <div className="p-3 sm:p-3.5 bg-slate-50 border-t-2 border-border space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-xs text-txt-primary">Team Total</span>
                         <span className="font-bold text-xs text-[#57B71B] font-tabular">
                           {formatCurrency(activePipelineValue)}
                         </span>
                       </div>
-                      <div className="grid grid-cols-4 gap-1.5 text-center text-xs">
-                        <div className="bg-white p-1.5 rounded border border-border/60">
-                          <span className="text-[10px] text-txt-muted block">Leads</span>
-                          <span className="font-bold font-tabular text-txt-primary">{leads.length}</span>
+                      <div className="grid grid-cols-4 gap-1 sm:gap-1.5 text-center text-xs">
+                        <div className="bg-white p-1 sm:p-1.5 rounded border border-border/60 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Leads">Leads</span>
+                          <span className="font-bold font-tabular text-txt-primary text-xs truncate block">{leads.length}</span>
                         </div>
-                        <div className="bg-white p-1.5 rounded border border-border/60">
-                          <span className="text-[10px] text-txt-muted block">Deals</span>
-                          <span className="font-bold font-tabular text-txt-primary">{activeDeals.length}</span>
+                        <div className="bg-white p-1 sm:p-1.5 rounded border border-border/60 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Deals">Deals</span>
+                          <span className="font-bold font-tabular text-txt-primary text-xs truncate block">{activeDeals.length}</span>
                         </div>
-                        <div className="bg-white p-1.5 rounded border border-border/60">
-                          <span className="text-[10px] text-txt-muted block">Tasks</span>
-                          <span className="font-bold font-tabular text-txt-primary">{tasks.length}</span>
+                        <div className="bg-white p-1 sm:p-1.5 rounded border border-border/60 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Tasks">Tasks</span>
+                          <span className="font-bold font-tabular text-txt-primary text-xs truncate block">{tasks.length}</span>
                         </div>
-                        <div className="bg-white p-1.5 rounded border border-border/60">
-                          <span className="text-[10px] text-txt-muted block">Activities</span>
-                          <span className="font-bold font-tabular text-txt-primary">{repMetrics.reduce((s, r) => s + r.loggedActivitiesCount, 0)}</span>
+                        <div className="bg-white p-1 sm:p-1.5 rounded border border-border/60 min-w-0">
+                          <span className="text-[9px] sm:text-[10px] text-txt-muted block truncate" title="Activities">Activities</span>
+                          <span className="font-bold font-tabular text-txt-primary text-xs truncate block">{repMetrics.reduce((s, r) => s + r.loggedActivitiesCount, 0)}</span>
                         </div>
                       </div>
                     </div>
@@ -942,24 +947,28 @@ export const ReportsPage: React.FC = () => {
               Live Database Configuration
             </Badge>
           </CardHeader>
-          <CardContent className="p-4 space-y-3">
+          <CardContent className="p-3 sm:p-4 space-y-3">
             <p className="text-[11px] text-txt-muted leading-relaxed">
               Active CRM pipeline stages configured in your database and current distribution across each phase:
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
+            <div className="grid grid-cols-1 min-[340px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5 pt-1">
               {rawStages.map((ps: any, idx: number) => {
                 const stageDeals = deals.filter((d) => d.stageId === ps.id);
                 const stageVal = stageDeals.reduce((sum, d) => sum + d.amount, 0);
+                const stageLabel = `${ps.order ?? idx + 1}. ${ps.name}`;
                 return (
-                  <div key={ps.id || idx} className="p-2.5 rounded-btn bg-white border border-border space-y-1 text-center">
-                    <span className="text-[10px] font-bold text-txt-muted uppercase block truncate">
-                      {ps.order ?? idx + 1}. {ps.name}
+                  <div key={ps.id || idx} className="p-2 sm:p-2.5 rounded-btn bg-white border border-border space-y-1 text-center min-w-0">
+                    <span
+                      className="text-[10px] font-bold text-txt-muted uppercase block leading-tight line-clamp-2 break-words"
+                      title={stageLabel}
+                    >
+                      {stageLabel}
                     </span>
-                    <span className="text-xs font-bold text-txt-primary block font-tabular">
+                    <span className="text-xs font-bold text-txt-primary block font-tabular truncate">
                       {formatCurrency(stageVal)}
                     </span>
-                    <span className="text-[10px] text-txt-muted block font-medium font-tabular">
+                    <span className="text-[10px] text-txt-muted block font-medium font-tabular truncate">
                       {stageDeals.length} active deal{stageDeals.length !== 1 ? 's' : ''}
                     </span>
                   </div>
