@@ -299,8 +299,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span
                   className="text-[10px] block truncate mt-0.5 opacity-75"
                   style={{ color: appliedTheme.textColor }}
+                  title={`${user?.role || 'ADMIN'} • ${user?.organization?.name || 'DigiTechzo Media & Technologies Pvt Ltd'}`}
                 >
-                  {user?.role || 'ADMIN'} &bull; {user?.organization?.name || 'DigiTechzo'}
+                  {user?.role || 'ADMIN'} &bull; {user?.organization?.name?.replace(/Media & Technologies Pvt Ltd/i, 'DigiTechzo') || 'DigiTechzo'}
                 </span>
               </div>
             </div>
@@ -575,8 +576,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span
                   className="text-[10px] block truncate mt-0.5 opacity-75"
                   style={{ color: appliedTheme.textColor }}
+                  title={`${user?.role || 'ADMIN'} • ${user?.organization?.name || 'DigiTechzo Media & Technologies Pvt Ltd'}`}
                 >
-                  {user?.role || 'ADMIN'} &bull; {user?.organization?.name || 'DigiTechzo'}
+                  {user?.role || 'ADMIN'} &bull; {user?.organization?.name?.replace(/Media & Technologies Pvt Ltd/i, 'DigiTechzo') || 'DigiTechzo'}
                 </span>
               </div>
             </div>

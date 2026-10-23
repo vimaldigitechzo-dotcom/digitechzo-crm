@@ -168,10 +168,10 @@ export const DashboardPage: React.FC = () => {
           title="Click to view Overdue Tasks"
           className="cursor-pointer border-border hover:border-[#DC2626]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none rounded-xl"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <div
-                className={`flex h-9 w-9 items-center justify-center rounded-full shrink-0 transition-transform group-hover:scale-105 ${
+                className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full shrink-0 transition-transform group-hover:scale-105 ${
                   overdueTasks.length > 0
                     ? 'bg-[#FEF2F2] text-[#DC2626] border border-rose-200'
                     : 'bg-emerald-50 text-[#16A34A] border border-emerald-100'
@@ -179,8 +179,11 @@ export const DashboardPage: React.FC = () => {
               >
                 <Clock className="h-4 w-4" />
               </div>
-              <div className="space-y-0.5 min-w-0">
-                <p className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-wider group-hover:text-txt-primary transition-colors truncate">
+              <div className="space-y-0.5 min-w-0 flex-1">
+                <p
+                  title="Overdue Tasks"
+                  className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-tight group-hover:text-txt-primary transition-colors leading-tight line-clamp-1 xs:line-clamp-2"
+                >
                   Overdue
                 </p>
                 <div
@@ -199,7 +202,7 @@ export const DashboardPage: React.FC = () => {
                 </p>
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors" />
+            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors hidden min-[360px]:block" />
           </CardContent>
         </Card>
 
@@ -209,13 +212,16 @@ export const DashboardPage: React.FC = () => {
           title="Click to view Follow-ups & Pending Tasks"
           className="cursor-pointer border-border hover:border-[#57B71B]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none rounded-xl"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-[#16A34A] border border-emerald-100 shrink-0 transition-transform group-hover:scale-105">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+              <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-emerald-50 text-[#16A34A] border border-emerald-100 shrink-0 transition-transform group-hover:scale-105">
                 <PhoneCall className="h-4 w-4" />
               </div>
-              <div className="space-y-0.5 min-w-0">
-                <p className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-wider group-hover:text-txt-primary transition-colors truncate">
+              <div className="space-y-0.5 min-w-0 flex-1">
+                <p
+                  title="Follow-ups Due"
+                  className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-tight group-hover:text-txt-primary transition-colors leading-tight line-clamp-1 xs:line-clamp-2"
+                >
                   Follow-ups Due
                 </p>
                 <div className="text-xl sm:text-2xl font-bold tracking-tight text-txt-primary font-tabular leading-tight">
@@ -226,7 +232,7 @@ export const DashboardPage: React.FC = () => {
                 </p>
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors" />
+            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors hidden min-[360px]:block" />
           </CardContent>
         </Card>
 
@@ -236,10 +242,10 @@ export const DashboardPage: React.FC = () => {
           title="Click to view Hot Leads"
           className="cursor-pointer border-border hover:border-[#D97706]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none rounded-xl"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <div
-                className={`flex h-9 w-9 items-center justify-center rounded-full shrink-0 transition-transform group-hover:scale-105 ${
+                className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full shrink-0 transition-transform group-hover:scale-105 ${
                   hotLeads.length > 0
                     ? 'bg-[#FFFBEB] text-[#D97706] border border-amber-200'
                     : 'bg-emerald-50 text-[#16A34A] border border-emerald-100'
@@ -247,8 +253,11 @@ export const DashboardPage: React.FC = () => {
               >
                 <Flame className="h-4 w-4" />
               </div>
-              <div className="space-y-0.5 min-w-0">
-                <p className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-wider group-hover:text-txt-primary transition-colors truncate">
+              <div className="space-y-0.5 min-w-0 flex-1">
+                <p
+                  title="Hot Leads"
+                  className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-tight group-hover:text-txt-primary transition-colors leading-tight line-clamp-1 xs:line-clamp-2"
+                >
                   Hot Leads
                 </p>
                 <div
@@ -263,7 +272,7 @@ export const DashboardPage: React.FC = () => {
                 </p>
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors" />
+            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors hidden min-[360px]:block" />
           </CardContent>
         </Card>
 
@@ -273,16 +282,19 @@ export const DashboardPage: React.FC = () => {
           title="Click to view Deals & Pipeline"
           className="cursor-pointer border-border hover:border-[#16A34A]/70 hover:shadow-subtle transition-all active:scale-[0.99] group shadow-none rounded-xl"
         >
-          <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-[#16A34A] border border-emerald-100 shrink-0 transition-transform group-hover:scale-105">
+          <CardContent className="p-2.5 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+              <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-emerald-50 text-[#16A34A] border border-emerald-100 shrink-0 transition-transform group-hover:scale-105">
                 <span className="font-bold text-sm">₹</span>
               </div>
-              <div className="space-y-0.5 min-w-0">
-                <p className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-wider group-hover:text-txt-primary transition-colors truncate">
+              <div className="space-y-0.5 min-w-0 flex-1">
+                <p
+                  title="Active Pipeline"
+                  className="text-[10px] sm:text-[11px] font-bold text-txt-muted uppercase tracking-tight group-hover:text-txt-primary transition-colors leading-tight line-clamp-1 xs:line-clamp-2"
+                >
                   Active Pipeline
                 </p>
-                <div className="text-base sm:text-xl xl:text-2xl font-bold tracking-tight text-txt-primary font-tabular whitespace-nowrap leading-tight">
+                <div className="text-base sm:text-xl xl:text-2xl font-bold tracking-tight text-txt-primary font-tabular whitespace-nowrap leading-tight truncate">
                   {formatCurrency(totalPipelineValue)}
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-[#16A34A] font-medium flex items-center gap-1 truncate">
@@ -290,7 +302,7 @@ export const DashboardPage: React.FC = () => {
                 </p>
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors" />
+            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-txt-primary shrink-0 transition-colors hidden min-[360px]:block" />
           </CardContent>
         </Card>
       </div>
@@ -376,13 +388,19 @@ export const DashboardPage: React.FC = () => {
                               actionType !== 'WHATSAPP' &&
                               actionType !== 'EMAIL' && <Calendar className="h-3.5 w-3.5" />}
                           </div>
-                          <div className="min-w-0 space-y-0.5">
-                            <p className="text-xs font-bold text-txt-primary truncate">
+                          <div className="min-w-0 flex-1 space-y-0.5">
+                            <p
+                              title={task.title}
+                              className="text-xs font-bold text-txt-primary line-clamp-2 break-words leading-snug"
+                            >
                               {task.title}
                             </p>
-                            <p className="text-[11px] text-txt-muted truncate flex items-center gap-1.5">
+                            <p
+                              className="text-[11px] text-txt-muted truncate flex items-center gap-1.5"
+                              title={task.lead?.fullName || task.leadName || 'General Follow-up'}
+                            >
                               <Building2 className="h-3 w-3 shrink-0" />
-                              <span>{task.lead?.fullName || task.leadName || 'General Follow-up'}</span>
+                              <span className="truncate">{task.lead?.fullName || task.leadName || 'General Follow-up'}</span>
                             </p>
                           </div>
                         </div>
@@ -526,30 +544,34 @@ export const DashboardPage: React.FC = () => {
                       key={lead.id}
                       onClick={() => navigate(`/leads/${lead.id}`)}
                       title={`Click to open ${lead.fullName}`}
-                      className="cursor-pointer p-3 px-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50/80 transition-colors gap-2 sm:gap-0"
+                      className="cursor-pointer p-3 px-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50/80 transition-colors gap-2 sm:gap-0 min-w-0 w-full overflow-hidden"
                     >
-                      <div className="min-w-0 space-y-0.5">
+                      <div className="min-w-0 max-w-full space-y-0.5 flex-1 overflow-hidden">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-txt-primary hover:text-[#57B71B] transition-colors">
+                          <span className="text-xs font-bold text-txt-primary hover:text-[#57B71B] transition-colors truncate max-w-full">
                             {lead.fullName}
                           </span>
                           <StatusBadge status={lead.status} type="lead" />
                         </div>
-                        <p className="text-[11px] text-txt-secondary truncate">
-                          {lead.companyName || 'Individual'} &bull;{' '}
-                          <span className="text-txt-muted">{lead.serviceInterest || 'General Inquiry'}</span>
+                        <p
+                          className="text-[11px] text-txt-secondary truncate max-w-full min-w-0 flex items-center gap-1 overflow-hidden"
+                          title={`${lead.companyName || 'Individual'} • ${lead.serviceInterest || 'General Inquiry'}`}
+                        >
+                          <span className="shrink-0 font-medium">{lead.companyName || 'Individual'}</span>
+                          <span className="text-txt-muted/60 shrink-0">&bull;</span>
+                          <span className="text-txt-muted truncate min-w-0">{lead.serviceInterest || 'General Inquiry'}</span>
                         </p>
                       </div>
 
-                      <div className="text-left sm:text-right shrink-0 pt-1 sm:pt-0 border-t border-slate-100 sm:border-0">
+                      <div className="text-left sm:text-right shrink-0 pt-1 sm:pt-0 border-t border-slate-100 sm:border-0 min-w-0 max-w-full">
                         {lead.nextAction?.dueDate ? (
-                          <span className="text-[11px] text-[#57B71B] font-semibold block">
+                          <span className="text-[11px] text-[#57B71B] font-semibold block truncate">
                             Next: {lead.nextAction.type || 'Follow-up'} ({formatDate(lead.nextAction.dueDate)})
                           </span>
                         ) : (
-                          <span className="text-[11px] text-txt-muted block">No action scheduled</span>
+                          <span className="text-[11px] text-txt-muted block truncate">No action scheduled</span>
                         )}
-                        <span className="text-[10px] text-txt-muted block mt-0.5">
+                        <span className="text-[10px] text-txt-muted block mt-0.5 truncate">
                           Owner: {lead.ownerName || lead.owner?.name || 'Unassigned'}
                         </span>
                       </div>
@@ -595,18 +617,21 @@ export const DashboardPage: React.FC = () => {
                 <div className="divide-y divide-border">
                   {activities.slice(0, 3).map((act) => (
                     <div key={act.id} className="py-2.5 first:pt-0 last:pb-0 space-y-1 text-xs">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <Activity className="h-3 w-3 text-txt-muted shrink-0" />
-                          <span className="font-bold text-txt-primary truncate">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-start gap-1.5 min-w-0 flex-1">
+                          <Activity className="h-3.5 w-3.5 text-txt-muted shrink-0 mt-0.5" />
+                          <span
+                            className="font-bold text-txt-primary line-clamp-2 break-words leading-tight"
+                            title={act.subject || act.title || 'Activity'}
+                          >
                             {act.subject || act.title || 'Activity'}
                           </span>
                         </div>
-                        <span className="text-[10px] text-txt-muted shrink-0 font-medium">
+                        <span className="text-[10px] text-txt-muted shrink-0 font-medium tabular-nums pt-0.5">
                           {formatDate(act.activityDate || act.createdAt)}
                         </span>
                       </div>
-                      <p className="text-[11px] text-txt-secondary leading-relaxed line-clamp-2 pl-4.5">
+                      <p className="text-[11px] text-txt-secondary leading-relaxed line-clamp-2 pl-5 break-words">
                         {act.description || 'No additional notes provided.'}
                       </p>
                     </div>
