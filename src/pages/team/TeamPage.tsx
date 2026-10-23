@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FilterPills, FilterOption } from '@/components/common/FilterPills';
-import { SearchInput } from '@/components/common/SearchInput';
 import { EmptyState } from '@/components/common/EmptyState';
 import { MetricCard } from '@/components/common/MetricCard';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
@@ -506,16 +505,9 @@ export const TeamPage: React.FC = () => {
         />
       </div>
 
-      {/* 3. Search & Compact Filters Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pb-1">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
-          <div className="w-full sm:w-64">
-            <SearchInput
-              value={searchQuery}
-              onChange={setSearchQuery}
-              placeholder="Search member by name, email, team..."
-            />
-          </div>
+      {/* 3. Compact Role Filters Toolbar */}
+      <div className="flex items-center justify-between gap-2.5 pb-1">
+        <div className="flex items-center gap-2 flex-1 overflow-x-auto">
           <FilterPills
             options={filterOptions}
             activeId={roleFilter}
@@ -523,12 +515,12 @@ export const TeamPage: React.FC = () => {
           />
         </div>
 
-        {(searchQuery || roleFilter !== 'ALL') && (
+        {roleFilter !== 'ALL' && (
           <Button
             variant="ghost"
             size="sm"
             onClick={handleResetFilters}
-            className="h-8 px-2 text-xs text-txt-muted hover:text-txt-primary self-end sm:self-auto cursor-pointer"
+            className="h-8 px-2 text-xs text-txt-muted hover:text-txt-primary shrink-0 cursor-pointer"
           >
             <RotateCcw className="h-3 w-3 mr-1" /> Reset
           </Button>
