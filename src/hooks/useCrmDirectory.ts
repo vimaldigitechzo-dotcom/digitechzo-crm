@@ -51,12 +51,13 @@ export function useCrmDirectory() {
 
   // Normalize Team Users
   const teamUsers = useMemo<CrmDirectoryUser[]>(() => {
+    const uData = usersQuery.data as any;
     const rawUsers: any[] =
-      usersQuery.data?.data?.data ||
-      usersQuery.data?.data?.items ||
-      usersQuery.data?.data ||
-      usersQuery.data?.items ||
-      (Array.isArray(usersQuery.data) ? usersQuery.data : []);
+      uData?.data?.data ||
+      uData?.data?.items ||
+      uData?.data ||
+      uData?.items ||
+      (Array.isArray(uData) ? uData : []);
 
     const fromApi = (Array.isArray(rawUsers) ? rawUsers : [])
       .filter((u: any) => u.status === 'ACTIVE' || !u.status)

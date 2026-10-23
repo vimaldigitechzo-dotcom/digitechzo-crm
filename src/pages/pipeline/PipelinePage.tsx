@@ -68,12 +68,12 @@ export const PipelinePage: React.FC = () => {
   });
 
   const rawStages = useMemo(() => {
-    const list = stagesResponse?.data || (Array.isArray(stagesResponse) ? stagesResponse : []);
+    const list = (stagesResponse as any)?.data || (Array.isArray(stagesResponse) ? stagesResponse : []);
     return Array.isArray(list) ? list : [];
   }, [stagesResponse]);
 
   const lostReasons = useMemo(() => {
-    const list = lostReasonsResponse?.data || (Array.isArray(lostReasonsResponse) ? lostReasonsResponse : []);
+    const list = (lostReasonsResponse as any)?.data || (Array.isArray(lostReasonsResponse) ? lostReasonsResponse : []);
     return Array.isArray(list) ? list : [];
   }, [lostReasonsResponse]);
 
@@ -304,6 +304,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
       setIsAddModalOpen(false);
       setNewDealForm({
         title: '',
+        leadId: '',
         stageId: stages[0]?.id || '',
         amount: 500000,
         probability: 50,
@@ -797,8 +798,9 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                             </div>
                           </div>
                         </div>
-                      ))
-                    )}
+                      );
+                    })
+                  )}
                   </div>
                 </div>
               );
