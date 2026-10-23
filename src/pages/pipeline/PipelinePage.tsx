@@ -47,8 +47,6 @@ export const PipelinePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [ownerFilter, setOwnerFilter] = useState('ALL');
   const [mobileStageFilter, setMobileStageFilter] = useState('ALL');
-  const [draggedDealId, setDraggedDealId] = useState<string | null>(null);
-  const [dragOverStageId, setDragOverStageId] = useState<string | null>(null);
 
   // Real API Queries
   const {
@@ -656,36 +654,12 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               return (
                 <div
                   key={stage.id}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    if (dragOverStageId !== stage.id) {
-                      setDragOverStageId(stage.id);
-                    }
-                  }}
-                  onDragLeave={(e) => {
-                    if (e.currentTarget === e.target) {
-                      setDragOverStageId(null);
-                    }
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const droppedDealId = e.dataTransfer.getData('text/plain') || draggedDealId;
-                    setDragOverStageId(null);
-                    setDraggedDealId(null);
-                    if (droppedDealId) {
-                      handleStageChange(droppedDealId, stage.id);
-                    }
-                  }}
-                  className={`rounded-card border flex flex-col gap-2.5 p-2.5 transition-all shrink-0 snap-center ${
+                  className={`rounded-card border flex flex-col gap-2.5 p-2.5 shrink-0 snap-center ${
                     mobileStageFilter !== 'ALL'
                       ? 'w-full sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
                       : 'w-[82vw] max-w-[290px] sm:w-auto sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
                   } ${
-                    dragOverStageId === stage.id
-                      ? 'ring-2 ring-[#57B71B] border-[#57B71B] bg-emerald-50/90 shadow-md scale-[1.01]'
-                      : isWonStage
+                    isWonStage
                       ? 'bg-emerald-50/40 border-emerald-200'
                       : isLostStage
                       ? 'bg-rose-50/40 border-rose-200'
@@ -716,55 +690,40 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                     </span>
                   </div>
 
-                  {/* Stage Drop Zone Feedback */}
-                  {dragOverStageId === stage.id && (
-                    <div className="py-2 px-2 bg-emerald-100/90 border border-dashed border-emerald-400 rounded-btn text-center text-[11px] font-semibold text-emerald-800 pointer-events-none">
-                      Release to move to {stage.name}
-                    </div>
-                  )}
-
-                  {/* Stage Cards Container */}
+                  {/* Stage Cards Container (Stable - No Drag & Drop) */}
                   <div className="space-y-2 min-h-[140px] flex-1 rounded">
                     {stageDeals.length === 0 ? (
                       <div className="h-28 flex flex-col items-center justify-center border border-dashed border-border rounded-btn text-center p-2 text-txt-muted text-[11px]">
                         <span>No active deals</span>
                       </div>
                     ) : (
-                      stageDeals.map((deal) => (
-                        <div
-                          key={deal.id}
-                          draggable
-                          onDragStart={(e) => {
-                            setDraggedDealId(deal.id);
-                            e.dataTransfer.setData('text/plain', deal.id);
-                            e.dataTransfer.effectAllowed = 'move';
-                          }}
-                          onDragEnd={() => {
-                            setDraggedDealId(null);
-                            setDragOverStageId(null);
-                          }}
-                          onClick={() => setSelectedDeal(deal)}
-                          className={`bg-white rounded-card border border-border p-3 space-y-2 shadow-card hover:border-slate-300 hover:shadow-subtle transition-all cursor-grab active:cursor-grabbing group select-none active:scale-[0.99] ${
-                            draggedDealId === deal.id ? 'opacity-40 border-dashed border-[#57B71B] scale-[0.98]' : ''
-                          } ${draggedDealId && draggedDealId !== deal.id ? 'pointer-events-none' : ''}`}
-                        >
-                          {/* Deal Header: Title */}
-                          <div className="flex items-start justify-between gap-1.5">
-                            <h4 className="text-xs font-semibold text-txt-primary line-clamp-2 leading-snug group-hover:text-primary transition-colors flex-1">
-                              {deal.title}
-                            </h4>
-                            <div className="flex items-center gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
-                              {!isWonStage && !isLostStage && (
-                                <button
-                                  type="button"
-                                  title="Advance to next stage"
-                                  onClick={() => handleAdvanceStage(deal)}
-                                  className="p-1 rounded text-txt-muted hover:text-white hover:bg-[#57B71B] transition-colors cursor-pointer"
-                                >
-                                  <ChevronRight className="h-3.5 w-3.5" />
-                                </button>
-                              )}
-                              <ActionMenu
+                      stageDeals.map((deal) => {
+                        const currentStageIndex = stages.findIndex((s) => s.id === stage.id);
+                        const nextStage = stages[currentStageIndex + 1];
+
+                        return (
+                          <div
+                            key={deal.id}
+                            onClick={() => setSelectedDeal(deal)}
+                            className="bg-white rounded-card border border-border p-3 space-y-2 shadow-card hover:border-primary/60 hover:shadow-subtle transition-all cursor-pointer group select-none"
+                          >
+                            {/* Deal Header: Title */}
+                            <div className="flex items-start justify-between gap-1.5">
+                              <h4 className="text-xs font-semibold text-txt-primary line-clamp-2 leading-snug group-hover:text-primary transition-colors flex-1">
+                                {deal.title}
+                              </h4>
+                              <div className="flex items-center gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                                {!isWonStage && !isLostStage && nextStage && (
+                                  <button
+                                    type="button"
+                                    title={`Advance to ${nextStage.name}`}
+                                    onClick={() => handleAdvanceStage(deal)}
+                                    className="p-1 rounded text-txt-muted hover:text-white hover:bg-[#57B71B] transition-colors cursor-pointer"
+                                  >
+                                    <ChevronRight className="h-3.5 w-3.5" />
+                                  </button>
+                                )}
+                                <ActionMenu
                                 items={[
                                   {
                                     label: 'View Deal',
