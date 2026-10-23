@@ -283,34 +283,66 @@ export const TasksPage: React.FC = () => {
     setIsOutcomeModalOpen(true);
   };
 
+  // Instant Optimistic Task Status Updater for zero-latency UI response
+  const applyOptimisticTaskStatus = (targetTaskId: string, newStatus: 'COMPLETED' | 'PENDING') => {
+    const previous = queryClient.getQueryData(['tasks']);
+    queryClient.setQueryData(['tasks'], (old: any) => {
+      if (!old) return old;
+      const updateList = (list: any[]) =>
+        list.map((item: any) =>
+          item.id === targetTaskId
+            ? {
+                ...item,
+                status: newStatus,
+                completedAt: newStatus === 'COMPLETED' ? new Date().toISOString() : null,
+              }
+            : item
+        );
+      if (Array.isArray(old?.data)) return { ...old, data: updateList(old.data) };
+      if (Array.isArray(old?.items)) return { ...old, items: updateList(old.items) };
+      if (Array.isArray(old)) return updateList(old);
+      return old;
+    });
+    return previous;
+  };
+
   const handleLogOutcomeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!taskForOutcome) return;
-    setIsSubmitting(true);
+    
+    // 0ms Instant Optimistic Feedback: close modal and mark completed immediately
+    const targetTaskId = taskForOutcome.id;
+    const targetLeadId = taskForOutcome.leadId;
+    const currentOutcome = outcomeForm.outcome;
+    const currentNotes = outcomeForm.notes;
+    const previousTasksData = applyOptimisticTaskStatus(targetTaskId, 'COMPLETED');
+
+    setIsOutcomeModalOpen(false);
+    setTaskForOutcome(null);
+    setOutcomeForm({ outcome: 'CONNECTED_INTERESTED', notes: '' });
+
     try {
-      // 1. Complete Task
-      await crmApi.completeTask(taskForOutcome.id, {
-        completionNotes: `Outcome: ${outcomeForm.outcome}. Notes: ${outcomeForm.notes || 'Completed via tasks action queue'}`,
+      // 1. Complete Task on server
+      await crmApi.completeTask(targetTaskId, {
+        completionNotes: `Outcome: ${currentOutcome}. Notes: ${currentNotes || 'Completed via tasks action queue'}`,
         createActivity: true,
       });
 
       // 2. If task is linked to lead, update lead status and temperature
-      if (taskForOutcome.leadId) {
+      if (targetLeadId) {
         try {
-          await crmApi.updateLeadStatus(taskForOutcome.leadId, 'CONTACTED');
+          await crmApi.updateLeadStatus(targetLeadId, 'CONTACTED');
         } catch {}
 
-        if (outcomeForm.outcome === 'CONNECTED_INTERESTED') {
+        if (currentOutcome === 'CONNECTED_INTERESTED') {
           try {
-            await crmApi.updateLead(taskForOutcome.leadId, { temperature: 'HOT' });
+            await crmApi.updateLead(targetLeadId, { temperature: 'HOT' });
           } catch {}
         }
-      }
 
-      // 3. Advance linked deal from Stage 1 to Stage 2 if task has deal/lead
-      if (taskForOutcome.leadId) {
+        // 3. Advance linked deal from Stage 1 to Stage 2 if task has deal/lead
         try {
-          const dealsRes = await crmApi.getDeals({ leadId: taskForOutcome.leadId, limit: 10 });
+          const dealsRes = await crmApi.getDeals({ leadId: targetLeadId, limit: 10 });
           const deals = dealsRes?.items || dealsRes?.data || [];
           const activeDeal = deals.find((d: any) => d.status === 'OPEN');
           if (activeDeal && (activeDeal.stage?.order === 1 || !activeDeal.stageId)) {
@@ -323,21 +355,16 @@ export const TasksPage: React.FC = () => {
         } catch {}
       }
 
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['tasks'] }),
-        queryClient.invalidateQueries({ queryKey: ['leads'] }),
-        queryClient.invalidateQueries({ queryKey: ['deals'] }),
-        queryClient.invalidateQueries({ queryKey: ['activities'] }),
-        queryClient.invalidateQueries({ queryKey: ['pipeline-stages'] }),
-      ]);
-
-      setIsOutcomeModalOpen(false);
-      setTaskForOutcome(null);
-      setOutcomeForm({ outcome: 'CONNECTED_INTERESTED', notes: '' });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['deals'] });
+      queryClient.invalidateQueries({ queryKey: ['activities'] });
+      queryClient.invalidateQueries({ queryKey: ['pipeline-stages'] });
     } catch (err: any) {
+      console.error('Failed to log task outcome:', err);
+      // Revert optimistic update on server error
+      queryClient.setQueryData(['tasks'], previousTasksData);
       alert(`Failed to log task outcome: ${err?.message || 'Server error'}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -345,8 +372,12 @@ export const TasksPage: React.FC = () => {
     const task = tasks.find((t) => t.id === taskId);
     if (!task) return;
 
+    // 0ms Instant Optimistic Feedback: Toggle UI immediately
+    const willBeCompleted = task.status !== 'COMPLETED';
+    const previousTasksData = applyOptimisticTaskStatus(taskId, willBeCompleted ? 'COMPLETED' : 'PENDING');
+
     try {
-      if (task.status === 'COMPLETED') {
+      if (!willBeCompleted) {
         await crmApi.reopenTask(taskId);
       } else {
         await crmApi.completeTask(taskId, {
@@ -354,10 +385,9 @@ export const TasksPage: React.FC = () => {
           createActivity: true,
         });
 
-        // Advance linked deal from Stage 1 to Stage 2 if task has lead
+        // Advance linked deal asynchronously in background
         if (task.leadId) {
-          try {
-            const dealsRes = await crmApi.getDeals({ leadId: task.leadId, limit: 10 });
+          crmApi.getDeals({ leadId: task.leadId, limit: 10 }).then(async (dealsRes) => {
             const deals = dealsRes?.items || dealsRes?.data || [];
             const activeDeal = deals.find((d: any) => d.status === 'OPEN');
             if (activeDeal && (activeDeal.stage?.order === 1 || !activeDeal.stageId)) {
@@ -365,20 +395,20 @@ export const TasksPage: React.FC = () => {
               const stage2 = stages.find((s: any) => s.order === 2);
               if (stage2) {
                 await crmApi.updateDealStage(activeDeal.id, stage2.id);
+                queryClient.invalidateQueries({ queryKey: ['deals'] });
               }
             }
-          } catch {}
+          }).catch(() => {});
         }
       }
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['tasks'] }),
-        queryClient.invalidateQueries({ queryKey: ['leads'] }),
-        queryClient.invalidateQueries({ queryKey: ['deals'] }),
-        queryClient.invalidateQueries({ queryKey: ['activities'] }),
-        queryClient.invalidateQueries({ queryKey: ['pipeline-stages'] }),
-      ]);
+
+      // Revalidate in background to keep data in perfect sync
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['activities'] });
     } catch (err: any) {
       console.error('Failed to toggle completion status:', err);
+      // Revert optimistic state on failure
+      queryClient.setQueryData(['tasks'], previousTasksData);
     }
   };
 

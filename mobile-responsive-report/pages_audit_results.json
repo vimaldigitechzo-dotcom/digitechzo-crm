@@ -1,0 +1,602 @@
+[
+  {
+    "page": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Leads",
+    "path": "/leads",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Leads",
+    "path": "/leads",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Leads",
+    "path": "/leads",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Leads",
+    "path": "/leads",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Leads",
+    "path": "/leads",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Tasks",
+    "path": "/tasks",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Tasks",
+    "path": "/tasks",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Tasks",
+    "path": "/tasks",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Tasks",
+    "path": "/tasks",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Tasks",
+    "path": "/tasks",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Activities",
+    "path": "/activities",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Activities",
+    "path": "/activities",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Activities",
+    "path": "/activities",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Activities",
+    "path": "/activities",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Activities",
+    "path": "/activities",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Meetings",
+    "path": "/meetings",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Meetings",
+    "path": "/meetings",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Meetings",
+    "path": "/meetings",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Meetings",
+    "path": "/meetings",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Meetings",
+    "path": "/meetings",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Proposals",
+    "path": "/proposals",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Proposals",
+    "path": "/proposals",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Proposals",
+    "path": "/proposals",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Proposals",
+    "path": "/proposals",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Proposals",
+    "path": "/proposals",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Invoices",
+    "path": "/invoices",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Invoices",
+    "path": "/invoices",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Invoices",
+    "path": "/invoices",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Invoices",
+    "path": "/invoices",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Invoices",
+    "path": "/invoices",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Customers",
+    "path": "/customers",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Customers",
+    "path": "/customers",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Customers",
+    "path": "/customers",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Customers",
+    "path": "/customers",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Customers",
+    "path": "/customers",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Reports",
+    "path": "/reports",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Reports",
+    "path": "/reports",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Reports",
+    "path": "/reports",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Reports",
+    "path": "/reports",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Reports",
+    "path": "/reports",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Team",
+    "path": "/team",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Team",
+    "path": "/team",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Team",
+    "path": "/team",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Team",
+    "path": "/team",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Team",
+    "path": "/team",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  },
+  {
+    "page": "Settings",
+    "path": "/settings",
+    "viewport": "Small mobile (iPhone SE 1st gen/min)",
+    "width": 320,
+    "height": 568,
+    "passed": true,
+    "docWidth": 320,
+    "overflowingElement": null
+  },
+  {
+    "page": "Settings",
+    "path": "/settings",
+    "viewport": "iPhone SE (3rd generation)",
+    "width": 375,
+    "height": 667,
+    "passed": true,
+    "docWidth": 375,
+    "overflowingElement": null
+  },
+  {
+    "page": "Settings",
+    "path": "/settings",
+    "viewport": "iPhone 15 / iPhone 16",
+    "width": 393,
+    "height": 852,
+    "passed": true,
+    "docWidth": 393,
+    "overflowingElement": null
+  },
+  {
+    "page": "Settings",
+    "path": "/settings",
+    "viewport": "iPhone 16 Pro / iPhone 17 / 17 Pro",
+    "width": 402,
+    "height": 874,
+    "passed": true,
+    "docWidth": 402,
+    "overflowingElement": null
+  },
+  {
+    "page": "Settings",
+    "path": "/settings",
+    "viewport": "iPhone 16 Pro Max / 17 Pro Max",
+    "width": 440,
+    "height": 956,
+    "passed": true,
+    "docWidth": 440,
+    "overflowingElement": null
+  }
+]
