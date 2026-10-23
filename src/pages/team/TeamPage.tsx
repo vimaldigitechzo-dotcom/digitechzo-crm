@@ -639,7 +639,7 @@ export const TeamPage: React.FC = () => {
                   className="rounded-card border border-border bg-white p-3.5 shadow-card space-y-3"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <Avatar className="h-8 w-8 border border-border shrink-0">
                         {member.avatarUrl && (
                           <AvatarImage src={member.avatarUrl} alt={`${member.firstName} ${member.lastName}`} />
@@ -648,34 +648,44 @@ export const TeamPage: React.FC = () => {
                           {initials || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="min-w-0">
-                        <div className="font-semibold text-xs text-txt-primary truncate">
+                      <div className="min-w-0 flex-1">
+                        <div
+                          title={`${member.firstName} ${member.lastName}`}
+                          className="font-semibold text-xs text-txt-primary line-clamp-1 break-words"
+                        >
                           {member.firstName} {member.lastName}
                         </div>
-                        <div className="text-[11px] text-txt-muted truncate">{member.email}</div>
+                        <div
+                          title={member.email}
+                          className="text-[11px] text-txt-muted break-all line-clamp-1"
+                        >
+                          {member.email}
+                        </div>
                       </div>
                     </div>
-                    <Badge variant={isUserActive ? 'success' : 'neutral'}>
+                    <Badge variant={isUserActive ? 'success' : 'neutral'} className="shrink-0">
                       {isUserActive ? 'Active' : 'Inactive'}
                     </Badge>
                   </div>
 
                   <div className="space-y-1.5 text-xs border-t border-border/50 pt-2.5">
-                    <div className="flex items-center justify-between text-txt-secondary">
-                      <span className="text-txt-muted">Role</span>
-                      <Badge variant={getRoleBadgeVariant(member.role?.name)}>
+                    <div className="flex items-center justify-between text-txt-secondary gap-2">
+                      <span className="text-txt-muted shrink-0">Role</span>
+                      <Badge variant={getRoleBadgeVariant(member.role?.name)} className="shrink-0">
                         {roleDisplayName}
                       </Badge>
                     </div>
 
-                    <div className="flex items-center justify-between text-txt-secondary">
-                      <span className="text-txt-muted">Assigned Team</span>
-                      <span className="text-txt-primary font-medium">{member.teamName || 'Global / Leadership'}</span>
+                    <div className="flex items-center justify-between text-txt-secondary gap-2">
+                      <span className="text-txt-muted shrink-0">Assigned Team</span>
+                      <span className="text-txt-primary font-medium text-right line-clamp-1 break-words">
+                        {member.teamName || 'Global / Leadership'}
+                      </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-txt-secondary">
-                      <span className="text-txt-muted">Data Scope</span>
-                      <div>{getDataScopeBadge(member)}</div>
+                    <div className="flex items-center justify-between text-txt-secondary gap-2">
+                      <span className="text-txt-muted shrink-0">Data Scope</span>
+                      <div className="text-right shrink-0">{getDataScopeBadge(member)}</div>
                     </div>
                   </div>
 
@@ -686,14 +696,14 @@ export const TeamPage: React.FC = () => {
                       onClick={() => setSelectedMember(member)}
                       className="flex-1 h-8 text-xs font-medium cursor-pointer"
                     >
-                      <Eye className="h-3.5 w-3.5 mr-1.5" /> Profile
+                      <Eye className="h-3.5 w-3.5 mr-1.5 shrink-0" /> Profile
                     </Button>
                     {member.role?.name !== 'ADMIN' && (
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleDeleteMember(member)}
-                        className="h-8 text-xs px-2.5 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 cursor-pointer"
+                        className="h-8 text-xs px-2.5 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 cursor-pointer shrink-0"
                         title="Remove Account"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -702,7 +712,7 @@ export const TeamPage: React.FC = () => {
                     {member.email && (
                       <a
                         href={`mailto:${member.email}`}
-                        className="inline-flex items-center justify-center h-8 w-8 rounded-btn border border-border bg-slate-50 text-txt-secondary hover:text-txt-primary hover:bg-slate-100 transition-colors"
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-btn border border-border bg-slate-50 text-txt-secondary hover:text-txt-primary hover:bg-slate-100 transition-colors shrink-0"
                         title="Send Email"
                       >
                         <Mail className="h-3.5 w-3.5" />
@@ -711,7 +721,7 @@ export const TeamPage: React.FC = () => {
                     {member.phone && (
                       <a
                         href={`tel:${member.phone}`}
-                        className="inline-flex items-center justify-center h-8 w-8 rounded-btn border border-border bg-slate-50 text-txt-secondary hover:text-txt-primary hover:bg-slate-100 transition-colors"
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-btn border border-border bg-slate-50 text-txt-secondary hover:text-txt-primary hover:bg-slate-100 transition-colors shrink-0"
                         title="Call Member"
                       >
                         <Phone className="h-3.5 w-3.5" />
@@ -727,11 +737,11 @@ export const TeamPage: React.FC = () => {
 
       {/* 5. Member Profile & Documented RBAC Capabilities Modal */}
       <Dialog open={!!selectedMember} onOpenChange={(open) => !open && setSelectedMember(null)}>
-        <DialogContent className="max-w-lg w-full">
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl max-h-[90vh] flex flex-col">
           {selectedMember && (
             <>
-              <DialogHeader>
-                <div className="flex items-start gap-3 pr-8">
+              <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+                <div className="flex items-start gap-3">
                   <Avatar className="h-10 w-10 border border-border shrink-0 mt-0.5">
                     {selectedMember.avatarUrl && (
                       <AvatarImage
@@ -762,13 +772,13 @@ export const TeamPage: React.FC = () => {
                 </div>
               </DialogHeader>
 
-              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-4 text-xs">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-4 text-xs touch-pan-y">
 
               {/* Assignment Information Grid */}
-              <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-card border border-border/60 text-xs">
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 p-3 bg-slate-50 rounded-card border border-border/60 text-xs">
                 <div>
                   <div className="text-[11px] font-medium text-txt-muted">Assigned Team</div>
-                  <div className="font-semibold text-txt-primary mt-0.5">{selectedMember.teamName || 'Global / Leadership'}</div>
+                  <div className="font-semibold text-txt-primary mt-0.5 break-words">{selectedMember.teamName || 'Global / Leadership'}</div>
                 </div>
                 <div>
                   <div className="text-[11px] font-medium text-txt-muted">Data Scope</div>
@@ -785,8 +795,8 @@ export const TeamPage: React.FC = () => {
                   <span className="text-[10px] text-txt-muted">Per docs/AUTH-RBAC.md</span>
                 </div>
 
-                <div className="rounded-card border border-border overflow-hidden text-xs">
-                  <table className="w-full text-left">
+                <div className="rounded-card border border-border overflow-x-auto text-xs">
+                  <table className="w-full text-left min-w-[260px]">
                     <thead className="bg-slate-50 border-b border-border text-[11px] text-txt-muted">
                       <tr>
                         <th className="py-2 px-3 font-semibold">Capability</th>
@@ -832,37 +842,39 @@ export const TeamPage: React.FC = () => {
 
               </div>
 
-              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-between sm:justify-between shrink-0 bg-slate-50/95 mt-auto">
-                <Button
-                  type="button"
-                  variant={selectedMember.status === 'ACTIVE' ? 'destructive' : 'outline'}
-                  size="sm"
-                  disabled={isSubmitting}
-                  onClick={() => handleToggleMemberStatus(selectedMember)}
-                  className="h-8 text-xs font-medium cursor-pointer"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" />
-                  ) : selectedMember.status === 'ACTIVE' ? (
-                    <UserX className="h-3.5 w-3.5 mr-1" />
-                  ) : (
-                    <UserCheck2 className="h-3.5 w-3.5 mr-1" />
-                  )}
-                  {selectedMember.status === 'ACTIVE' ? 'Deactivate Member' : 'Reactivate Member'}
-                </Button>
-                {selectedMember.role?.name !== 'ADMIN' && (
+              <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-wrap items-center justify-between gap-2 mt-auto">
+                <div className="flex items-center gap-2 flex-wrap">
                   <Button
                     type="button"
-                    variant="destructive"
+                    variant={selectedMember.status === 'ACTIVE' ? 'destructive' : 'outline'}
                     size="sm"
                     disabled={isSubmitting}
-                    onClick={() => handleDeleteMember(selectedMember)}
+                    onClick={() => handleToggleMemberStatus(selectedMember)}
                     className="h-8 text-xs font-medium cursor-pointer"
                   >
-                    <Trash2 className="h-3.5 w-3.5 mr-1" />
-                    Remove Account
+                    {isSubmitting ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" />
+                    ) : selectedMember.status === 'ACTIVE' ? (
+                      <UserX className="h-3.5 w-3.5 mr-1" />
+                    ) : (
+                      <UserCheck2 className="h-3.5 w-3.5 mr-1" />
+                    )}
+                    {selectedMember.status === 'ACTIVE' ? 'Deactivate Member' : 'Reactivate Member'}
                   </Button>
-                )}
+                  {selectedMember.role?.name !== 'ADMIN' && (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      disabled={isSubmitting}
+                      onClick={() => handleDeleteMember(selectedMember)}
+                      className="h-8 text-xs font-medium cursor-pointer"
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1" />
+                      Remove Account
+                    </Button>
+                  )}
+                </div>
                 <Button
                   variant="outline"
                   size="sm"
@@ -879,7 +891,7 @@ export const TeamPage: React.FC = () => {
 
       {/* 6. Invite Member Modal */}
       <Dialog open={isInviteModalOpen} onOpenChange={setIsInviteModalOpen}>
-        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl max-h-[90vh] flex flex-col">
           <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <UserPlus className="h-4 w-4 text-[#57B71B]" /> Add / Invite Team Member
