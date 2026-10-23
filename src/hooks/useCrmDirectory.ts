@@ -6,6 +6,7 @@ import { MOCK_LEADS } from '@/mocks/mockData';
 
 export interface CrmDirectoryClient {
   id: string;
+  leadId?: string;
   companyName: string;
   contactName: string;
   phone: string;
@@ -50,15 +51,25 @@ export function useCrmDirectory() {
 
   // Normalize Team Users
   const teamUsers = useMemo<CrmDirectoryUser[]>(() => {
-    const rawUsers: any[] = usersQuery.data?.data || (Array.isArray(usersQuery.data) ? usersQuery.data : []);
-    const fromApi = rawUsers
+    const rawUsers: any[] =
+      usersQuery.data?.data?.data ||
+      usersQuery.data?.data?.items ||
+      usersQuery.data?.data ||
+      usersQuery.data?.items ||
+      (Array.isArray(usersQuery.data) ? usersQuery.data : []);
+
+    const fromApi = (Array.isArray(rawUsers) ? rawUsers : [])
       .filter((u: any) => u.status === 'ACTIVE' || !u.status)
       .map((u: any) => ({
         id: u.id,
         name: u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
         email: u.email || '',
-        role: u.role?.name || u.role || 'Member',
+        role: u.role?.displayAlias || u.role?.name || u.role || 'Member',
       }));
+
+    if (fromApi.length > 0) {
+      return fromApi;
+    }
 
     const fromMock = MOCK_USERS.map((u) => ({
       id: u.id,
@@ -116,7 +127,8 @@ export function useCrmDirectory() {
         ].filter(Boolean).join(' ');
 
         list.push({
-          id: c.id,
+          id: c.leadId || c.id,
+          leadId: c.leadId,
           companyName: company || contact,
           contactName: contact,
           phone,

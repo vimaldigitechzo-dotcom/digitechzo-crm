@@ -248,15 +248,36 @@ export const ProposalsPage: React.FC = () => {
       return;
     }
 
+    if (!newProposalForm.leadId) {
+      setFormError('Please select a Client or Prospect for this proposal');
+      return;
+    }
+
     setIsSubmitting(true);
     setFormError(null);
+
+    // Validate and sanitize UUIDs
+    const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const sanitizedOwnerId =
+      newProposalForm.ownerId && UUID_REGEX.test(newProposalForm.ownerId)
+        ? newProposalForm.ownerId
+        : undefined;
+
+    const sanitizedDealId =
+      newProposalForm.dealId && UUID_REGEX.test(newProposalForm.dealId)
+        ? newProposalForm.dealId
+        : undefined;
+
+    // Resolve target leadId from selected client or lead
+    const chosenClient = clients.find((c) => c.id === newProposalForm.leadId);
+    const targetLeadId = chosenClient?.leadId || newProposalForm.leadId;
 
     try {
       await crmApi.createProposal({
         title: newProposalForm.title.trim(),
-        leadId: newProposalForm.leadId || undefined,
-        dealId: newProposalForm.dealId || undefined,
-        ownerId: newProposalForm.ownerId || undefined,
+        leadId: targetLeadId,
+        dealId: sanitizedDealId,
+        ownerId: sanitizedOwnerId,
         subtotal: Number(newProposalForm.amount) || 0,
         totalAmount: Number(newProposalForm.amount) || 0,
         validUntil: newProposalForm.validUntil ? new Date(newProposalForm.validUntil).toISOString() : undefined,
@@ -264,12 +285,10 @@ export const ProposalsPage: React.FC = () => {
       } as any);
 
       // Automatically advance linked deal to Stage 4 (Proposal Sent) and update value
-      const targetLeadId = newProposalForm.leadId;
-      const targetDealId = newProposalForm.dealId;
       const proposalAmount = Number(newProposalForm.amount) || 0;
 
       try {
-        let dealToUpdateId = targetDealId;
+        let dealToUpdateId = sanitizedDealId;
         if (!dealToUpdateId && targetLeadId) {
           const dealsRes = await crmApi.getDeals({ leadId: targetLeadId, limit: 10 });
           const deals = dealsRes?.items || dealsRes?.data || [];
@@ -309,7 +328,10 @@ export const ProposalsPage: React.FC = () => {
         scopeNotes: '',
       });
     } catch (err: any) {
-      setFormError(err.message || 'Failed to create proposal');
+      const errMsg = Array.isArray(err?.data?.message)
+        ? err.data.message.join(', ')
+        : err?.data?.message || err?.message || 'Failed to create proposal';
+      setFormError(errMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -829,7 +851,9 @@ export const ProposalsPage: React.FC = () => {
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-txt-primary">Client / Prospect</label>
+                <label className="text-xs font-semibold text-txt-primary">
+                  Client / Prospect <span className="text-red-500">*</span>
+                </label>
                 <span className="text-[10px] text-txt-muted">{clients.length} clients available</span>
               </div>
               <CustomSelect
@@ -845,13 +869,10 @@ export const ProposalsPage: React.FC = () => {
                   }));
                 }}
                 placeholder="Select client or prospect..."
-                options={[
-                  { value: '', label: 'None / Direct Prospect' },
-                  ...clients.map((c) => ({
-                    value: c.id,
-                    label: c.displayText,
-                  })),
-                ]}
+                options={clients.map((c) => ({
+                  value: c.id,
+                  label: c.displayText,
+                }))}
               />
 
               {/* Selected client detailed card */}

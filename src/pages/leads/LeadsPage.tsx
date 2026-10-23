@@ -340,7 +340,9 @@ export const LeadsPage: React.FC = () => {
         priority: newLeadForm.priority || 'MEDIUM',
         temperature: newLeadForm.temperature ? (newLeadForm.temperature as 'HOT' | 'WARM' | 'COLD') : undefined,
         serviceInterest: newLeadForm.serviceInterest.trim() || LEAD_CATEGORIES[0],
-        ownerId: newLeadForm.ownerId || undefined,
+        ownerId: newLeadForm.ownerId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(newLeadForm.ownerId)
+          ? newLeadForm.ownerId
+          : undefined,
         nextActionDueAt: newLeadForm.nextActionDate
           ? new Date(`${newLeadForm.nextActionDate}T${newLeadForm.nextActionTime || '10:00'}:00`).toISOString()
           : undefined,
@@ -482,7 +484,11 @@ export const LeadsPage: React.FC = () => {
       });
 
       // If owner was modified, reassign the lead via backend API
-      if (editForm.ownerId && editForm.ownerId !== editingLead.ownerId) {
+      if (
+        editForm.ownerId &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(editForm.ownerId) &&
+        editForm.ownerId !== editingLead.ownerId
+      ) {
         try {
           const reassigned = await crmApi.assignLead(editingLead.id, editForm.ownerId);
           updated = { ...updated, ...reassigned };

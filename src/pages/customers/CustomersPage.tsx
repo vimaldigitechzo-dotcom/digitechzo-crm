@@ -272,9 +272,9 @@ export const CustomersPage: React.FC = () => {
         email: formState.contactEmail.trim().toLowerCase(),
         phone: formState.contactPhone.trim(),
         status: formState.status,
-        leadId: formState.leadId || undefined,
-        dealId: formState.dealId || undefined,
-        ownerId: formState.ownerId || undefined,
+        leadId: formState.leadId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formState.leadId) ? formState.leadId : undefined,
+        dealId: formState.dealId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formState.dealId) ? formState.dealId : undefined,
+        ownerId: formState.ownerId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(formState.ownerId) ? formState.ownerId : undefined,
         notes: combinedNotes,
       });
 

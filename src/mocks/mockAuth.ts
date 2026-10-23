@@ -2,7 +2,7 @@ import { User, AuthSession } from '@/types/auth';
 
 export const MOCK_USERS: User[] = [
   {
-    id: 'user-1',
+    id: '121fc497-45c4-4096-9cb0-add599bcb1c6',
     email: 'arjun.v@digitechzo.com',
     name: 'Arjun Verma',
     firstName: 'Arjun',
@@ -13,7 +13,7 @@ export const MOCK_USERS: User[] = [
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
   },
   {
-    id: 'user-2',
+    id: 'b1a11111-2222-4333-8444-555555555555',
     email: 'priya.s@digitechzo.com',
     name: 'Priya Sharma',
     firstName: 'Priya',
@@ -24,7 +24,7 @@ export const MOCK_USERS: User[] = [
     avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80',
   },
   {
-    id: 'user-3',
+    id: 'c1a11111-2222-4333-8444-666666666666',
     email: 'vikram.m@digitechzo.com',
     name: 'Vikram Malhotra',
     firstName: 'Vikram',
@@ -35,7 +35,7 @@ export const MOCK_USERS: User[] = [
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
   },
   {
-    id: 'user-admin',
+    id: '0f048a4c-0223-475f-9bc8-4e3e026dd9a7',
     email: 'admin@digitechzo.com',
     name: 'Aditya Rao',
     firstName: 'Aditya',
