@@ -503,6 +503,29 @@ export const MeetingsPage: React.FC = () => {
           notes: outcomeForm.nextStepNotes.trim() || undefined,
           createActivity: true,
         });
+
+        // Automatically advance linked deal to Stage 3 (Demo / Meeting Completed)
+        try {
+          let dealToUpdateId = outcomeModalMeeting.dealId;
+          if (!dealToUpdateId && outcomeModalMeeting.leadId) {
+            const dealsRes = await crmApi.getDeals({ leadId: outcomeModalMeeting.leadId, limit: 10 });
+            const deals = dealsRes?.items || dealsRes?.data || [];
+            const openDeal = deals.find((d: any) => d.status === 'OPEN');
+            if (openDeal) dealToUpdateId = openDeal.id;
+          }
+
+          if (dealToUpdateId) {
+            const stages = await crmApi.getPipelineStages();
+            const demoStage = stages.find(
+              (s: any) => s.order === 3 || s.name.toLowerCase().includes('demo') || s.name.toLowerCase().includes('meeting')
+            );
+            if (demoStage) {
+              await crmApi.updateDealStage(dealToUpdateId, demoStage.id);
+            }
+          }
+        } catch (e) {
+          console.error('Failed to auto-advance deal on meeting completion:', e);
+        }
       } else if (outcomeForm.status === 'CANCELLED') {
         await crmApi.cancelMeeting(outcomeModalMeeting.id, {
           cancelReason: outcomeForm.outcomeSummary.trim() || 'Cancelled by client or host',

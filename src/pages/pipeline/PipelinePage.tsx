@@ -77,6 +77,16 @@ export const PipelinePage: React.FC = () => {
     queryFn: () => crmApi.getDeals({ limit: 100 }),
   });
 
+  // Query all active leads for deal association
+  const { data: leadsResponse } = useQuery({
+    queryKey: ['leads'],
+    queryFn: () => crmApi.getLeads({ limit: 100 }),
+  });
+
+  const leads = useMemo(() => {
+    return leadsResponse?.items || leadsResponse?.data || [];
+  }, [leadsResponse]);
+
   // Map Backend Deals into frontend Deal model
   const rawDeals = useMemo(() => {
     return dealsResponse?.items || dealsResponse?.data || [];
@@ -144,6 +154,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
   const [addError, setAddError] = useState<string | null>(null);
   const [newDealForm, setNewDealForm] = useState({
     title: '',
+    leadId: '',
     stageId: DEFAULT_PIPELINE_STAGES[0].id,
     amount: 500000,
     probability: 50,
@@ -254,13 +265,21 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
 
   const handleAddDealSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newDealForm.title.trim()) return;
+    if (!newDealForm.title.trim()) {
+      setAddError('Deal title is required');
+      return;
+    }
+    if (!newDealForm.leadId) {
+      setAddError('Please select an associated lead');
+      return;
+    }
 
     setIsAddSubmitting(true);
     setAddError(null);
     try {
       await crmApi.createDeal({
         title: newDealForm.title.trim(),
+        leadId: newDealForm.leadId,
         value: Number(newDealForm.amount) || 0,
         stageId: newDealForm.stageId || (stages[0]?.id ?? ''),
         probability: Number(newDealForm.probability) || 50,
@@ -333,15 +352,55 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
 
   const handleStageChange = async (dealId: string, targetStageId: string) => {
     setActionError(null);
+
+    const targetStage = stages.find((s) => s.id === targetStageId);
+
+    // 0ms Instant Optimistic UI Update: Move deal card immediately
+    const previousDealsData = queryClient.getQueryData(['deals']);
+    queryClient.setQueryData(['deals'], (old: any) => {
+      if (!old) return old;
+      const updateList = (list: any[]) =>
+        list.map((d: any) =>
+          d.id === dealId
+            ? {
+                ...d,
+                stageId: targetStageId,
+                stageName: targetStage?.name || d.stageName,
+                stage: targetStage || d.stage,
+                status: targetStage?.stageType === 'WON' ? 'WON' : targetStage?.stageType === 'LOST' ? 'LOST' : 'OPEN',
+              }
+            : d
+        );
+
+      if (Array.isArray(old?.data)) return { ...old, data: updateList(old.data) };
+      if (Array.isArray(old?.items)) return { ...old, items: updateList(old.items) };
+      if (Array.isArray(old)) return updateList(old);
+      return old;
+    });
+
+    if (selectedDeal && selectedDeal.id === dealId) {
+      setSelectedDeal((prev) =>
+        prev
+          ? {
+              ...prev,
+              stageId: targetStageId,
+              stageName: targetStage?.name || prev.stageName,
+              status: targetStage?.stageType === 'WON' ? 'WON' : targetStage?.stageType === 'LOST' ? 'LOST' : 'OPEN',
+            }
+          : null
+      );
+    }
+
     try {
       await crmApi.updateDealStage(dealId, targetStageId);
-      await queryClient.invalidateQueries({ queryKey: ['deals'] });
-      if (selectedDeal && selectedDeal.id === dealId) {
-        setSelectedDeal((prev) => (prev ? { ...prev, stageId: targetStageId } : null));
-      }
+      queryClient.invalidateQueries({ queryKey: ['deals'] });
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['activities'] });
     } catch (err: any) {
+      console.error('Failed to update deal stage:', err);
       setActionError(err?.message || 'Failed to update deal stage.');
-      await queryClient.invalidateQueries({ queryKey: ['deals'] });
+      // Revert optimistic update on error
+      queryClient.setQueryData(['deals'], previousDealsData);
     }
   };
 
@@ -482,6 +541,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                 setAddError(null);
                 setNewDealForm((prev) => ({
                   ...prev,
+                  leadId: prev.leadId || (leads.length > 0 ? leads[0].id : ''),
                   stageId: prev.stageId || (stages.length > 0 ? stages[0].id : DEFAULT_PIPELINE_STAGES[0].id),
                 }));
                 setIsAddModalOpen(true);
@@ -1144,6 +1204,21 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               )}
             <div className="space-y-1">
               <label className="text-caption text-txt-secondary block font-medium">
+                Associated Lead / Client <span className="text-red-500">*</span>
+              </label>
+              <CustomSelect
+                value={newDealForm.leadId}
+                onChange={(val) => setNewDealForm({ ...newDealForm, leadId: val })}
+                options={leads.map((l: any) => ({
+                  value: l.id,
+                  label: `${l.fullName}${l.companyName ? ` (${l.companyName})` : ''}`,
+                }))}
+                placeholder="Select Client / Lead..."
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-caption text-txt-secondary block font-medium">
                 Deal Title <span className="text-red-500">*</span>
               </label>
               <input
@@ -1210,30 +1285,32 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsAddModalOpen(false)}
-                className="w-full sm:w-auto h-8 text-xs cursor-pointer"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={isAddSubmitting}
-                size="sm"
-                className="w-full sm:w-auto h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer"
-              >
-                {isAddSubmitting ? (
-                  <>
-                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Creating...
-                  </>
-                ) : (
-                  'Create Deal'
-                )}
-              </Button>
+            <DialogFooter className="px-4 py-2.5 sm:px-5 sm:py-3 border-t border-border shrink-0 bg-slate-50/95 mt-auto">
+              <div className="grid grid-cols-2 gap-2 w-full sm:flex sm:justify-end sm:w-auto">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="w-full sm:w-auto h-8 text-xs cursor-pointer"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isAddSubmitting}
+                  size="sm"
+                  className="w-full sm:w-auto h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer font-semibold"
+                >
+                  {isAddSubmitting ? (
+                    <>
+                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Creating...
+                    </>
+                  ) : (
+                    'Create Deal'
+                  )}
+                </Button>
+              </div>
             </DialogFooter>
           </form>
         </DialogContent>

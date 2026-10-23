@@ -263,6 +263,36 @@ export const ProposalsPage: React.FC = () => {
         description: newProposalForm.scopeNotes.trim() || undefined,
       } as any);
 
+      // Automatically advance linked deal to Stage 4 (Proposal Sent) and update value
+      const targetLeadId = newProposalForm.leadId;
+      const targetDealId = newProposalForm.dealId;
+      const proposalAmount = Number(newProposalForm.amount) || 0;
+
+      try {
+        let dealToUpdateId = targetDealId;
+        if (!dealToUpdateId && targetLeadId) {
+          const dealsRes = await crmApi.getDeals({ leadId: targetLeadId, limit: 10 });
+          const deals = dealsRes?.items || dealsRes?.data || [];
+          const openDeal = deals.find((d: any) => d.status === 'OPEN');
+          if (openDeal) dealToUpdateId = openDeal.id;
+        }
+
+        if (dealToUpdateId) {
+          const stages = await crmApi.getPipelineStages();
+          const proposalStage = stages.find(
+            (s: any) => s.order === 4 || s.name.toLowerCase().includes('proposal')
+          );
+          if (proposalStage) {
+            await crmApi.updateDealStage(dealToUpdateId, proposalStage.id);
+          }
+          if (proposalAmount > 0) {
+            await crmApi.updateDeal(dealToUpdateId, { value: proposalAmount });
+          }
+        }
+      } catch (e) {
+        console.error('Failed to auto-advance deal on proposal creation:', e);
+      }
+
       await queryClient.invalidateQueries({ queryKey: ['proposals'] });
       await queryClient.invalidateQueries({ queryKey: ['leads'] });
       await queryClient.invalidateQueries({ queryKey: ['deals'] });
