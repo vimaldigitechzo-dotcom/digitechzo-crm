@@ -1,0 +1,1884 @@
+[
+  {
+    "module": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "span",
+        "cls": "text-txt-muted",
+        "right": 340,
+        "width": 194,
+        "overflowDiff": 20
+      }
+    ],
+    "screenshot": "dashboard-small-320x568.png"
+  },
+  {
+    "module": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "dashboard-standard-390x844.png"
+  },
+  {
+    "module": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "dashboard-large-430x932.png"
+  },
+  {
+    "module": "Dashboard",
+    "path": "/dashboard",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "dashboard-landscape-844x390.png"
+  },
+  {
+    "module": "Leads",
+    "path": "/leads",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 403,
+        "width": 76,
+        "overflowDiff": 83
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 366,
+        "width": 26,
+        "overflowDiff": 46
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 390,
+        "width": 18,
+        "overflowDiff": 70
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 526,
+        "width": 116,
+        "overflowDiff": 206
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 488,
+        "width": 66,
+        "overflowDiff": 168
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-200 text-",
+        "right": 513,
+        "width": 18,
+        "overflowDiff": 193
+      }
+    ],
+    "screenshot": "leads-small-320x568.png"
+  },
+  {
+    "module": "Leads",
+    "path": "/leads",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 403,
+        "width": 76,
+        "overflowDiff": 13
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 526,
+        "width": 116,
+        "overflowDiff": 136
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 488,
+        "width": 66,
+        "overflowDiff": 98
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-200 text-",
+        "right": 513,
+        "width": 18,
+        "overflowDiff": 123
+      }
+    ],
+    "screenshot": "leads-standard-390x844.png"
+  },
+  {
+    "module": "Leads",
+    "path": "/leads",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 526,
+        "width": 116,
+        "overflowDiff": 96
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 488,
+        "width": 66,
+        "overflowDiff": 58
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-200 text-",
+        "right": 513,
+        "width": 18,
+        "overflowDiff": 83
+      }
+    ],
+    "screenshot": "leads-large-430x932.png"
+  },
+  {
+    "module": "Leads",
+    "path": "/leads",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "table",
+        "cls": "w-full caption-bottom text-table border-collapse",
+        "right": 1329,
+        "width": 1308,
+        "overflowDiff": 485
+      },
+      {
+        "tag": "thead",
+        "cls": "bg-slate-50 border-b border-border",
+        "right": 1329,
+        "width": 1308,
+        "overflowDiff": 485
+      },
+      {
+        "tag": "tr",
+        "cls": "transition-colors hover:bg-slate-50/70",
+        "right": 1329,
+        "width": 1308,
+        "overflowDiff": 485
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle text-xs font-semibold text-txt-secondary upper",
+        "right": 863,
+        "width": 198,
+        "overflowDiff": 19
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle text-xs font-semibold text-txt-secondary upper",
+        "right": 1017,
+        "width": 154,
+        "overflowDiff": 173
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle text-xs font-semibold text-txt-secondary upper",
+        "right": 1245,
+        "width": 228,
+        "overflowDiff": 401
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 align-middle text-xs font-semibold text-txt-secondary uppercase track",
+        "right": 1329,
+        "width": 84,
+        "overflowDiff": 485
+      },
+      {
+        "tag": "tbody",
+        "cls": "divide-y divide-border bg-white",
+        "right": 1329,
+        "width": 1308,
+        "overflowDiff": 485
+      }
+    ],
+    "screenshot": "leads-landscape-844x390.png"
+  },
+  {
+    "module": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 577,
+        "width": 258,
+        "overflowDiff": 257
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 540,
+        "width": 208,
+        "overflowDiff": 220
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 564,
+        "width": 18,
+        "overflowDiff": 244
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 789,
+        "width": 206,
+        "overflowDiff": 469
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 752,
+        "width": 156,
+        "overflowDiff": 432
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 776,
+        "width": 18,
+        "overflowDiff": 456
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 925,
+        "width": 130,
+        "overflowDiff": 605
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 888,
+        "width": 80,
+        "overflowDiff": 568
+      }
+    ],
+    "screenshot": "pipeline-small-320x568.png"
+  },
+  {
+    "module": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 577,
+        "width": 258,
+        "overflowDiff": 187
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 540,
+        "width": 208,
+        "overflowDiff": 150
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 564,
+        "width": 18,
+        "overflowDiff": 174
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 789,
+        "width": 206,
+        "overflowDiff": 399
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 752,
+        "width": 156,
+        "overflowDiff": 362
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 776,
+        "width": 18,
+        "overflowDiff": 386
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 925,
+        "width": 130,
+        "overflowDiff": 535
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 888,
+        "width": 80,
+        "overflowDiff": 498
+      }
+    ],
+    "screenshot": "pipeline-standard-390x844.png"
+  },
+  {
+    "module": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 577,
+        "width": 258,
+        "overflowDiff": 147
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 540,
+        "width": 208,
+        "overflowDiff": 110
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 564,
+        "width": 18,
+        "overflowDiff": 134
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 789,
+        "width": 206,
+        "overflowDiff": 359
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 752,
+        "width": 156,
+        "overflowDiff": 322
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 776,
+        "width": 18,
+        "overflowDiff": 346
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 925,
+        "width": 130,
+        "overflowDiff": 495
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 888,
+        "width": 80,
+        "overflowDiff": 458
+      }
+    ],
+    "screenshot": "pipeline-large-430x932.png"
+  },
+  {
+    "module": "Pipeline",
+    "path": "/pipeline",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "div",
+        "cls": "flex gap-3 items-start w-max sm:min-w-[1400px]",
+        "right": 1932,
+        "width": 1912,
+        "overflowDiff": 1088
+      },
+      {
+        "tag": "div",
+        "cls": "rounded-card border flex flex-col gap-2.5 p-2.5 shrink-0 snap-center w-[82vw] ma",
+        "right": 1107,
+        "width": 263,
+        "overflowDiff": 263
+      },
+      {
+        "tag": "div",
+        "cls": "flex items-center justify-between pb-2 border-b border-border/80",
+        "right": 1096,
+        "width": 241,
+        "overflowDiff": 252
+      },
+      {
+        "tag": "div",
+        "cls": "flex items-center gap-1.5 min-w-0",
+        "right": 962,
+        "width": 106,
+        "overflowDiff": 118
+      },
+      {
+        "tag": "span",
+        "cls": "font-semibold text-xs text-txt-primary truncate",
+        "right": 935,
+        "width": 80,
+        "overflowDiff": 91
+      },
+      {
+        "tag": "span",
+        "cls": "text-[10px] font-bold px-1.5 py-0.2 rounded-full tabular-nums shrink-0 bg-white ",
+        "right": 962,
+        "width": 20,
+        "overflowDiff": 118
+      },
+      {
+        "tag": "span",
+        "cls": "text-[11px] font-bold text-txt-muted tabular-nums shrink-0 ml-1",
+        "right": 1096,
+        "width": 14,
+        "overflowDiff": 252
+      },
+      {
+        "tag": "div",
+        "cls": "space-y-2 min-h-[140px] flex-1 rounded",
+        "right": 1096,
+        "width": 241,
+        "overflowDiff": 252
+      }
+    ],
+    "screenshot": "pipeline-landscape-844x390.png"
+  },
+  {
+    "module": "Tasks",
+    "path": "/tasks",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 413,
+        "width": 114,
+        "overflowDiff": 93
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 376,
+        "width": 64,
+        "overflowDiff": 56
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-200 text-",
+        "right": 400,
+        "width": 18,
+        "overflowDiff": 80
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 498,
+        "width": 79,
+        "overflowDiff": 178
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 460,
+        "width": 28,
+        "overflowDiff": 140
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 485,
+        "width": 18,
+        "overflowDiff": 165
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 614,
+        "width": 110,
+        "overflowDiff": 294
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 576,
+        "width": 60,
+        "overflowDiff": 256
+      }
+    ],
+    "screenshot": "tasks-small-320x568.png"
+  },
+  {
+    "module": "Tasks",
+    "path": "/tasks",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 413,
+        "width": 114,
+        "overflowDiff": 23
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-200 text-",
+        "right": 400,
+        "width": 18,
+        "overflowDiff": 10
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 498,
+        "width": 79,
+        "overflowDiff": 108
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 460,
+        "width": 28,
+        "overflowDiff": 70
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 485,
+        "width": 18,
+        "overflowDiff": 95
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 614,
+        "width": 110,
+        "overflowDiff": 224
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 576,
+        "width": 60,
+        "overflowDiff": 186
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 601,
+        "width": 18,
+        "overflowDiff": 211
+      }
+    ],
+    "screenshot": "tasks-standard-390x844.png"
+  },
+  {
+    "module": "Tasks",
+    "path": "/tasks",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 498,
+        "width": 79,
+        "overflowDiff": 68
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 460,
+        "width": 28,
+        "overflowDiff": 30
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 485,
+        "width": 18,
+        "overflowDiff": 55
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 614,
+        "width": 110,
+        "overflowDiff": 184
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 576,
+        "width": 60,
+        "overflowDiff": 146
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 601,
+        "width": 18,
+        "overflowDiff": 171
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 724,
+        "width": 104,
+        "overflowDiff": 294
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 687,
+        "width": 54,
+        "overflowDiff": 257
+      }
+    ],
+    "screenshot": "tasks-large-430x932.png"
+  },
+  {
+    "module": "Tasks",
+    "path": "/tasks",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "tasks-landscape-844x390.png"
+  },
+  {
+    "module": "Activities",
+    "path": "/activities",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 425,
+        "width": 126,
+        "overflowDiff": 105
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 387,
+        "width": 76,
+        "overflowDiff": 67
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 412,
+        "width": 18,
+        "overflowDiff": 92
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 535,
+        "width": 104,
+        "overflowDiff": 215
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 497,
+        "width": 54,
+        "overflowDiff": 177
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 522,
+        "width": 18,
+        "overflowDiff": 202
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 634,
+        "width": 94,
+        "overflowDiff": 314
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 591,
+        "width": 37,
+        "overflowDiff": 271
+      }
+    ],
+    "screenshot": "activities-small-320x568.png"
+  },
+  {
+    "module": "Activities",
+    "path": "/activities",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 425,
+        "width": 126,
+        "overflowDiff": 35
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 412,
+        "width": 18,
+        "overflowDiff": 22
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 535,
+        "width": 104,
+        "overflowDiff": 145
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 497,
+        "width": 54,
+        "overflowDiff": 107
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 522,
+        "width": 18,
+        "overflowDiff": 132
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 634,
+        "width": 94,
+        "overflowDiff": 244
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 591,
+        "width": 37,
+        "overflowDiff": 201
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 621,
+        "width": 24,
+        "overflowDiff": 231
+      }
+    ],
+    "screenshot": "activities-standard-390x844.png"
+  },
+  {
+    "module": "Activities",
+    "path": "/activities",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 535,
+        "width": 104,
+        "overflowDiff": 105
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 497,
+        "width": 54,
+        "overflowDiff": 67
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 522,
+        "width": 18,
+        "overflowDiff": 92
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 634,
+        "width": 94,
+        "overflowDiff": 204
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 591,
+        "width": 37,
+        "overflowDiff": 161
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 621,
+        "width": 24,
+        "overflowDiff": 191
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 731,
+        "width": 91,
+        "overflowDiff": 301
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 687,
+        "width": 34,
+        "overflowDiff": 257
+      }
+    ],
+    "screenshot": "activities-large-430x932.png"
+  },
+  {
+    "module": "Activities",
+    "path": "/activities",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "activities-landscape-844x390.png"
+  },
+  {
+    "module": "Meetings",
+    "path": "/meetings",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 428,
+        "width": 103,
+        "overflowDiff": 108
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 391,
+        "width": 53,
+        "overflowDiff": 71
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-red-100 text-re",
+        "right": 415,
+        "width": 18,
+        "overflowDiff": 95
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 542,
+        "width": 108,
+        "overflowDiff": 222
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 505,
+        "width": 58,
+        "overflowDiff": 185
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-amber-100 text-",
+        "right": 529,
+        "width": 18,
+        "overflowDiff": 209
+      }
+    ],
+    "screenshot": "meetings-small-320x568.png"
+  },
+  {
+    "module": "Meetings",
+    "path": "/meetings",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 428,
+        "width": 103,
+        "overflowDiff": 38
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-red-100 text-re",
+        "right": 415,
+        "width": 18,
+        "overflowDiff": 25
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 542,
+        "width": 108,
+        "overflowDiff": 152
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 505,
+        "width": 58,
+        "overflowDiff": 115
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-amber-100 text-",
+        "right": 529,
+        "width": 18,
+        "overflowDiff": 139
+      }
+    ],
+    "screenshot": "meetings-standard-390x844.png"
+  },
+  {
+    "module": "Meetings",
+    "path": "/meetings",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 542,
+        "width": 108,
+        "overflowDiff": 112
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 505,
+        "width": 58,
+        "overflowDiff": 75
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-amber-100 text-",
+        "right": 529,
+        "width": 18,
+        "overflowDiff": 99
+      }
+    ],
+    "screenshot": "meetings-large-430x932.png"
+  },
+  {
+    "module": "Meetings",
+    "path": "/meetings",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "table",
+        "cls": "w-full caption-bottom text-table border-collapse",
+        "right": 1161,
+        "width": 1140,
+        "overflowDiff": 317
+      },
+      {
+        "tag": "thead",
+        "cls": "border-b border-border bg-slate-50/60",
+        "right": 1161,
+        "width": 1140,
+        "overflowDiff": 317
+      },
+      {
+        "tag": "tr",
+        "cls": "transition-colors hover:bg-slate-50/70",
+        "right": 1161,
+        "width": 1140,
+        "overflowDiff": 317
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle tracking-wider select-none py-2.5 text-xs font",
+        "right": 993,
+        "width": 200,
+        "overflowDiff": 149
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 align-middle tracking-wider select-none py-2.5 text-xs font-bold text",
+        "right": 1161,
+        "width": 169,
+        "overflowDiff": 317
+      },
+      {
+        "tag": "tbody",
+        "cls": "divide-y divide-border bg-white",
+        "right": 1161,
+        "width": 1140,
+        "overflowDiff": 317
+      },
+      {
+        "tag": "tr",
+        "cls": "hover:bg-slate-50/80 transition-colors",
+        "right": 1161,
+        "width": 1140,
+        "overflowDiff": 317
+      },
+      {
+        "tag": "td",
+        "cls": "px-3.5 align-middle text-xs text-txt-primary py-2.5",
+        "right": 993,
+        "width": 200,
+        "overflowDiff": 149
+      }
+    ],
+    "screenshot": "meetings-landscape-844x390.png"
+  },
+  {
+    "module": "Proposals",
+    "path": "/proposals",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 388,
+        "width": 79,
+        "overflowDiff": 68
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 351,
+        "width": 29,
+        "overflowDiff": 31
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 375,
+        "width": 18,
+        "overflowDiff": 55
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 499,
+        "width": 105,
+        "overflowDiff": 179
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 462,
+        "width": 55,
+        "overflowDiff": 142
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 486,
+        "width": 18,
+        "overflowDiff": 166
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 606,
+        "width": 100,
+        "overflowDiff": 286
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 569,
+        "width": 50,
+        "overflowDiff": 249
+      }
+    ],
+    "screenshot": "proposals-small-320x568.png"
+  },
+  {
+    "module": "Proposals",
+    "path": "/proposals",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 499,
+        "width": 105,
+        "overflowDiff": 109
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 462,
+        "width": 55,
+        "overflowDiff": 72
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 486,
+        "width": 18,
+        "overflowDiff": 96
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 606,
+        "width": 100,
+        "overflowDiff": 216
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 569,
+        "width": 50,
+        "overflowDiff": 179
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-red-100 text-re",
+        "right": 593,
+        "width": 18,
+        "overflowDiff": 203
+      }
+    ],
+    "screenshot": "proposals-standard-390x844.png"
+  },
+  {
+    "module": "Proposals",
+    "path": "/proposals",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 499,
+        "width": 105,
+        "overflowDiff": 69
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 462,
+        "width": 55,
+        "overflowDiff": 32
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 486,
+        "width": 18,
+        "overflowDiff": 56
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 606,
+        "width": 100,
+        "overflowDiff": 176
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 569,
+        "width": 50,
+        "overflowDiff": 139
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-red-100 text-re",
+        "right": 593,
+        "width": 18,
+        "overflowDiff": 163
+      }
+    ],
+    "screenshot": "proposals-large-430x932.png"
+  },
+  {
+    "module": "Proposals",
+    "path": "/proposals",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "table",
+        "cls": "w-full caption-bottom text-table border-collapse",
+        "right": 1374,
+        "width": 1353,
+        "overflowDiff": 530
+      },
+      {
+        "tag": "thead",
+        "cls": "border-b border-border bg-slate-50/60",
+        "right": 1374,
+        "width": 1353,
+        "overflowDiff": 530
+      },
+      {
+        "tag": "tr",
+        "cls": "transition-colors hover:bg-slate-50/70",
+        "right": 1374,
+        "width": 1353,
+        "overflowDiff": 530
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle tracking-wider select-none py-2.5 text-xs font",
+        "right": 868,
+        "width": 95,
+        "overflowDiff": 24
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle tracking-wider select-none py-2.5 text-xs font",
+        "right": 955,
+        "width": 87,
+        "overflowDiff": 111
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle tracking-wider select-none py-2.5 text-xs font",
+        "right": 1051,
+        "width": 95,
+        "overflowDiff": 207
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle tracking-wider select-none py-2.5 text-xs font",
+        "right": 1124,
+        "width": 74,
+        "overflowDiff": 280
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 text-left align-middle tracking-wider select-none py-2.5 text-xs font",
+        "right": 1230,
+        "width": 105,
+        "overflowDiff": 386
+      }
+    ],
+    "screenshot": "proposals-landscape-844x390.png"
+  },
+  {
+    "module": "Invoices",
+    "path": "/invoices",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "invoices-small-320x568.png"
+  },
+  {
+    "module": "Invoices",
+    "path": "/invoices",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "invoices-standard-390x844.png"
+  },
+  {
+    "module": "Invoices",
+    "path": "/invoices",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "invoices-large-430x932.png"
+  },
+  {
+    "module": "Invoices",
+    "path": "/invoices",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "invoices-landscape-844x390.png"
+  },
+  {
+    "module": "Customers",
+    "path": "/customers",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 324,
+        "width": 96,
+        "overflowDiff": 4
+      }
+    ],
+    "screenshot": "customers-small-320x568.png"
+  },
+  {
+    "module": "Customers",
+    "path": "/customers",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "customers-standard-390x844.png"
+  },
+  {
+    "module": "Customers",
+    "path": "/customers",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "customers-large-430x932.png"
+  },
+  {
+    "module": "Customers",
+    "path": "/customers",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "table",
+        "cls": "w-full caption-bottom text-table border-collapse",
+        "right": 884,
+        "width": 863,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "thead",
+        "cls": "bg-slate-50 border-b border-border",
+        "right": 884,
+        "width": 863,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "tr",
+        "cls": "transition-colors hover:bg-slate-50/70",
+        "right": 884,
+        "width": 863,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "th",
+        "cls": "h-9 px-3.5 align-middle text-xs font-semibold text-txt-secondary uppercase track",
+        "right": 884,
+        "width": 115,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "tbody",
+        "cls": "divide-y divide-border bg-white",
+        "right": 884,
+        "width": 863,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "tr",
+        "cls": "hover:bg-slate-50/80 transition-colors",
+        "right": 884,
+        "width": 863,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "td",
+        "cls": "px-3.5 py-2.5 align-middle text-xs text-txt-primary text-right",
+        "right": 884,
+        "width": 115,
+        "overflowDiff": 40
+      },
+      {
+        "tag": "div",
+        "cls": "flex items-center justify-end gap-1",
+        "right": 870,
+        "width": 87,
+        "overflowDiff": 26
+      }
+    ],
+    "screenshot": "customers-landscape-844x390.png"
+  },
+  {
+    "module": "Reports",
+    "path": "/reports",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-btn text-xs font-semibold w",
+        "right": 381,
+        "width": 101,
+        "overflowDiff": 61
+      }
+    ],
+    "screenshot": "reports-small-320x568.png"
+  },
+  {
+    "module": "Reports",
+    "path": "/reports",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "reports-standard-390x844.png"
+  },
+  {
+    "module": "Reports",
+    "path": "/reports",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "reports-large-430x932.png"
+  },
+  {
+    "module": "Reports",
+    "path": "/reports",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "reports-landscape-844x390.png"
+  },
+  {
+    "module": "Team",
+    "path": "/team",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 326,
+        "width": 134,
+        "overflowDiff": 6
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 419,
+        "width": 87,
+        "overflowDiff": 99
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 381,
+        "width": 36,
+        "overflowDiff": 61
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 406,
+        "width": 18,
+        "overflowDiff": 86
+      }
+    ],
+    "screenshot": "team-small-320x568.png"
+  },
+  {
+    "module": "Team",
+    "path": "/team",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 419,
+        "width": 87,
+        "overflowDiff": 29
+      },
+      {
+        "tag": "span",
+        "cls": "px-1.5 py-0.2 rounded-full text-[10px] font-bold tabular-nums bg-slate-100 text-",
+        "right": 406,
+        "width": 18,
+        "overflowDiff": 16
+      }
+    ],
+    "screenshot": "team-standard-390x844.png"
+  },
+  {
+    "module": "Team",
+    "path": "/team",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "team-large-430x932.png"
+  },
+  {
+    "module": "Team",
+    "path": "/team",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "team-landscape-844x390.png"
+  },
+  {
+    "module": "Settings",
+    "path": "/settings",
+    "viewport": "small-320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 402,
+        "width": 164,
+        "overflowDiff": 82
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 389,
+        "width": 138,
+        "overflowDiff": 69
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 480,
+        "width": 72,
+        "overflowDiff": 160
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 467,
+        "width": 46,
+        "overflowDiff": 147
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 581,
+        "width": 95,
+        "overflowDiff": 261
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 568,
+        "width": 69,
+        "overflowDiff": 248
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 665,
+        "width": 78,
+        "overflowDiff": 345
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 652,
+        "width": 52,
+        "overflowDiff": 332
+      }
+    ],
+    "screenshot": "settings-small-320x568.png"
+  },
+  {
+    "module": "Settings",
+    "path": "/settings",
+    "viewport": "standard-390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 402,
+        "width": 164,
+        "overflowDiff": 12
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 480,
+        "width": 72,
+        "overflowDiff": 90
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 467,
+        "width": 46,
+        "overflowDiff": 77
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 581,
+        "width": 95,
+        "overflowDiff": 191
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 568,
+        "width": 69,
+        "overflowDiff": 178
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 665,
+        "width": 78,
+        "overflowDiff": 275
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 652,
+        "width": 52,
+        "overflowDiff": 262
+      }
+    ],
+    "screenshot": "settings-standard-390x844.png"
+  },
+  {
+    "module": "Settings",
+    "path": "/settings",
+    "viewport": "large-430x932",
+    "width": 430,
+    "height": 932,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 480,
+        "width": 72,
+        "overflowDiff": 50
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 467,
+        "width": 46,
+        "overflowDiff": 37
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 581,
+        "width": 95,
+        "overflowDiff": 151
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 568,
+        "width": 69,
+        "overflowDiff": 138
+      },
+      {
+        "tag": "button",
+        "cls": "inline-flex items-center gap-1.5 px-3 py-1 rounded-btn text-xs font-semibold whi",
+        "right": 665,
+        "width": 78,
+        "overflowDiff": 235
+      },
+      {
+        "tag": "span",
+        "cls": "",
+        "right": 652,
+        "width": 52,
+        "overflowDiff": 222
+      }
+    ],
+    "screenshot": "settings-large-430x932.png"
+  },
+  {
+    "module": "Settings",
+    "path": "/settings",
+    "viewport": "landscape-844x390",
+    "width": 844,
+    "height": 390,
+    "hasHorizontalOverflow": false,
+    "overflowAmount": 0,
+    "elements": [],
+    "screenshot": "settings-landscape-844x390.png"
+  }
+]
