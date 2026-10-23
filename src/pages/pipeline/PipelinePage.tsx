@@ -36,6 +36,7 @@ import {
   AlertCircle,
   Loader2,
   XCircle,
+  ChevronRight,
 } from 'lucide-react';
 
 export const PipelinePage: React.FC = () => {
@@ -46,10 +47,12 @@ export const PipelinePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [ownerFilter, setOwnerFilter] = useState('ALL');
   const [mobileStageFilter, setMobileStageFilter] = useState('ALL');
+  const [draggedDealId, setDraggedDealId] = useState<string | null>(null);
+  const [dragOverStageId, setDragOverStageId] = useState<string | null>(null);
 
   // Real API Queries
   const {
-    data: rawStages = [],
+    data: stagesResponse,
     isLoading: isStagesLoading,
     isError: isStagesError,
     error: stagesError,
@@ -60,11 +63,21 @@ export const PipelinePage: React.FC = () => {
   });
 
   const {
-    data: lostReasons = [],
+    data: lostReasonsResponse,
   } = useQuery({
     queryKey: ['lost-reasons'],
     queryFn: () => crmApi.getLostReasons(),
   });
+
+  const rawStages = useMemo(() => {
+    const list = stagesResponse?.data || (Array.isArray(stagesResponse) ? stagesResponse : []);
+    return Array.isArray(list) ? list : [];
+  }, [stagesResponse]);
+
+  const lostReasons = useMemo(() => {
+    const list = lostReasonsResponse?.data || (Array.isArray(lostReasonsResponse) ? lostReasonsResponse : []);
+    return Array.isArray(list) ? list : [];
+  }, [lostReasonsResponse]);
 
   const {
     data: dealsResponse,
@@ -89,7 +102,8 @@ export const PipelinePage: React.FC = () => {
 
   // Map Backend Deals into frontend Deal model
   const rawDeals = useMemo(() => {
-    return dealsResponse?.items || dealsResponse?.data || [];
+    const list = dealsResponse?.data?.items || dealsResponse?.items || dealsResponse?.data || (Array.isArray(dealsResponse) ? dealsResponse : []);
+    return Array.isArray(list) ? list : [];
   }, [dealsResponse]);
 
   const deals: Deal[] = useMemo(() => {
@@ -119,13 +133,13 @@ export const PipelinePage: React.FC = () => {
   }, [rawDeals]);
 
 const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
-  { id: 'cc188905-517a-4b7a-9c17-d306d0dd15f1', name: 'New Lead (Qualification)', order: 1, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
-  { id: '03c77337-d28a-48ff-846f-d3e2d5edd11c', name: 'Discovery & Requirement Discussion', order: 2, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
-  { id: '1f5153d1-9d16-460f-8e9b-0dc5afab54cc', name: 'Demo / Meeting Completed', order: 3, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
-  { id: '532ed2ed-5521-457b-ae4b-691ba0054da7', name: 'Proposal Sent', order: 4, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
-  { id: '56dde455-f754-4805-b948-f0ff1e15b4de', name: 'Negotiation', order: 5, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
-  { id: '1d79d247-9d30-40ed-aa7d-a960fa5b9bcd', name: 'Closed Won', order: 6, dealCount: 0, totalValue: 0, stageType: 'WON' },
-  { id: '7de7800c-0045-4705-8379-ea9ba925cb46', name: 'Closed Lost', order: 7, dealCount: 0, totalValue: 0, stageType: 'LOST' },
+  { id: 'd6e050d2-30c3-442f-ab5d-1a53e3a0532d', name: 'New Lead (Qualification)', order: 1, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '74d8f2ff-c931-4ad1-880d-d01b8ccaac9e', name: 'Discovery & Requirement Discussion', order: 2, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: 'dc3fdff3-a0c8-433d-a6c5-4b9f0fd46e84', name: 'Demo / Meeting Completed', order: 3, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '790a2e7e-8c2d-4222-915f-ba0f378f2af9', name: 'Proposal Sent', order: 4, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: '4171a46f-c0bc-4812-847e-a1d5ef3ca1e2', name: 'Negotiation', order: 5, dealCount: 0, totalValue: 0, stageType: 'OPEN' },
+  { id: 'bf98ca23-4c85-48ef-ad6b-89a9fecd36c9', name: 'Closed Won', order: 6, dealCount: 0, totalValue: 0, stageType: 'WON' },
+  { id: '4186f156-bc5d-4162-b7a8-0fc65b7f6d7a', name: 'Closed Lost', order: 7, dealCount: 0, totalValue: 0, stageType: 'LOST' },
 ];
 
   // Compute Stages with real aggregate counts and totals
@@ -642,12 +656,36 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               return (
                 <div
                   key={stage.id}
-                  className={`rounded-card border flex flex-col gap-2.5 p-2.5 transition-colors shrink-0 snap-center ${
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (dragOverStageId !== stage.id) {
+                      setDragOverStageId(stage.id);
+                    }
+                  }}
+                  onDragLeave={(e) => {
+                    if (e.currentTarget === e.target) {
+                      setDragOverStageId(null);
+                    }
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const droppedDealId = e.dataTransfer.getData('text/plain') || draggedDealId;
+                    setDragOverStageId(null);
+                    setDraggedDealId(null);
+                    if (droppedDealId) {
+                      handleStageChange(droppedDealId, stage.id);
+                    }
+                  }}
+                  className={`rounded-card border flex flex-col gap-2.5 p-2.5 transition-all shrink-0 snap-center ${
                     mobileStageFilter !== 'ALL'
                       ? 'w-full sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
                       : 'w-[82vw] max-w-[290px] sm:w-auto sm:flex-1 sm:min-w-[220px] sm:max-w-[280px]'
                   } ${
-                    isWonStage
+                    dragOverStageId === stage.id
+                      ? 'ring-2 ring-[#57B71B] border-[#57B71B] bg-emerald-50/90 shadow-md scale-[1.01]'
+                      : isWonStage
                       ? 'bg-emerald-50/40 border-emerald-200'
                       : isLostStage
                       ? 'bg-rose-50/40 border-rose-200'
@@ -678,21 +716,15 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                     </span>
                   </div>
 
-                  {/* Stage Cards Container with HTML5 Drop Zone */}
-                  <div
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      e.dataTransfer.dropEffect = 'move';
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      const droppedDealId = e.dataTransfer.getData('text/plain');
-                      if (droppedDealId) {
-                        handleStageChange(droppedDealId, stage.id);
-                      }
-                    }}
-                    className="space-y-2 min-h-[140px] flex-1 rounded"
-                  >
+                  {/* Stage Drop Zone Feedback */}
+                  {dragOverStageId === stage.id && (
+                    <div className="py-2 px-2 bg-emerald-100/90 border border-dashed border-emerald-400 rounded-btn text-center text-[11px] font-semibold text-emerald-800 pointer-events-none">
+                      Release to move to {stage.name}
+                    </div>
+                  )}
+
+                  {/* Stage Cards Container */}
+                  <div className="space-y-2 min-h-[140px] flex-1 rounded">
                     {stageDeals.length === 0 ? (
                       <div className="h-28 flex flex-col items-center justify-center border border-dashed border-border rounded-btn text-center p-2 text-txt-muted text-[11px]">
                         <span>No active deals</span>
@@ -703,17 +735,35 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                           key={deal.id}
                           draggable
                           onDragStart={(e) => {
+                            setDraggedDealId(deal.id);
                             e.dataTransfer.setData('text/plain', deal.id);
+                            e.dataTransfer.effectAllowed = 'move';
+                          }}
+                          onDragEnd={() => {
+                            setDraggedDealId(null);
+                            setDragOverStageId(null);
                           }}
                           onClick={() => setSelectedDeal(deal)}
-                          className="bg-white rounded-card border border-border p-3 space-y-2 shadow-card hover:border-slate-300 hover:shadow-subtle transition-all cursor-grab active:cursor-grabbing group select-none active:scale-[0.99]"
+                          className={`bg-white rounded-card border border-border p-3 space-y-2 shadow-card hover:border-slate-300 hover:shadow-subtle transition-all cursor-grab active:cursor-grabbing group select-none active:scale-[0.99] ${
+                            draggedDealId === deal.id ? 'opacity-40 border-dashed border-[#57B71B] scale-[0.98]' : ''
+                          } ${draggedDealId && draggedDealId !== deal.id ? 'pointer-events-none' : ''}`}
                         >
                           {/* Deal Header: Title */}
                           <div className="flex items-start justify-between gap-1.5">
-                            <h4 className="text-xs font-semibold text-txt-primary line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                            <h4 className="text-xs font-semibold text-txt-primary line-clamp-2 leading-snug group-hover:text-primary transition-colors flex-1">
                               {deal.title}
                             </h4>
-                            <div onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                              {!isWonStage && !isLostStage && (
+                                <button
+                                  type="button"
+                                  title="Advance to next stage"
+                                  onClick={() => handleAdvanceStage(deal)}
+                                  className="p-1 rounded text-txt-muted hover:text-white hover:bg-[#57B71B] transition-colors cursor-pointer"
+                                >
+                                  <ChevronRight className="h-3.5 w-3.5" />
+                                </button>
+                              )}
                               <ActionMenu
                                 items={[
                                   {
