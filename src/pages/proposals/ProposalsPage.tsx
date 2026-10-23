@@ -957,21 +957,21 @@ export const ProposalsPage: React.FC = () => {
         {selectedProposal && (
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-btn border bg-emerald-50 border-emerald-200/60 text-[#57B71B]">
-                    <FileText className="h-4 w-4" />
-                  </div>
-                  <div>
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-btn border bg-emerald-50 border-emerald-200/60 text-[#57B71B]">
+                  <FileText className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
                     <DialogTitle className="text-base font-bold text-txt-primary font-mono">
                       {selectedProposal.quoteNumber}
                     </DialogTitle>
-                    <DialogDescription className="text-xs text-txt-muted">
-                      {selectedProposal.versionLabel} • {selectedProposal.companyName}
-                    </DialogDescription>
+                    {getStatusBadge(selectedProposal.status)}
                   </div>
+                  <DialogDescription className="text-xs text-txt-muted">
+                    {selectedProposal.versionLabel} • {selectedProposal.companyName}
+                  </DialogDescription>
                 </div>
-                {getStatusBadge(selectedProposal.status)}
               </div>
             </DialogHeader>
 

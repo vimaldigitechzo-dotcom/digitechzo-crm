@@ -1304,16 +1304,16 @@ export const LeadsPage: React.FC = () => {
 
       {/* MODAL: CREATE NEW LEAD */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden">
           <DialogHeader>
-            <DialogTitle className="text-section-title text-txt-primary">Create New Lead</DialogTitle>
+            <DialogTitle className="text-sm sm:text-base font-bold text-txt-primary">Create New Lead</DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
               Record a new prospect inquiry and persist it to PostgreSQL
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleAddLeadSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-2.5 sm:px-5 sm:py-3.5 space-y-2.5 text-xs touch-pan-y">
               {createError && (
                 <div className="p-2.5 rounded-btn bg-[#FEF2F2] border border-[#FECACA] flex items-start gap-2 text-xs text-[#DC2626]">
                   <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
@@ -1602,31 +1602,33 @@ export const LeadsPage: React.FC = () => {
               </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsAddModalOpen(false)}
-                disabled={isSubmitting}
-                className="h-8 text-xs cursor-pointer w-full sm:w-auto"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                disabled={isSubmitting}
-                className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer w-full sm:w-auto"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Saving...
-                  </>
-                ) : (
-                  'Create Lead'
-                )}
-              </Button>
+            <DialogFooter className="px-4 py-2.5 sm:px-5 sm:py-3 border-t border-border shrink-0 bg-slate-50/95 mt-auto">
+              <div className="grid grid-cols-2 gap-2 w-full sm:flex sm:justify-end sm:w-auto">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setIsAddModalOpen(false)}
+                  disabled={isSubmitting}
+                  className="h-8 text-xs cursor-pointer w-full sm:w-auto"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={isSubmitting}
+                  className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer w-full sm:w-auto font-semibold"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Saving...
+                    </>
+                  ) : (
+                    'Create Lead'
+                  )}
+                </Button>
+              </div>
             </DialogFooter>
           </form>
         </DialogContent>

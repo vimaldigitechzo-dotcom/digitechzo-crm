@@ -668,35 +668,33 @@ export const TeamPage: React.FC = () => {
           {selectedMember && (
             <>
               <DialogHeader>
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border border-border shrink-0">
-                      {selectedMember.avatarUrl && (
-                        <AvatarImage
-                          src={selectedMember.avatarUrl}
-                          alt={`${selectedMember.firstName} ${selectedMember.lastName}`}
-                        />
-                      )}
-                      <AvatarFallback className="bg-slate-100 text-txt-secondary text-xs font-bold">
-                        {`${(selectedMember.firstName || selectedMember.name || 'U')[0] || ''}${(selectedMember.lastName || '')[0] || ''}`.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <DialogTitle className="text-base font-bold text-txt-primary">
+                <div className="flex items-start gap-3 pr-8">
+                  <Avatar className="h-10 w-10 border border-border shrink-0 mt-0.5">
+                    {selectedMember.avatarUrl && (
+                      <AvatarImage
+                        src={selectedMember.avatarUrl}
+                        alt={`${selectedMember.firstName} ${selectedMember.lastName}`}
+                      />
+                    )}
+                    <AvatarFallback className="bg-slate-100 text-txt-secondary text-xs font-bold">
+                      {`${(selectedMember.firstName || selectedMember.name || 'U')[0] || ''}${(selectedMember.lastName || '')[0] || ''}`.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <DialogTitle className="text-base font-bold text-txt-primary leading-tight">
                         {selectedMember.firstName} {selectedMember.lastName}
                       </DialogTitle>
-                      <DialogDescription className="text-xs text-txt-muted mt-0.5">
-                        {selectedMember.email} {selectedMember.phone ? `• ${selectedMember.phone}` : ''}
-                      </DialogDescription>
+                      <Badge variant={getRoleBadgeVariant(selectedMember.role?.name)} className="text-[11px] font-semibold">
+                        {getRoleDisplayName(selectedMember.role?.name, selectedMember.role?.displayAlias)}
+                      </Badge>
+                      <Badge variant={selectedMember.status === 'ACTIVE' ? 'success' : 'neutral'} className="text-[11px] font-semibold">
+                        {selectedMember.status === 'ACTIVE' ? 'Active' : 'Inactive'}
+                      </Badge>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <Badge variant={getRoleBadgeVariant(selectedMember.role?.name)}>
-                      {getRoleDisplayName(selectedMember.role?.name, selectedMember.role?.displayAlias)}
-                    </Badge>
-                    <Badge variant={selectedMember.status === 'ACTIVE' ? 'success' : 'neutral'}>
-                      {selectedMember.status === 'ACTIVE' ? 'Active' : 'Inactive'}
-                    </Badge>
+                    <DialogDescription className="text-xs text-txt-muted break-all">
+                      {selectedMember.email} {selectedMember.phone ? ` • ${selectedMember.phone}` : ''}
+                    </DialogDescription>
                   </div>
                 </div>
               </DialogHeader>

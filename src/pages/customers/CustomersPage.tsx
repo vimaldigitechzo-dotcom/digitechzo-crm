@@ -702,17 +702,17 @@ export const CustomersPage: React.FC = () => {
           {selectedCustomer && (
             <>
               <DialogHeader>
-                <div className="flex items-start justify-between gap-2">
-                  <div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
                     <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
                       <Building2 className="h-4 w-4 text-[#57B71B] shrink-0" />
                       <span>{selectedCustomer.companyName}</span>
                     </DialogTitle>
-                    <DialogDescription className="text-xs text-txt-muted mt-0.5">
-                      Account 360 Profile & Overview
-                    </DialogDescription>
+                    {getStatusBadge(selectedCustomer.status)}
                   </div>
-                  {getStatusBadge(selectedCustomer.status)}
+                  <DialogDescription className="text-xs text-txt-muted mt-0.5">
+                    Account 360 Profile & Overview
+                  </DialogDescription>
                 </div>
               </DialogHeader>
 

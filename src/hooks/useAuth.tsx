@@ -22,14 +22,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check localStorage for existing valid session on startup
     const existing = authStorage.getSession();
     if (existing && existing.user && existing.accessToken) {
-      // Check if access token is expired
+      const isMockToken = typeof existing.accessToken === 'string' && existing.accessToken.startsWith('mock-');
       const isExpired = existing.expiresAt
         ? new Date(existing.expiresAt).getTime() < Date.now()
         : false;
 
-      if (!isExpired) {
+      if (isMockToken) {
+        authStorage.clearSession();
+        setSession(null);
+      } else if (!isExpired) {
         setSession(existing);
-      } else if (existing.refreshToken) {
+      } else if (existing.refreshToken && !existing.refreshToken.startsWith('mock-')) {
         // Token expired but refreshToken exists; apiFetch will refresh on demand
         setSession(existing);
       } else {
@@ -40,6 +43,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(null);
     }
     setIsLoading(false);
+
+    // Auto log-out when session expires on any background API request
+    const handleAuthExpired = () => {
+      setSession(null);
+    };
+    window.addEventListener('auth:expired', handleAuthExpired);
+    return () => window.removeEventListener('auth:expired', handleAuthExpired);
   }, []);
 
   const login = async (email: string, password = '') => {

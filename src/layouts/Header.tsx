@@ -45,7 +45,9 @@ export const Header: React.FC<HeaderProps> = () => {
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  const initials = user ? `${user.firstName[0]}${user.lastName[0]}` : 'DA';
+  const initials = user
+    ? `${(user.firstName?.[0] || user.name?.[0] || 'D').toUpperCase()}${(user.lastName?.[0] || user.name?.split(' ')?.[1]?.[0] || user.email?.[0] || 'A').toUpperCase()}`
+    : 'DA';
 
   // Handle outside clicks to close search dropdown
   useEffect(() => {

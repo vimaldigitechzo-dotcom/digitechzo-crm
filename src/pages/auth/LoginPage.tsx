@@ -25,6 +25,15 @@ export const LoginPage: React.FC = () => {
 
   const from = (location.state as any)?.from?.pathname || '/dashboard';
 
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('expired') === '1' || (location.state as any)?.reason === 'expired') {
+      setError('Your session has expired. Please sign in again.');
+    } else if ((location.state as any)?.message) {
+      setError((location.state as any).message);
+    }
+  }, [location]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -50,8 +59,8 @@ export const LoginPage: React.FC = () => {
   };
 
   const handleUseAdminCredentials = () => {
-    setEmail('vimaldigitechzo@gmail.com');
-    setPassword('VimalKK4186@');
+    setEmail('admin@digitechzo.com');
+    setPassword('AdminSecurePassword123!');
     setError(null);
     setLoginBannerSuccess(null);
   };
@@ -141,7 +150,7 @@ export const LoginPage: React.FC = () => {
             <div className="rounded-btn bg-slate-50 border border-border p-2.5 text-xs text-txt-secondary flex items-center justify-between">
               <div>
                 <p className="font-semibold text-txt-primary text-[11px]">Seeded Admin Account</p>
-                <p className="text-[10px] text-txt-muted font-mono">vimaldigitechzo@gmail.com</p>
+                <p className="text-[10px] text-txt-muted font-mono">admin@digitechzo.com</p>
               </div>
               <Button
                 type="button"

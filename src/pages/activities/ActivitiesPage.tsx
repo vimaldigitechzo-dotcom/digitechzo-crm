@@ -17,7 +17,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { crmApi } from '@/lib/api';
+import { crmApi, authStorage } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useCrmDirectory } from '@/hooks/useCrmDirectory';
@@ -446,18 +446,39 @@ export const ActivitiesPage: React.FC = () => {
   }
 
   if (isActivitiesError) {
+    const isSessionExpired =
+      (activitiesError as any)?.status === 401 ||
+      (activitiesError instanceof Error && activitiesError.message.toLowerCase().includes('session'));
+
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 p-6 text-center">
-        <AlertCircle className="h-10 w-10 text-red-500" />
-        <h3 className="text-base font-semibold text-txt-primary">Failed to load activities</h3>
+        <AlertCircle className={cn('h-10 w-10', isSessionExpired ? 'text-amber-500' : 'text-red-500')} />
+        <h3 className="text-base font-semibold text-txt-primary">
+          {isSessionExpired ? 'Session Expired' : 'Failed to load activities'}
+        </h3>
         <p className="text-xs text-txt-muted max-w-sm">
-          {activitiesError instanceof Error
+          {isSessionExpired
+            ? 'Your login session has expired. Please sign in again to access activities.'
+            : activitiesError instanceof Error
             ? activitiesError.message
             : 'Network error loading activities from PostgreSQL backend.'}
         </p>
-        <Button size="sm" onClick={() => refetchActivities()}>
-          Try Again
-        </Button>
+        {isSessionExpired ? (
+          <Button
+            size="sm"
+            className="bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer"
+            onClick={() => {
+              authStorage.clearSession();
+              window.location.href = '/login?expired=1';
+            }}
+          >
+            Sign In Again
+          </Button>
+        ) : (
+          <Button size="sm" onClick={() => refetchActivities()}>
+            Try Again
+          </Button>
+        )}
       </div>
     );
   }

@@ -298,7 +298,7 @@ export const MobileBottomNav: React.FC = () => {
                 </div>
                 <div className="min-w-0">
                   <span className="font-bold text-xs text-slate-900 block truncate leading-none">
-                    {user ? `${user.firstName} ${user.lastName}` : 'DigiTechzo Admin'}
+                    {user ? (user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'DigiTechzo Admin') : 'DigiTechzo Admin'}
                   </span>
                   <span className="text-[10px] text-slate-500 block truncate leading-none mt-0.5">
                     {user?.email || 'admin@digitechzo.com'}

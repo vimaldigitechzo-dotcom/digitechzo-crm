@@ -15,8 +15,9 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: process.env.VITE_BACKEND_TARGET || 'https://digitechzo-crm-api.onrender.com',
         changeOrigin: true,
+        secure: false,
       },
     },
   },

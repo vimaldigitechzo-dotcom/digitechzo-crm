@@ -60,6 +60,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { user } = useAuth();
   const { appliedTheme, isAppliedBgDark } = useSidebarTheme();
   const isAccentDark = isColorDark(appliedTheme.accentColor);
+  const displayName = user?.name || (user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : '') || 'Administrator';
+  const displayInitial = (user?.firstName?.[0] || user?.name?.[0] || 'A').toUpperCase();
 
   // Close drawer on Escape key press
   useEffect(() => {
@@ -285,14 +287,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   borderColor: isAppliedBgDark ? '#2D3238' : 'rgba(0,0,0,0.1)',
                 }}
               >
-                {user?.firstName?.[0] || 'U'}
+                {displayInitial}
               </div>
               <div className="min-w-0">
                 <span
                   className="font-semibold text-xs block truncate leading-tight"
                   style={{ color: appliedTheme.textColor }}
                 >
-                  {user ? `${user.firstName} ${user.lastName}` : 'Administrator'}
+                  {displayName}
                 </span>
                 <span
                   className="text-[10px] block truncate mt-0.5 opacity-75"
@@ -536,9 +538,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               color: appliedTheme.textColor,
               borderColor: isAppliedBgDark ? '#2D3238' : 'rgba(0,0,0,0.1)',
             }}
-            title={user ? `${user.firstName} ${user.lastName}` : 'Administrator'}
+            title={displayName}
           >
-            {user?.firstName?.[0] || 'U'}
+            {displayInitial}
           </div>
 
           {/* Expanded Card (Desktop only when not collapsed) */}
@@ -561,14 +563,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   borderColor: isAppliedBgDark ? '#2D3238' : 'rgba(0,0,0,0.1)',
                 }}
               >
-                {user?.firstName?.[0] || 'U'}
+                {displayInitial}
               </div>
               <div className="min-w-0">
                 <span
                   className="font-semibold text-xs block truncate leading-tight"
                   style={{ color: appliedTheme.textColor }}
                 >
-                  {user ? `${user.firstName} ${user.lastName}` : 'Administrator'}
+                  {displayName}
                 </span>
                 <span
                   className="text-[10px] block truncate mt-0.5 opacity-75"

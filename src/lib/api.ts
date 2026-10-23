@@ -47,6 +47,16 @@ export const authStorage = {
   },
 };
 
+function triggerSessionExpired(reason: string) {
+  authStorage.clearSession();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('auth:expired', { detail: { reason } }));
+    if (!window.location.pathname.startsWith('/login')) {
+      window.location.href = '/login?expired=1';
+    }
+  }
+}
+
 export async function apiFetch<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
   const headers = new Headers(options.headers || {});
@@ -64,7 +74,8 @@ export async function apiFetch<T = any>(endpoint: string, options: RequestInit =
 
   // Handle 401 Unauthorized with token refresh (avoid infinite loops on auth endpoints)
   if (response.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/refresh')) {
-    if (!isRefreshing && session?.refreshToken) {
+    const isMockToken = typeof session?.accessToken === 'string' && session.accessToken.startsWith('mock-');
+    if (!isMockToken && !isRefreshing && session?.refreshToken && !session.refreshToken.startsWith('mock-')) {
       isRefreshing = true;
       try {
         const refreshRes = await fetch(`${API_BASE_URL}/auth/refresh`, {
@@ -94,13 +105,15 @@ export async function apiFetch<T = any>(endpoint: string, options: RequestInit =
           return handleResponse<T>(retryRes);
         } else {
           isRefreshing = false;
-          throw new ApiError(401, 'Session refresh failed.');
+          triggerSessionExpired('refresh_failed');
+          throw new ApiError(401, 'Your session has expired. Please sign in again.');
         }
       } catch (err) {
         isRefreshing = false;
-        throw err;
+        triggerSessionExpired('refresh_error');
+        throw new ApiError(401, 'Your session has expired. Please sign in again.');
       }
-    } else if (isRefreshing) {
+    } else if (!isMockToken && isRefreshing) {
       // Queue requests until refresh completes
       return new Promise<T>((resolve) => {
         subscribeTokenRefresh(async (newToken) => {
@@ -110,7 +123,8 @@ export async function apiFetch<T = any>(endpoint: string, options: RequestInit =
         });
       });
     } else {
-      throw new ApiError(401, 'Endpoint requires authorization');
+      triggerSessionExpired('unauthorized');
+      throw new ApiError(401, 'Your session has expired. Please sign in again.');
     }
   }
 
@@ -143,64 +157,36 @@ async function handleResponse<T>(response: Response): Promise<T> {
 // Backend Auth API
 export const authApi = {
   async login(email: string, password: string): Promise<AuthSession> {
-    try {
-      const data = await apiFetch<any>('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      });
+    const data = await apiFetch<any>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
 
-      const userPayload = data.user;
-      const nameParts = (userPayload.name || '').trim().split(' ');
-      const firstName = nameParts[0] || userPayload.email.split('@')[0];
-      const lastName = nameParts.slice(1).join(' ') || '';
+    const userPayload = data.user;
+    const nameParts = (userPayload.name || '').trim().split(' ');
+    const firstName = nameParts[0] || userPayload.email.split('@')[0];
+    const lastName = nameParts.slice(1).join(' ') || '';
 
-      const user: User = {
-        id: userPayload.id,
-        email: userPayload.email,
-        name: userPayload.name,
-        firstName,
-        lastName,
-        role: userPayload.role,
-        permissions: userPayload.permissions || [],
-        organization: userPayload.organization,
-      };
+    const user: User = {
+      id: userPayload.id,
+      email: userPayload.email,
+      name: userPayload.name,
+      firstName,
+      lastName,
+      role: userPayload.role,
+      permissions: userPayload.permissions || [],
+      organization: userPayload.organization,
+    };
 
-      const session: AuthSession = {
-        user,
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-        expiresAt: new Date(Date.now() + (data.expiresIn || 2592000) * 1000).toISOString(),
-      };
+    const session: AuthSession = {
+      user,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+      expiresAt: new Date(Date.now() + (data.expiresIn || 2592000) * 1000).toISOString(),
+    };
 
-      authStorage.setSession(session);
-      return session;
-    } catch (err: any) {
-      // If backend is unreachable or returns 500, provide a valid local authenticated session
-      console.warn('Backend login unavailable, creating local session for:', email);
-      const nameParts = email.split('@')[0].split('.');
-      const firstName = nameParts[0] || 'Vimal';
-      const lastName = nameParts[1] || 'Tester';
-      const user: User = {
-        id: 'user-' + Date.now(),
-        email: email,
-        name: `${firstName} ${lastName}`.trim(),
-        firstName,
-        lastName,
-        role: 'ADMIN',
-        permissions: ['*'],
-        organization: 'DigiTechzo',
-      };
-
-      const session: AuthSession = {
-        user,
-        accessToken: 'mock-jwt-token-' + Date.now(),
-        refreshToken: 'mock-refresh-token-' + Date.now(),
-        expiresAt: new Date(Date.now() + 86400000 * 30).toISOString(),
-      };
-
-      authStorage.setSession(session);
-      return session;
-    }
+    authStorage.setSession(session);
+    return session;
   },
 
   async logout(): Promise<void> {

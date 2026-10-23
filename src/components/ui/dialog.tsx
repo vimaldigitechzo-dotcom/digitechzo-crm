@@ -29,11 +29,11 @@ const DialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden pointer-events-none overscroll-contain">
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "pointer-events-auto relative z-50 flex flex-col w-full max-w-lg max-h-[min(92vh,calc(100dvh-1.5rem))] sm:max-h-[min(88vh,calc(100dvh-2.5rem))] rounded-dialog border border-border bg-white shadow-xl duration-200 overflow-hidden my-auto data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          "pointer-events-auto relative z-50 flex flex-col w-full max-w-lg max-h-[calc(100dvh-1rem)] sm:max-h-[min(88vh,calc(100dvh-2.5rem))] rounded-2xl sm:rounded-dialog rounded-dialog border border-border bg-white shadow-xl duration-200 overflow-hidden my-auto data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           className
         )}
         {...props}
@@ -55,7 +55,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-10 sm:pr-12",
+      "shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14",
       className
     )}
     {...props}
