@@ -517,9 +517,9 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
         }
         description="Active revenue stages, deal progression, and sales conversion velocity"
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
             {/* View Switcher Toggle */}
-            <div className="inline-flex items-center rounded-btn border border-border bg-white p-0.5 shadow-subtle">
+            <div className="inline-flex items-center rounded-btn border border-border bg-white p-0.5 shadow-subtle shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('kanban')}
@@ -559,7 +559,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                 }));
                 setIsAddModalOpen(true);
               }}
-              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer shadow-subtle"
+              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shadow-subtle shrink-0 ml-auto sm:ml-0"
             >
               <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
               Add Deal
@@ -1197,25 +1197,27 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
 
       {/* 6. Add Deal Modal */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-section-title text-txt-primary">Create New Deal</DialogTitle>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+              <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Create New Deal
+            </DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
               Add a commercial opportunity to the active sales pipeline
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleAddDealSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {addError && (
-                <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{addError}</span>
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                  <span className="font-medium leading-relaxed">{addError}</span>
                 </div>
               )}
             <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Associated Lead / Client <span className="text-red-500">*</span>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Associated Lead / Client <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <CustomSelect
                 value={newDealForm.leadId}
@@ -1229,8 +1231,8 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
             </div>
 
             <div className="space-y-1">
-              <label className="text-caption text-txt-secondary block font-medium">
-                Deal Title <span className="text-red-500">*</span>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Deal Title <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <input
                 type="text"
@@ -1238,14 +1240,14 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                 value={newDealForm.title}
                 onChange={(e) => setNewDealForm({ ...newDealForm, title: e.target.value })}
                 placeholder="e.g. Enterprise Cloud ERP Migration"
-                className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs transition-colors"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">
-                  Deal Amount (INR) <span className="text-red-500">*</span>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Deal Amount (INR) <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <input
                   type="number"
@@ -1253,12 +1255,12 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   min="0"
                   value={newDealForm.amount}
                   onChange={(e) => setNewDealForm({ ...newDealForm, amount: Number(e.target.value) })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                  className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs tabular-nums transition-colors"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Initial Stage</label>
+                <label className="text-xs font-semibold text-txt-primary">Initial Stage</label>
                 <CustomSelect
                   value={newDealForm.stageId}
                   onChange={(val) => setNewDealForm({ ...newDealForm, stageId: val })}
@@ -1271,57 +1273,62 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Win Probability (%)</label>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Win Probability (%)</span>
+                  <span className="text-[10px] font-normal text-txt-muted">Optional</span>
+                </label>
                 <input
                   type="number"
                   min="0"
                   max="100"
                   value={newDealForm.probability}
                   onChange={(e) => setNewDealForm({ ...newDealForm, probability: Number(e.target.value) })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                  className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs tabular-nums transition-colors"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Expected Close Date</label>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Expected Close Date</span>
+                  <span className="text-[10px] font-normal text-txt-muted">Optional</span>
+                </label>
                 <input
                   type="date"
                   value={newDealForm.expectedCloseDate}
                   onChange={(e) => setNewDealForm({ ...newDealForm, expectedCloseDate: e.target.value })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                  className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs cursor-pointer transition-colors"
                 />
               </div>
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-2.5 sm:px-5 sm:py-3 border-t border-border shrink-0 bg-slate-50/95 mt-auto">
-              <div className="grid grid-cols-2 gap-2 w-full sm:flex sm:justify-end sm:w-auto">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="w-full sm:w-auto h-8 text-xs cursor-pointer"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isAddSubmitting}
-                  size="sm"
-                  className="w-full sm:w-auto h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer font-semibold"
-                >
-                  {isAddSubmitting ? (
-                    <>
-                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Creating...
-                    </>
-                  ) : (
-                    'Create Deal'
-                  )}
-                </Button>
-              </div>
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsAddModalOpen(false)}
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
+                disabled={isAddSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isAddSubmitting}
+                size="sm"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
+              >
+                {isAddSubmitting ? (
+                  <>
+                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Creating...
+                  </>
+                ) : (
+                  'Create Deal'
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -1330,50 +1337,54 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
       {/* 7. Edit Deal Modal */}
       <Dialog open={!!editingDeal} onOpenChange={(open) => !open && setEditingDeal(null)}>
         {editingDeal && (
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-section-title text-txt-primary">Edit Deal</DialogTitle>
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+            <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+              <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+                <Edit className="h-4 w-4 text-[#57B71B]" /> Edit Deal
+              </DialogTitle>
               <DialogDescription className="text-xs text-txt-muted">
                 Update opportunity details and financials
               </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleEditDealSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
                 {editError && (
-                  <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
-                    <AlertCircle className="h-4 w-4 shrink-0" />
-                    <span>{editError}</span>
+                  <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                    <span className="font-medium leading-relaxed">{editError}</span>
                   </div>
                 )}
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">
-                  Deal Title <span className="text-red-500">*</span>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Deal Title <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <input
                   type="text"
                   required
                   value={editForm.title}
                   onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                  className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs transition-colors"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-caption text-txt-secondary block font-medium">Amount (INR)</label>
+                  <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                    <span>Amount (INR) <span className="text-red-500 ml-0.5">*</span></span>
+                  </label>
                   <input
                     type="number"
                     required
                     min="0"
                     value={editForm.amount}
                     onChange={(e) => setEditForm({ ...editForm, amount: Number(e.target.value) })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                    className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs tabular-nums transition-colors"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-caption text-txt-secondary block font-medium">Pipeline Stage</label>
+                  <label className="text-xs font-semibold text-txt-primary">Pipeline Stage</label>
                   <CustomSelect
                     value={editForm.stageId}
                     onChange={(val) => setEditForm({ ...editForm, stageId: val })}
@@ -1386,38 +1397,44 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-caption text-txt-secondary block font-medium">Win Probability (%)</label>
+                  <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                    <span>Win Probability (%)</span>
+                    <span className="text-[10px] font-normal text-txt-muted">Optional</span>
+                  </label>
                   <input
                     type="number"
                     min="0"
                     max="100"
                     value={editForm.probability}
                     onChange={(e) => setEditForm({ ...editForm, probability: Number(e.target.value) })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                    className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs tabular-nums transition-colors"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-caption text-txt-secondary block font-medium">Expected Close Date</label>
+                  <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                    <span>Expected Close Date</span>
+                    <span className="text-[10px] font-normal text-txt-muted">Optional</span>
+                  </label>
                   <input
                     type="date"
                     value={editForm.expectedCloseDate}
                     onChange={(e) => setEditForm({ ...editForm, expectedCloseDate: e.target.value })}
-                    className="w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                    className="w-full h-8 rounded-lg border border-border bg-white px-2.5 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs cursor-pointer transition-colors"
                   />
                 </div>
                 </div>
               </div>
 
-              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
+              <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => setEditingDeal(null)}
-                  className="w-full sm:w-auto h-8 text-xs cursor-pointer"
+                  className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 >
                   Cancel
                 </Button>
@@ -1425,7 +1442,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   type="submit"
                   disabled={isEditSubmitting}
                   size="sm"
-                  className="w-full sm:w-auto h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer"
+                  className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
                 >
                   {isEditSubmitting ? (
                     <>
@@ -1444,26 +1461,28 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
       {/* 8. Mark Lost Modal */}
       <Dialog open={!!lostDealModal} onOpenChange={(open) => !open && setLostDealModal(null)}>
         {lostDealModal && (
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-section-title text-txt-primary">Mark Deal as Closed-Lost</DialogTitle>
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+            <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+              <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-rose-500" /> Mark Deal as Closed-Lost
+              </DialogTitle>
               <DialogDescription className="text-xs text-txt-muted">
                 Record lost reason and notes for post-mortem analysis
               </DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleLostSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
                 {lostError && (
-                  <div className="p-2.5 rounded bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-1.5">
-                    <AlertCircle className="h-4 w-4 shrink-0" />
-                    <span>{lostError}</span>
+                  <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                    <span className="font-medium leading-relaxed">{lostError}</span>
                   </div>
                 )}
 
                 <div className="space-y-1">
-                  <label className="text-caption text-txt-secondary block font-medium">
-                    Lost Reason <span className="text-red-500">*</span>
+                  <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                    <span>Lost Reason <span className="text-red-500 ml-0.5">*</span></span>
                   </label>
                   <CustomSelect
                     value={selectedLostReasonId}
@@ -1478,26 +1497,27 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-caption text-txt-secondary block font-medium">
-                    Debrief Notes (Optional)
+                  <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                    <span>Debrief Notes</span>
+                    <span className="text-[10px] font-normal text-txt-muted">Optional</span>
                   </label>
                   <textarea
                     rows={3}
                     value={lostReasonNotes}
                     onChange={(e) => setLostReasonNotes(e.target.value)}
                     placeholder="Explain why the deal was lost (e.g. competitor pricing, feature gap)..."
-                    className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                    className="w-full rounded-lg border border-border bg-white p-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs resize-none transition-colors"
                   />
                 </div>
               </div>
 
-              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+              <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => setLostDealModal(null)}
-                  className="h-8 text-xs cursor-pointer"
+                  className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 >
                   Cancel
                 </Button>
@@ -1505,7 +1525,7 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                   type="submit"
                   disabled={isLostSubmitting}
                   size="sm"
-                  className="h-8 text-xs bg-rose-600 hover:bg-rose-700 text-white cursor-pointer"
+                  className="w-full sm:w-auto h-8 px-4 text-xs bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
                 >
                   {isLostSubmitting ? (
                     <>

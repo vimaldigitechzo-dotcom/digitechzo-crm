@@ -395,16 +395,18 @@ export const CustomersPage: React.FC = () => {
         title="Customers"
         count={`${activeCount} active`}
         actions={
-          <Button
-            size="sm"
-            onClick={() => {
-              setFormError(null);
-              setIsAddModalOpen(true);
-            }}
-            className="h-8 px-3 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
-          >
-            <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Add Customer
-          </Button>
+          <div className="flex items-center justify-end w-full sm:w-auto">
+            <Button
+              size="sm"
+              onClick={() => {
+                setFormError(null);
+                setIsAddModalOpen(true);
+              }}
+              className="h-8 px-3 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0 ml-auto"
+            >
+              <PlusCircle className="mr-1.5 h-3.5 w-3.5" /> Add Customer
+            </Button>
+          </div>
         }
       />
 
@@ -607,45 +609,54 @@ export const CustomersPage: React.FC = () => {
                   {getStatusBadge(customer.status)}
                 </div>
 
-                <div className="space-y-1.5 text-xs border-t border-border/50 pt-2.5">
+                <div className="space-y-2 text-xs border-t border-border/50 pt-2.5">
                   <div className="flex items-center justify-between text-txt-secondary">
-                    <span className="text-txt-muted flex items-center gap-1">
+                    <span className="text-txt-muted flex items-center gap-1 shrink-0">
                       <User className="h-3 w-3" /> Contact
                     </span>
-                    <span className="font-medium text-txt-primary">{customer.contactName}</span>
+                    <span className="font-semibold text-txt-primary truncate max-w-[65%] text-right">
+                      {customer.contactName || '—'}
+                    </span>
                   </div>
 
                   {customer.contactEmail && (
                     <div className="flex items-center justify-between text-txt-secondary text-[11px]">
-                      <span className="text-txt-muted flex items-center gap-1">
+                      <span className="text-txt-muted flex items-center gap-1 shrink-0">
                         <Mail className="h-3 w-3" /> Email
                       </span>
-                      <span className="text-txt-muted truncate max-w-[200px]">
+                      <a
+                        href={`mailto:${customer.contactEmail}`}
+                        className="text-txt-secondary hover:text-[#57B71B] truncate max-w-[65%] text-right transition-colors"
+                      >
                         {customer.contactEmail}
-                      </span>
+                      </a>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between text-txt-secondary">
-                    <span className="text-txt-muted">Account Manager</span>
-                    <span className="text-txt-primary">{customer.accountManager}</span>
-                  </div>
-
-                  <div className="flex items-start justify-between gap-2 pt-1">
-                    <span className="text-txt-muted shrink-0 flex items-center gap-1">
-                      <Briefcase className="h-3 w-3" /> Services
-                    </span>
-                    <span className="text-right text-txt-primary font-medium">
-                      {customer.purchasedServices}
+                    <span className="text-txt-muted shrink-0">Account Manager</span>
+                    <span className="text-txt-primary truncate max-w-[65%] text-right font-medium">
+                      {customer.accountManager || '—'}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between pt-1 border-t border-border/50">
-                    <span className="text-txt-muted">Realized Revenue</span>
-                    <span className="font-medium text-xs text-txt-muted tabular-nums">
+                    <span className="text-txt-muted font-medium">Realized Revenue</span>
+                    <span className="font-bold text-xs text-txt-primary tabular-nums">
                       {customer.deal?.value ? formatCurrency(customer.deal.value) : '—'}
                     </span>
                   </div>
+
+                  {customer.purchasedServices && (
+                    <div className="pt-2 border-t border-border/50 space-y-1">
+                      <span className="text-[10px] font-bold text-txt-muted uppercase tracking-wider flex items-center gap-1">
+                        <Briefcase className="h-3 w-3 text-txt-muted" /> Services & Deal Details
+                      </span>
+                      <p className="text-xs text-txt-primary bg-slate-50 border border-slate-200/80 rounded-lg p-2.5 leading-relaxed text-left break-words">
+                        {customer.purchasedServices}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-1.5 pt-1">
@@ -695,10 +706,10 @@ export const CustomersPage: React.FC = () => {
 
       {/* Customer 360 Modal */}
       <Dialog open={!!selectedCustomer} onOpenChange={(open) => !open && setSelectedCustomer(null)}>
-        <DialogContent className="max-w-lg w-full">
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
           {selectedCustomer && (
             <>
-              <DialogHeader>
+              <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
@@ -876,8 +887,8 @@ export const CustomersPage: React.FC = () => {
 
       {/* Add Customer Modal */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-md w-full">
-          <DialogHeader>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Add Customer Account
             </DialogTitle>
@@ -887,56 +898,57 @@ export const CustomersPage: React.FC = () => {
           </DialogHeader>
 
           <form onSubmit={handleAddCustomerSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {formError && (
-                <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{formError}</span>
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                  <span className="font-medium leading-relaxed">{formError}</span>
                 </div>
               )}
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                Company Name *
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Company Name <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <Input
                 required
                 value={formState.companyName}
                 onChange={(e) => setFormState({ ...formState, companyName: e.target.value })}
                 placeholder="e.g. Acme Enterprises Ltd"
-                className="h-8 text-xs"
+                className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Contact Person *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Contact Person <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   required
                   value={formState.contactName}
                   onChange={(e) => setFormState({ ...formState, contactName: e.target.value })}
                   placeholder="e.g. Rahul Sharma"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Job Title / Designation
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Job Title / Designation</span>
+                  <span className="text-[10px] font-normal text-txt-muted">Optional</span>
                 </label>
                 <Input
                   value={formState.title}
                   onChange={(e) => setFormState({ ...formState, title: e.target.value })}
                   placeholder="e.g. VP Operations"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Contact Email *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Contact Email <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   type="email"
@@ -944,28 +956,26 @@ export const CustomersPage: React.FC = () => {
                   value={formState.contactEmail}
                   onChange={(e) => setFormState({ ...formState, contactEmail: e.target.value })}
                   placeholder="rahul@acme.com"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Contact Phone *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Contact Phone <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   required
                   value={formState.contactPhone}
                   onChange={(e) => setFormState({ ...formState, contactPhone: e.target.value })}
                   placeholder="+91 98000 00000"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Source Lead / Client
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Source Lead / Client</label>
                 <span className="text-[10px] text-txt-muted">{clients.length} available</span>
               </div>
               <CustomSelect
@@ -992,11 +1002,9 @@ export const CustomersPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Account Manager / Owner
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Account Manager / Owner</label>
                 <CustomSelect
                   value={formState.ownerId}
                   onChange={(val) => setFormState({ ...formState, ownerId: val })}
@@ -1012,9 +1020,7 @@ export const CustomersPage: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Linked Deal
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Linked Deal</label>
                 <CustomSelect
                   value={formState.dealId}
                   onChange={(val) => setFormState({ ...formState, dealId: val })}
@@ -1030,11 +1036,9 @@ export const CustomersPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Status
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Account Status</label>
                 <CustomSelect
                   value={formState.status}
                   onChange={(val) => setFormState({ ...formState, status: val as CustomerStatus })}
@@ -1048,9 +1052,7 @@ export const CustomersPage: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Purchased Services / Category
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Purchased Services / Category</label>
                 <CategorySelect
                   value={formState.category}
                   onChange={(val) => setFormState({ ...formState, category: val })}
@@ -1061,26 +1063,27 @@ export const CustomersPage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                Notes & Additional Instructions
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Notes & Additional Instructions</span>
+                <span className="text-[10px] font-normal text-txt-muted">Optional</span>
               </label>
               <textarea
                 rows={2}
                 value={formState.notes}
                 onChange={(e) => setFormState({ ...formState, notes: e.target.value })}
                 placeholder="Optional customer account notes, billing preferences, special terms..."
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary placeholder:text-txt-muted focus:outline-none focus:ring-1 focus:ring-[#57B71B] resize-none"
+                className="w-full rounded-lg border border-border bg-white p-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs resize-none"
               />
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsAddModalOpen(false)}
-                className="h-8 text-xs font-medium cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 disabled={isSubmitting}
               >
                 Cancel
@@ -1089,7 +1092,7 @@ export const CustomersPage: React.FC = () => {
                 type="submit"
                 size="sm"
                 disabled={isSubmitting}
-                className="bg-[#57B71B] hover:bg-[#469815] text-white h-8 text-xs font-semibold px-3 rounded-button cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
               >
                 {isSubmitting ? (
                   <>
@@ -1106,8 +1109,8 @@ export const CustomersPage: React.FC = () => {
 
       {/* Edit Customer Modal */}
       <Dialog open={!!editingCustomer} onOpenChange={(open) => !open && setEditingCustomer(null)}>
-        <DialogContent className="max-w-md w-full">
-          <DialogHeader>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <Edit2 className="h-4 w-4 text-[#57B71B]" /> Edit Customer Account
             </DialogTitle>
@@ -1117,80 +1120,80 @@ export const CustomersPage: React.FC = () => {
           </DialogHeader>
 
           <form onSubmit={handleEditCustomerSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {formError && (
-                <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{formError}</span>
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                  <span className="font-medium leading-relaxed">{formError}</span>
                 </div>
               )}
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                Company Name *
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Company Name <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <Input
                 required
                 value={editFormState.companyName}
                 onChange={(e) => setEditFormState({ ...editFormState, companyName: e.target.value })}
-                className="h-8 text-xs"
+                className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Contact Person *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Contact Person <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   required
                   value={editFormState.contactName}
                   onChange={(e) => setEditFormState({ ...editFormState, contactName: e.target.value })}
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Job Title
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Job Title</span>
+                  <span className="text-[10px] font-normal text-txt-muted">Optional</span>
                 </label>
                 <Input
                   value={editFormState.title}
                   onChange={(e) => setEditFormState({ ...editFormState, title: e.target.value })}
-                  className="h-8 text-xs"
+                  placeholder="e.g. VP Operations"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Email *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Email <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   type="email"
                   required
                   value={editFormState.contactEmail}
                   onChange={(e) => setEditFormState({ ...editFormState, contactEmail: e.target.value })}
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Phone *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Phone <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   required
                   value={editFormState.contactPhone}
                   onChange={(e) => setEditFormState({ ...editFormState, contactPhone: e.target.value })}
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Status
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Account Status</label>
                 <CustomSelect
                   value={editFormState.status}
                   onChange={(val) => setEditFormState({ ...editFormState, status: val as CustomerStatus })}
@@ -1204,9 +1207,7 @@ export const CustomersPage: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Services / Category
-                </label>
+                <label className="text-xs font-semibold text-txt-primary">Services / Category</label>
                 <CategorySelect
                   value={editFormState.category}
                   onChange={(val) => setEditFormState({ ...editFormState, category: val })}
@@ -1217,26 +1218,27 @@ export const CustomersPage: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                Notes & Additional Instructions
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Notes & Additional Instructions</span>
+                <span className="text-[10px] font-normal text-txt-muted">Optional</span>
               </label>
               <textarea
                 rows={2}
                 value={editFormState.notes}
                 onChange={(e) => setEditFormState({ ...editFormState, notes: e.target.value })}
                 placeholder="Optional customer account notes, billing requirements..."
-                className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary placeholder:text-txt-muted focus:outline-none focus:ring-1 focus:ring-[#57B71B] resize-none"
+                className="w-full rounded-lg border border-border bg-white p-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs resize-none"
               />
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setEditingCustomer(null)}
-                className="h-8 text-xs font-medium cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 disabled={isSubmitting}
               >
                 Cancel
@@ -1245,7 +1247,7 @@ export const CustomersPage: React.FC = () => {
                 type="submit"
                 size="sm"
                 disabled={isSubmitting}
-                className="bg-[#57B71B] hover:bg-[#469815] text-white h-8 text-xs font-semibold px-3 rounded-button cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
               >
                 {isSubmitting ? (
                   <>

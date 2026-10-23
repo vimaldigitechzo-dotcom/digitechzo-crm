@@ -799,37 +799,39 @@ export const LeadsPage: React.FC = () => {
         count={`${filteredLeads.length} of ${leads.length}`}
         description="Master sales records, prospective inquiries, and continuous pipeline tracker"
         actions={
-          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap w-full sm:w-auto">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleExportCSV}
-              className="h-8 text-xs cursor-pointer border-border flex-1 sm:flex-none justify-center"
-            >
-              <Download className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
-              Export
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setImportError(null);
-                setImportResult(null);
-                setImportRows([]);
-                setIsImportModalOpen(true);
-              }}
-              className="h-8 text-xs cursor-pointer border-border hover:bg-slate-50 flex-1 sm:flex-none justify-center"
-            >
-              <Upload className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
-              Import
-            </Button>
+          <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-1.5 shrink-0">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleExportCSV}
+                className="h-8 text-xs cursor-pointer border-border justify-center"
+              >
+                <Download className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
+                Export
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setImportError(null);
+                  setImportResult(null);
+                  setImportRows([]);
+                  setIsImportModalOpen(true);
+                }}
+                className="h-8 text-xs cursor-pointer border-border hover:bg-slate-50 justify-center"
+              >
+                <Upload className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
+                Import
+              </Button>
+            </div>
             <Button
               size="sm"
               onClick={() => {
                 setCreateError(null);
                 setIsAddModalOpen(true);
               }}
-              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer shadow-subtle w-full sm:w-auto justify-center"
+              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shadow-subtle shrink-0 ml-auto sm:ml-0"
             >
               <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
               Add Lead
@@ -1310,9 +1312,11 @@ export const LeadsPage: React.FC = () => {
 
       {/* MODAL: CREATE NEW LEAD */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden">
-          <DialogHeader>
-            <DialogTitle className="text-sm sm:text-base font-bold text-txt-primary">Create New Lead</DialogTitle>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+              <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Create New Lead
+            </DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
               Record a new prospect inquiry and persist it to PostgreSQL
             </DialogDescription>
@@ -1608,33 +1612,31 @@ export const LeadsPage: React.FC = () => {
               </div>
             </div>
 
-            <DialogFooter className="px-4 py-2.5 sm:px-5 sm:py-3 border-t border-border shrink-0 bg-slate-50/95 mt-auto">
-              <div className="grid grid-cols-2 gap-2 w-full sm:flex sm:justify-end sm:w-auto">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setIsAddModalOpen(false)}
-                  disabled={isSubmitting}
-                  className="h-8 text-xs cursor-pointer w-full sm:w-auto"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  size="sm"
-                  disabled={isSubmitting}
-                  className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer w-full sm:w-auto font-semibold"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Saving...
-                    </>
-                  ) : (
-                    'Create Lead'
-                  )}
-                </Button>
-              </div>
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsAddModalOpen(false)}
+                disabled={isSubmitting}
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={isSubmitting}
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Saving...
+                  </>
+                ) : (
+                  'Create Lead'
+                )}
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -1643,9 +1645,11 @@ export const LeadsPage: React.FC = () => {
       {/* MODAL: EDIT LEAD */}
       <Dialog open={!!editingLead} onOpenChange={(open) => !open && setEditingLead(null)}>
         {editingLead && (
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-section-title text-txt-primary">Edit Lead</DialogTitle>
+          <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+            <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+              <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+                <Edit className="h-4 w-4 text-[#57B71B]" /> Edit Lead
+              </DialogTitle>
               <DialogDescription className="text-xs text-txt-muted">
                 Update prospect details and sync changes to PostgreSQL
               </DialogDescription>
@@ -1835,14 +1839,14 @@ export const LeadsPage: React.FC = () => {
               </div>
               </div>
 
-              <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 shrink-0 bg-slate-50/95 mt-auto">
+              <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => setEditingLead(null)}
                   disabled={isEditSubmitting}
-                  className="h-8 text-xs cursor-pointer w-full sm:w-auto"
+                  className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 >
                   Cancel
                 </Button>
@@ -1850,9 +1854,15 @@ export const LeadsPage: React.FC = () => {
                   type="submit"
                   size="sm"
                   disabled={isEditSubmitting}
-                  className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer w-full sm:w-auto"
+                  className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
                 >
-                  {isEditSubmitting ? 'Saving...' : 'Save Changes'}
+                  {isEditSubmitting ? (
+                    <>
+                      <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Saving...
+                    </>
+                  ) : (
+                    'Save Changes'
+                  )}
                 </Button>
               </DialogFooter>
             </form>

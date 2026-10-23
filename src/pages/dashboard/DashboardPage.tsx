@@ -312,18 +312,20 @@ export const DashboardPage: React.FC = () => {
                 <CardTitle className="text-xs sm:text-sm font-bold text-txt-primary uppercase tracking-wide">
                   Priority Follow-ups
                 </CardTitle>
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-slate-200/80 text-txt-muted text-[10px] font-bold" title="Tasks and scheduled follow-ups">
-                  i
-                </span>
-                <span
-                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                    tasks.length > 0
-                      ? 'bg-[#FEF2F2] text-[#DC2626] border border-rose-200'
-                      : 'bg-slate-100 text-txt-muted border border-border'
-                  }`}
-                >
-                  {tasks.length}
-                </span>
+                {tasks.length > 0 ? (
+                  <Link
+                    to="/tasks?filter=PENDING"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shadow-2xs"
+                    title="Click to view pending follow-ups"
+                  >
+                    <span className="font-bold tabular-nums">{tasks.length}</span>
+                    <span>Pending</span>
+                  </Link>
+                ) : (
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    0 Pending
+                  </span>
+                )}
               </div>
               <Link
                 to="/tasks"
@@ -422,12 +424,14 @@ export const DashboardPage: React.FC = () => {
                 <CardTitle className="text-xs sm:text-sm font-bold text-txt-primary uppercase tracking-wide">
                   Pipeline Snapshot
                 </CardTitle>
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-slate-200/80 text-txt-muted text-[10px] font-bold" title="Pipeline stages overview">
-                  i
-                </span>
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-txt-secondary border border-border">
-                  {totalDealsCount}
-                </span>
+                <Link
+                  to="/pipeline"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors shadow-2xs"
+                  title="Click to view all deals in Pipeline"
+                >
+                  <span className="font-bold tabular-nums">{totalDealsCount}</span>
+                  <span>Deals</span>
+                </Link>
               </div>
             </CardHeader>
             <CardContent className="p-3 sm:p-4 space-y-2">
@@ -488,12 +492,14 @@ export const DashboardPage: React.FC = () => {
                 <CardTitle className="text-xs sm:text-sm font-bold text-txt-primary uppercase tracking-wide">
                   Recent Leads
                 </CardTitle>
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-slate-200/80 text-txt-muted text-[10px] font-bold" title="Prospect leads list">
-                  i
-                </span>
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-txt-secondary border border-border">
-                  {leads.length}
-                </span>
+                <Link
+                  to="/leads"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors shadow-2xs"
+                  title="Click to view all Leads"
+                >
+                  <span className="font-bold tabular-nums">{leads.length}</span>
+                  <span>Leads</span>
+                </Link>
               </div>
               <Link
                 to="/leads"

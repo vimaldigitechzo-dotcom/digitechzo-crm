@@ -106,8 +106,8 @@ export const SettingsPage: React.FC = () => {
         title="Settings"
         badge="Admin Config"
         actions={
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-medium text-txt-muted flex items-center gap-1 bg-slate-50 px-2.5 py-1 rounded-badge border border-border">
+          <div className="flex items-center justify-end gap-2 w-full sm:w-auto">
+            <span className="hidden sm:inline-flex text-[11px] font-medium text-txt-muted items-center gap-1 bg-slate-50 px-2.5 py-1 rounded-badge border border-border">
               <ShieldCheck className="h-3.5 w-3.5 text-[#57B71B]" />
               Live System Configuration (Read-Only)
             </span>
@@ -115,7 +115,7 @@ export const SettingsPage: React.FC = () => {
               size="sm"
               variant="outline"
               onClick={handleRefreshAll}
-              className="h-8 px-2.5 text-xs font-medium cursor-pointer shrink-0"
+              className="h-8 px-2.5 text-xs font-medium cursor-pointer shrink-0 ml-auto sm:ml-0"
             >
               <RotateCcw className="h-3.5 w-3.5 mr-1" />
               Refresh

@@ -463,25 +463,27 @@ export const TeamPage: React.FC = () => {
         title="Team"
         count={`${totalActive} active / ${members.length} total`}
         actions={
-          <Button
-            size="sm"
-            onClick={() => {
-              setFormError(null);
-              setInviteForm({
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                roleId: '',
-                role: 'BDE',
-                password: '',
-              });
-              setIsInviteModalOpen(true);
-            }}
-            className="h-8 px-3 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
-          >
-            <UserPlus className="mr-1.5 h-3.5 w-3.5" /> Invite Member
-          </Button>
+          <div className="flex items-center justify-end w-full sm:w-auto">
+            <Button
+              size="sm"
+              onClick={() => {
+                setFormError(null);
+                setInviteForm({
+                  firstName: '',
+                  lastName: '',
+                  email: '',
+                  phone: '',
+                  roleId: '',
+                  role: 'BDE',
+                  password: '',
+                });
+                setIsInviteModalOpen(true);
+              }}
+              className="h-8 px-3 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0 ml-auto"
+            >
+              <UserPlus className="mr-1.5 h-3.5 w-3.5" /> Invite Member
+            </Button>
+          </div>
         }
       />
 
@@ -877,8 +879,8 @@ export const TeamPage: React.FC = () => {
 
       {/* 6. Invite Member Modal */}
       <Dialog open={isInviteModalOpen} onOpenChange={setIsInviteModalOpen}>
-        <DialogContent className="max-w-md w-full">
-          <DialogHeader>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
             <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <UserPlus className="h-4 w-4 text-[#57B71B]" /> Add / Invite Team Member
             </DialogTitle>
@@ -888,10 +890,10 @@ export const TeamPage: React.FC = () => {
           </DialogHeader>
 
           <form onSubmit={handleInviteSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden" autoComplete="off">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {formError && (
-                <div className="flex items-center gap-2 p-2.5 bg-danger/10 border border-danger/30 rounded-card text-xs text-danger-dark font-medium">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
+                <div className="flex items-center gap-2 p-2.5 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 font-medium">
+                  <AlertCircle className="h-4 w-4 shrink-0 text-rose-500" />
                   <span>{formError}</span>
                 </div>
               )}
@@ -899,38 +901,38 @@ export const TeamPage: React.FC = () => {
             <input type="text" name="prevent_autofill_user" className="hidden" tabIndex={-1} aria-hidden="true" autoComplete="off" />
             <input type="password" name="prevent_autofill_pwd" className="hidden" tabIndex={-1} aria-hidden="true" autoComplete="off" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  First Name *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>First Name <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   required
                   value={inviteForm.firstName}
                   onChange={(e) => setInviteForm({ ...inviteForm, firstName: e.target.value })}
                   placeholder="e.g. Neha"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                   autoComplete="off"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Last Name *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Last Name <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <Input
                   required
                   value={inviteForm.lastName}
                   onChange={(e) => setInviteForm({ ...inviteForm, lastName: e.target.value })}
                   placeholder="e.g. Kulkarni"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                   autoComplete="off"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                Work Email *
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Work Email <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <Input
                 required
@@ -939,15 +941,15 @@ export const TeamPage: React.FC = () => {
                 value={inviteForm.email}
                 onChange={(e) => setInviteForm({ ...inviteForm, email: e.target.value })}
                 placeholder="neha.k@digitechzo.com"
-                className="h-8 text-xs"
+                className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                 autoComplete="new-email"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Role *
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Role <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <CustomSelect
                   value={inviteForm.role}
@@ -979,14 +981,15 @@ export const TeamPage: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Phone (Optional)
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Phone</span>
+                  <span className="text-[10px] font-normal text-txt-muted">Optional</span>
                 </label>
                 <Input
                   value={inviteForm.phone}
                   onChange={(e) => setInviteForm({ ...inviteForm, phone: e.target.value })}
                   placeholder="+919812345678"
-                  className="h-8 text-xs"
+                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                   autoComplete="off"
                 />
               </div>
@@ -994,8 +997,8 @@ export const TeamPage: React.FC = () => {
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-semibold text-txt-secondary uppercase tracking-wider">
-                  Initial Password <span className="text-red-500 font-bold">*</span>
+                <label className="text-xs font-semibold text-txt-primary flex items-center">
+                  <span>Initial Password <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <span className="text-[10px] text-txt-muted">Must be strong</span>
               </div>
@@ -1007,7 +1010,7 @@ export const TeamPage: React.FC = () => {
                   value={inviteForm.password}
                   onChange={(e) => setInviteForm({ ...inviteForm, password: e.target.value })}
                   placeholder="e.g. DigiTech@2026"
-                  className="h-8 text-xs pr-8"
+                  className="h-8 text-xs pr-8 rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
                   autoComplete="new-password"
                   data-lpignore="true"
                 />
@@ -1086,13 +1089,14 @@ export const TeamPage: React.FC = () => {
               </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsInviteModalOpen(false)}
-                className="h-8 text-xs font-medium cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
@@ -1100,7 +1104,7 @@ export const TeamPage: React.FC = () => {
                 type="submit"
                 size="sm"
                 disabled={isSubmitting}
-                className="bg-[#57B71B] hover:bg-[#469815] text-white h-8 text-xs font-semibold px-3 rounded-button cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
               >
                 {isSubmitting ? (
                   <>

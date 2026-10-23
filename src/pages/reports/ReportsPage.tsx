@@ -414,15 +414,17 @@ export const ReportsPage: React.FC = () => {
         badge="Live CRM Database"
         badgeVariant="success"
         actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExportCsv}
-            className="h-8 text-xs font-semibold border-border text-txt-primary hover:bg-slate-50 transition-colors shadow-none"
-          >
-            <Download className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
-            Export Summary (CSV)
-          </Button>
+          <div className="flex items-center justify-end w-full sm:w-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExportCsv}
+              className="h-8 text-xs font-semibold border-border text-txt-primary hover:bg-slate-50 transition-colors shadow-none ml-auto"
+            >
+              <Download className="mr-1.5 h-3.5 w-3.5 text-txt-muted" />
+              Export Summary (CSV)
+            </Button>
+          </div>
         }
       />
 

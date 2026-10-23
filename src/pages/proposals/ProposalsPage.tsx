@@ -458,17 +458,19 @@ export const ProposalsPage: React.FC = () => {
         badge={underReviewCount > 0 ? `${underReviewCount} under review` : undefined}
         badgeVariant="brand"
         actions={
-          <Button
-            size="sm"
-            className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
-            onClick={() => {
-              setFormError(null);
-              setIsCreateModalOpen(true);
-            }}
-          >
-            <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
-            Create Proposal
-          </Button>
+          <div className="flex items-center justify-end w-full sm:w-auto">
+            <Button
+              size="sm"
+              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0 ml-auto"
+              onClick={() => {
+                setFormError(null);
+                setIsCreateModalOpen(true);
+              }}
+            >
+              <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
+              Create Proposal
+            </Button>
+          </div>
         }
       />
 
@@ -819,25 +821,27 @@ export const ProposalsPage: React.FC = () => {
 
       {/* 5. Create Proposal Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-base font-bold text-txt-primary">Create Proposal / Quotation</DialogTitle>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+              <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Create Proposal / Quotation
+            </DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
               Generate a commercial quotation reference for an existing client or active deal.
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateProposal} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {formError && (
-                <div className="p-2.5 rounded-btn bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{formError}</span>
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                  <span className="font-medium leading-relaxed">{formError}</span>
                 </div>
               )}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-txt-primary">
-                Proposal Title <span className="text-red-500">*</span>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Proposal Title <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <input
                 type="text"
@@ -845,14 +849,14 @@ export const ProposalsPage: React.FC = () => {
                 placeholder="e.g. Enterprise Cloud Architecture Proposal"
                 value={newProposalForm.title}
                 onChange={(e) => setNewProposalForm({ ...newProposalForm, title: e.target.value })}
-                className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
+                className="w-full h-8 px-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs transition-colors"
               />
             </div>
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-semibold text-txt-primary">
-                  Client / Prospect <span className="text-red-500">*</span>
+                  Client / Prospect <span className="text-red-500 ml-0.5">*</span>
                 </label>
                 <span className="text-[10px] text-txt-muted">{clients.length} clients available</span>
               </div>
@@ -899,7 +903,7 @@ export const ProposalsPage: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-txt-primary">Assigned Owner / BDE</label>
                 <CustomSelect
@@ -933,10 +937,10 @@ export const ProposalsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary">
-                  Quoted Amount (INR) <span className="text-red-500">*</span>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Quoted Amount (INR) <span className="text-red-500 ml-0.5">*</span></span>
                 </label>
                 <input
                   type="number"
@@ -944,41 +948,46 @@ export const ProposalsPage: React.FC = () => {
                   min="0"
                   value={newProposalForm.amount}
                   onChange={(e) => setNewProposalForm({ ...newProposalForm, amount: Number(e.target.value) })}
-                  className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle tabular-nums"
+                  className="w-full h-8 px-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs tabular-nums transition-colors"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary">Valid Until</label>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Valid Until <span className="text-red-500 ml-0.5">*</span></span>
+                </label>
                 <input
                   type="date"
                   required
                   value={newProposalForm.validUntil}
                   onChange={(e) => setNewProposalForm({ ...newProposalForm, validUntil: e.target.value })}
-                  className="w-full h-8 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle"
+                  className="w-full h-8 px-2 text-xs rounded-lg border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs cursor-pointer transition-colors"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-txt-primary">Scope Summary / Deliverables</label>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Scope Summary / Deliverables</span>
+                <span className="text-[10px] font-normal text-txt-muted">Optional</span>
+              </label>
               <textarea
                 rows={2}
                 placeholder="High-level commercial deliverable highlights..."
                 value={newProposalForm.scopeNotes}
                 onChange={(e) => setNewProposalForm({ ...newProposalForm, scopeNotes: e.target.value })}
-                className="w-full p-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle resize-none"
+                className="w-full p-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs resize-none transition-colors"
               />
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsCreateModalOpen(false)}
-                className="h-8 text-xs cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 disabled={isSubmitting}
               >
                 Cancel
@@ -986,7 +995,7 @@ export const ProposalsPage: React.FC = () => {
               <Button
                 type="submit"
                 size="sm"
-                className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

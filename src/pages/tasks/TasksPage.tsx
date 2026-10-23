@@ -613,9 +613,9 @@ export const TasksPage: React.FC = () => {
         badgeVariant={overdueCount > 0 ? 'danger' : 'success'}
         description="Your follow-ups and scheduled actions"
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
             {/* View Switcher: Queue vs Table */}
-            <div className="flex items-center rounded-btn border border-border bg-white p-0.5 shadow-subtle">
+            <div className="flex items-center rounded-btn border border-border bg-white p-0.5 shadow-subtle shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('queue')}
@@ -644,7 +644,7 @@ export const TasksPage: React.FC = () => {
 
             <Button
               size="sm"
-              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
+              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0 ml-auto sm:ml-0"
               onClick={handleOpenScheduleModal}
             >
               <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
@@ -1237,26 +1237,29 @@ export const TasksPage: React.FC = () => {
       )}
 
       {/* 6. Schedule Task Modal */}
+      {/* 6. Schedule Task Modal */}
       <Dialog open={isScheduleModalOpen} onOpenChange={setIsScheduleModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-base font-bold text-txt-primary">Schedule Task</DialogTitle>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+              <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Schedule Task
+            </DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
               Schedule a sales follow-up call, WhatsApp check-in, or demo meeting.
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateTask} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {formError && (
-                <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{formError}</span>
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                  <span className="font-medium leading-relaxed">{formError}</span>
                 </div>
               )}
             <div className="space-y-1">
-              <label className="h-5 text-xs font-semibold text-txt-primary flex items-center">
-                Task Description <span className="text-red-500 ml-0.5">*</span>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Task Description <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <input
                 type="text"
@@ -1264,7 +1267,7 @@ export const TasksPage: React.FC = () => {
                 placeholder="e.g. Follow-up demo call regarding proposal"
                 value={newTaskForm.title}
                 onChange={(e) => setNewTaskForm({ ...newTaskForm, title: e.target.value })}
-                className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
+                className="w-full h-8 px-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs transition-colors"
               />
             </div>
 
@@ -1458,13 +1461,13 @@ export const TasksPage: React.FC = () => {
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsScheduleModalOpen(false)}
-                className="h-8 px-4 text-xs cursor-pointer min-w-[72px]"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 disabled={isSubmitting}
               >
                 Cancel
@@ -1472,7 +1475,7 @@ export const TasksPage: React.FC = () => {
               <Button
                 type="submit"
                 size="sm"
-                className="h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -1574,9 +1577,9 @@ export const TasksPage: React.FC = () => {
 
       {/* 8. Log Outcome Modal */}
       <Dialog open={isOutcomeModalOpen} onOpenChange={setIsOutcomeModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-section-title text-txt-primary flex items-center gap-2">
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-[#57B71B]" /> Log Task Outcome & Complete
             </DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
@@ -1585,9 +1588,11 @@ export const TasksPage: React.FC = () => {
           </DialogHeader>
 
           <form onSubmit={handleLogOutcomeSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">Outcome Status</label>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Outcome Status <span className="text-red-500 ml-0.5">*</span></span>
+                </label>
                 <CustomSelect
                   value={outcomeForm.outcome}
                   onChange={(val) => setOutcomeForm({ ...outcomeForm, outcome: val })}
@@ -1606,8 +1611,9 @@ export const TasksPage: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-caption text-txt-secondary block font-medium">
-                  Outcome Notes <span className="text-[10px] text-txt-muted font-normal">(Optional)</span>
+                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                  <span>Outcome Notes</span>
+                  <span className="text-[10px] text-txt-muted font-normal">Optional</span>
                 </label>
                 <textarea
                   rows={3}
@@ -1615,19 +1621,19 @@ export const TasksPage: React.FC = () => {
                   onChange={(e) => setOutcomeForm({ ...outcomeForm, notes: e.target.value })}
                   placeholder="What was discussed or concluded?"
                   disabled={isSubmitting}
-                  className="w-full rounded-input border border-border bg-white p-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full rounded-lg border border-border bg-white p-2.5 text-xs text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs resize-none transition-colors"
                 />
               </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsOutcomeModalOpen(false)}
                 disabled={isSubmitting}
-                className="h-8 px-4 text-xs cursor-pointer min-w-[72px]"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
               >
                 Cancel
               </Button>
@@ -1635,7 +1641,7 @@ export const TasksPage: React.FC = () => {
                 type="submit"
                 size="sm"
                 disabled={isSubmitting}
-                className="h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white cursor-pointer font-semibold"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
               >
                 {isSubmitting ? 'Saving...' : 'Confirm & Complete'}
               </Button>

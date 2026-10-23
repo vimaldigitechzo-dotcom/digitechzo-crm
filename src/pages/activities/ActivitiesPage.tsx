@@ -491,14 +491,16 @@ export const ActivitiesPage: React.FC = () => {
         count={`${activities.length} total events`}
         description="Unified chronological audit log of prospect interactions, calls, messages, and stage changes"
         actions={
-          <Button
-            size="sm"
-            className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
-            onClick={() => setIsLogModalOpen(true)}
-          >
-            <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
-            Log Interaction
-          </Button>
+          <div className="flex items-center justify-end w-full sm:w-auto">
+            <Button
+              size="sm"
+              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0 ml-auto"
+              onClick={() => setIsLogModalOpen(true)}
+            >
+              <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
+              Log Interaction
+            </Button>
+          </div>
         }
       />
 
@@ -783,20 +785,22 @@ export const ActivitiesPage: React.FC = () => {
 
       {/* 5. Log Interaction Modal */}
       <Dialog open={isLogModalOpen} onOpenChange={setIsLogModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-base font-bold text-txt-primary">Log Interaction</DialogTitle>
+        <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+              <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Log Interaction
+            </DialogTitle>
             <DialogDescription className="text-xs text-txt-muted">
               Record a call, message, demo meeting, or internal client note. Follows append-only rule BR-COMM-01.
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateActivity} className="flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4 space-y-3.5 text-xs touch-pan-y">
               {formError && (
-                <div className="p-2.5 text-xs bg-red-50 text-red-600 rounded-md border border-red-200 flex items-center gap-1.5">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <span>{formError}</span>
+                <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
+                  <span className="font-medium leading-relaxed">{formError}</span>
                 </div>
               )}
             <div className="space-y-1">
@@ -836,7 +840,7 @@ export const ActivitiesPage: React.FC = () => {
             </div>
 
             {newActivityForm.type === 'CALL' && (
-              <div className="grid grid-cols-2 gap-3 p-2.5 rounded-btn bg-[#F0FDF4] border border-emerald-200/80">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-2.5 rounded-lg bg-[#F0FDF4] border border-emerald-200/80">
                 <div className="space-y-1">
                   <label className="text-[11px] font-bold text-[#166534]">
                     Call Outcome <span className="text-red-500">*</span>
@@ -870,15 +874,15 @@ export const ActivitiesPage: React.FC = () => {
                     onChange={(e) =>
                       setNewActivityForm({ ...newActivityForm, callDuration: e.target.value })
                     }
-                    className="w-full h-7 px-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle"
+                    className="w-full h-8 px-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs"
                   />
                 </div>
               </div>
             )}
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-txt-primary">
-                Summary / Title <span className="text-red-500">*</span>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Summary / Title <span className="text-red-500 ml-0.5">*</span></span>
               </label>
               <input
                 type="text"
@@ -886,12 +890,15 @@ export const ActivitiesPage: React.FC = () => {
                 placeholder="e.g. Outbound Call Connected / Budget Validation"
                 value={newActivityForm.title}
                 onChange={(e) => setNewActivityForm({ ...newActivityForm, title: e.target.value })}
-                className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle"
+                className="w-full h-8 px-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs transition-colors"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-txt-primary">Detailed Notes / Transcript</label>
+              <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
+                <span>Detailed Notes / Transcript</span>
+                <span className="text-[10px] font-normal text-txt-muted">Optional</span>
+              </label>
               <textarea
                 rows={3}
                 placeholder="Enter conversation highlights, client questions, or agreement notes..."
@@ -899,7 +906,7 @@ export const ActivitiesPage: React.FC = () => {
                 onChange={(e) =>
                   setNewActivityForm({ ...newActivityForm, description: e.target.value })
                 }
-                className="w-full p-2 text-xs rounded-input border border-border bg-white text-txt-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-subtle resize-none"
+                className="w-full p-2.5 text-xs rounded-lg border border-border bg-white text-txt-primary placeholder:text-txt-muted/60 focus:outline-none focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B] shadow-2xs resize-none transition-colors"
               />
             </div>
 
@@ -909,18 +916,18 @@ export const ActivitiesPage: React.FC = () => {
                 type="text"
                 disabled
                 value={user?.name || 'Administrator'}
-                className="w-full h-8 px-2.5 text-xs rounded-input border border-border bg-slate-50 text-txt-secondary cursor-not-allowed shadow-subtle"
+                className="w-full h-8 px-2.5 text-xs rounded-lg border border-border bg-slate-50 text-txt-secondary cursor-not-allowed shadow-2xs"
               />
             </div>
             </div>
 
-            <DialogFooter className="px-4 py-3 sm:px-5 sm:py-3 border-t border-border flex items-center justify-end gap-2 shrink-0 bg-slate-50/95 mt-auto">
+            <DialogFooter className="shrink-0 sticky bottom-0 z-20 px-4 py-3 sm:px-5 sm:py-3 border-t border-border bg-slate-50/95 backdrop-blur-xs flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 mt-auto">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => setIsLogModalOpen(false)}
-                className="h-8 text-xs cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs border border-border bg-white hover:bg-slate-50 text-txt-secondary font-medium rounded-lg cursor-pointer"
                 disabled={isSubmitting}
               >
                 Cancel
@@ -928,7 +935,7 @@ export const ActivitiesPage: React.FC = () => {
               <Button
                 type="submit"
                 size="sm"
-                className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer"
+                className="w-full sm:w-auto h-8 px-4 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold rounded-lg shadow-xs cursor-pointer inline-flex items-center justify-center gap-1.5"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

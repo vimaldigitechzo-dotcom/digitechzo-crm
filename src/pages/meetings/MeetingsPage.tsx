@@ -642,9 +642,9 @@ export const MeetingsPage: React.FC = () => {
         badge={upcomingCount > 0 ? `${upcomingCount} upcoming` : 'all clear'}
         badgeVariant={upcomingCount > 0 ? 'brand' : 'neutral'}
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
             {/* View Switcher: Table vs Grid */}
-            <div className="flex items-center rounded-btn border border-border bg-white p-0.5 shadow-subtle">
+            <div className="flex items-center rounded-btn border border-border bg-white p-0.5 shadow-subtle shrink-0">
               <button
                 type="button"
                 onClick={() => setViewMode('table')}
@@ -677,7 +677,7 @@ export const MeetingsPage: React.FC = () => {
 
             <Button
               size="sm"
-              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0"
+              className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shrink-0 ml-auto sm:ml-0"
               onClick={handleOpenScheduleModal}
             >
               <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
