@@ -769,9 +769,9 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                             </div>
 
                             {/* Company / Prospect Contact */}
-                            <div className="flex items-center gap-1 text-[11px] text-txt-muted min-w-0 overflow-hidden">
+                            <div className="flex items-center gap-1 text-[11px] text-txt-muted min-w-0 flex-wrap">
                               <Building className="h-3 w-3 shrink-0" />
-                              <span className="truncate min-w-0 flex-1" title={deal.companyName || deal.leadName}>
+                              <span className="break-words min-w-0 flex-1" title={deal.companyName || deal.leadName}>
                                 {deal.companyName || deal.leadName}
                               </span>
                             </div>
@@ -847,9 +847,9 @@ const DEFAULT_PIPELINE_STAGES: PipelineStage[] = [
                         >
                           {deal.title}
                         </h4>
-                        <div className="flex items-center gap-1.5 text-[11px] text-txt-muted mt-0.5 min-w-0 overflow-hidden">
+                        <div className="flex items-center gap-1.5 text-[11px] text-txt-muted mt-0.5 min-w-0 flex-wrap">
                           <Building className="h-3 w-3 shrink-0" />
-                          <span className="truncate min-w-0 flex-1" title={deal.companyName || deal.leadName}>
+                          <span className="break-words min-w-0 flex-1" title={deal.companyName || deal.leadName}>
                             {deal.companyName || deal.leadName}
                           </span>
                         </div>

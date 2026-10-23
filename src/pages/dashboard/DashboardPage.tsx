@@ -396,11 +396,11 @@ export const DashboardPage: React.FC = () => {
                               {task.title}
                             </p>
                             <p
-                              className="text-[11px] text-txt-muted truncate flex items-center gap-1.5"
+                              className="text-[11px] text-txt-muted flex items-center gap-1.5 min-w-0"
                               title={task.lead?.fullName || task.leadName || 'General Follow-up'}
                             >
                               <Building2 className="h-3 w-3 shrink-0" />
-                              <span className="truncate">{task.lead?.fullName || task.leadName || 'General Follow-up'}</span>
+                              <span className="break-words leading-tight">{task.lead?.fullName || task.leadName || 'General Follow-up'}</span>
                             </p>
                           </div>
                         </div>

@@ -1022,9 +1022,9 @@ export const LeadsPage: React.FC = () => {
                         )}
                         <StatusBadge status={lead.status} type="lead" />
                       </div>
-                      <div className="text-[11px] text-txt-muted flex items-center gap-1 min-w-0 overflow-hidden">
+                      <div className="text-[11px] text-txt-muted flex items-center gap-1 min-w-0 flex-wrap">
                         <Building className="h-3 w-3 text-txt-muted shrink-0" />
-                        <span className="truncate min-w-0 flex-1" title={lead.companyName || 'Individual'}>
+                        <span className="break-words font-normal" title={lead.companyName || 'Individual'}>
                           {lead.companyName || 'Individual'}
                         </span>
                         {lead.title && <span className="shrink-0 text-txt-muted/70">&bull; {lead.title}</span>}
@@ -1076,10 +1076,10 @@ export const LeadsPage: React.FC = () => {
                       <a
                         href={`mailto:${lead.email}`}
                         title={lead.email}
-                        className="inline-flex items-center gap-1 text-[11px] text-txt-muted hover:text-[#57B71B] truncate max-w-full min-w-0"
+                        className="inline-flex items-center gap-1 text-[11px] text-txt-muted hover:text-[#57B71B] break-all max-w-full min-w-0"
                       >
                         <Mail className="h-2.5 w-2.5 text-slate-400 shrink-0" />
-                        <span className="truncate min-w-0">{lead.email}</span>
+                        <span className="break-all">{lead.email}</span>
                       </a>
                     )}
                   </div>
@@ -1098,22 +1098,22 @@ export const LeadsPage: React.FC = () => {
                   </div>
 
                   {/* Row 4: Owner & Next Action */}
-                  <div className="flex items-center justify-between text-[11px] gap-2 pt-0.5 min-w-0">
-                    <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden" title={`Owner: ${lead.ownerName}`}>
+                  <div className="flex flex-wrap items-center justify-between text-[11px] gap-2 pt-0.5 min-w-0">
+                    <div className="flex items-center gap-1.5 min-w-0" title={`Owner: ${lead.ownerName}`}>
                       <Avatar className="h-4.5 w-4.5 shrink-0">
                         <AvatarFallback className="bg-primary-soft text-primary text-[8px] font-bold">
                           {lead.ownerName.split(' ').map((n: string) => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-txt-muted truncate min-w-0">{lead.ownerName}</span>
+                      <span className="text-txt-muted break-words font-medium">{lead.ownerName}</span>
                     </div>
 
                     {lead.nextAction ? (
-                      <div className="text-right text-[10px] text-[#57B71B] font-semibold truncate shrink-0 max-w-[55%]">
+                      <div className="text-right text-[10px] text-[#57B71B] font-semibold break-words ml-auto">
                         Next: {lead.nextAction.actionType} ({lead.nextAction.time || formatDate(lead.nextAction.date)})
                       </div>
                     ) : (
-                      <span className="text-[10px] text-txt-muted shrink-0">No action scheduled</span>
+                      <span className="text-[10px] text-txt-muted shrink-0 ml-auto">No action scheduled</span>
                     )}
                   </div>
                 </div>
@@ -1163,7 +1163,7 @@ export const LeadsPage: React.FC = () => {
                           </div>
                           <span className="text-[11px] text-txt-muted flex items-center gap-1">
                             <Building className="h-3 w-3 text-txt-muted shrink-0" />
-                            <span className="truncate max-w-[140px]">
+                            <span className="break-words font-normal">
                               {lead.companyName || 'Individual'}
                             </span>
                           </span>
@@ -1190,11 +1190,11 @@ export const LeadsPage: React.FC = () => {
                           <a
                             href={`mailto:${lead.email}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1.5 text-[11px] text-txt-muted hover:text-[#57B71B] truncate max-w-[150px] hover:underline transition-colors block group/mail"
+                            className="inline-flex items-center gap-1.5 text-[11px] text-txt-muted hover:text-[#57B71B] break-all hover:underline transition-colors block group/mail"
                             title={`Email ${lead.email}`}
                           >
                             <Mail className="h-2.5 w-2.5 text-slate-400 group-hover/mail:text-[#57B71B] transition-colors shrink-0" />
-                            <span className="truncate">{lead.email}</span>
+                            <span className="break-all">{lead.email}</span>
                           </a>
                         ) : (
                           <span className="text-[11px] text-txt-muted block">—</span>
@@ -1223,7 +1223,7 @@ export const LeadsPage: React.FC = () => {
                     {/* 5. Service Line */}
                     <TableCell>
                       <span
-                        className="text-xs text-txt-primary truncate block max-w-[170px]"
+                        className="text-xs text-txt-primary block font-medium leading-tight break-words"
                         title={lead.serviceInterest}
                       >
                         {lead.serviceInterest}
@@ -1233,7 +1233,7 @@ export const LeadsPage: React.FC = () => {
                     {/* 6. Owner */}
                     <TableCell>
                       <div className="flex items-center gap-1.5">
-                        <Avatar className="h-5 w-5">
+                        <Avatar className="h-5 w-5 shrink-0">
                           <AvatarFallback className="bg-primary-soft text-primary text-[9px] font-bold">
                             {lead.ownerName
                               .split(' ')
@@ -1241,7 +1241,7 @@ export const LeadsPage: React.FC = () => {
                               .join('')}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-xs text-txt-primary truncate max-w-[100px]">
+                        <span className="text-xs text-txt-primary font-medium whitespace-nowrap">
                           {lead.ownerName}
                         </span>
                       </div>
