@@ -1856,158 +1856,177 @@ export const InvoicesPage: React.FC = () => {
         </div>
       )}
 
-      {/* Top Header & Quick Actions Bar */}
-      <div className="no-print bg-[#0B0F19] text-white p-4 sm:p-5 rounded-2xl shadow-xl border border-slate-800/80">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+      {/* Top Header & Ergonomic Studio Command Bar */}
+      <div className="no-print bg-white rounded-2xl shadow-sm border border-slate-200/90 p-4 sm:p-5 space-y-3.5">
+        {/* Tier 1: Identity & View Switcher */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3.5">
           <div className="flex items-center gap-3.5">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#57B71B] to-[#449414] text-white shadow-md shadow-[#57B71B]/20 shrink-0">
               <CreditCard className="h-5 w-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-base sm:text-xl font-extrabold text-white tracking-tight leading-tight">
+                <h1 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight leading-tight">
                   Digitechzo <span className="text-[#57B71B]">Invoice Studio</span>
                 </h1>
-                <span className="inline-block px-2.5 py-0.5 text-[9.5px] font-bold tracking-wider rounded-full bg-[#57B71B]/15 text-[#57B71B] border border-[#57B71B]/30">
-                  PRO BILLING ENGINE
+                <span className="inline-flex items-center px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {meta.number || 'INV-001'}
+                </span>
+                <span
+                  className={`inline-flex items-center px-2 py-0.5 text-[9.5px] font-bold rounded-full border ${
+                    meta.status === 'PAID'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                      : meta.status === 'PARTIALLY_PAID'
+                      ? 'bg-amber-50 text-amber-700 border-amber-200'
+                      : meta.status === 'UNPAID'
+                      ? 'bg-rose-50 text-rose-700 border-rose-200'
+                      : 'bg-slate-100 text-slate-600 border-slate-200'
+                  }`}
+                >
+                  {meta.status}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Design, customize & dispatch modern tax-compliant invoices
               </p>
             </div>
           </div>
 
-          {/* Controls: View Switcher + Actions */}
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-            {/* View Mode Switcher (Editor | Split | Preview) */}
-            <div className="inline-flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-800 shadow-inner">
-              <button
-                type="button"
-                onClick={() => setStudioViewMode('editor')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  studioViewMode === 'editor'
-                    ? 'bg-[#57B71B] text-white shadow-xs font-bold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <Layout className="h-3.5 w-3.5" />
-                <span>Editor</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setStudioViewMode('split')}
-                className={`hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  studioViewMode === 'split'
-                    ? 'bg-[#57B71B] text-white shadow-xs font-bold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <Columns className="h-3.5 w-3.5" />
-                <span>Split View</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setStudioViewMode('preview')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  studioViewMode === 'preview'
-                    ? 'bg-[#57B71B] text-white shadow-xs font-bold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <FileText className="h-3.5 w-3.5" />
-                <span>Preview</span>
-              </button>
-            </div>
+          {/* View Mode Switcher (Editor | Split View | Preview) */}
+          <div className="inline-flex items-center bg-slate-100/90 p-1 rounded-xl border border-slate-200 shadow-2xs self-start md:self-auto">
+            <button
+              type="button"
+              onClick={() => setStudioViewMode('editor')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                studioViewMode === 'editor'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+            >
+              <Layout className={`h-3.5 w-3.5 ${studioViewMode === 'editor' ? 'text-[#57B71B]' : 'text-slate-400'}`} />
+              <span>Editor</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudioViewMode('split')}
+              className={`hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                studioViewMode === 'split'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+            >
+              <Columns className={`h-3.5 w-3.5 ${studioViewMode === 'split' ? 'text-[#57B71B]' : 'text-slate-400'}`} />
+              <span>Split View</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudioViewMode('preview')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                studioViewMode === 'preview'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+            >
+              <FileText className={`h-3.5 w-3.5 ${studioViewMode === 'preview' ? 'text-[#57B71B]' : 'text-slate-400'}`} />
+              <span>Preview</span>
+            </button>
+          </div>
+        </div>
 
-            {/* Action Buttons Toolbar */}
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              {/* Primary: Download PDF */}
-              <button
-                type="button"
-                onClick={handleDownloadPdf}
-                disabled={isExportingPdf}
-                className="flex items-center justify-center gap-1.5 h-9 px-3.5 rounded-xl text-xs font-bold bg-[#57B71B] hover:bg-[#49a016] text-white shadow-sm shadow-[#57B71B]/25 active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
-              >
-                {isExportingPdf ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Download className="h-3.5 w-3.5" />
-                )}
-                <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
-              </button>
+        {/* Tier 2: Grouped Ergonomic Action Toolbar */}
+        <div className="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t border-slate-100">
+          {/* Left: Export Actions Group */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            {/* Primary: Download PDF */}
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={isExportingPdf}
+              className="flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl text-xs font-bold bg-[#57B71B] hover:bg-[#49a016] text-white shadow-sm shadow-[#57B71B]/25 active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+            >
+              {isExportingPdf ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Download className="h-3.5 w-3.5" />
+              )}
+              <span>{isExportingPdf ? 'Exporting...' : 'Download PDF'}</span>
+            </button>
 
-              {/* PNG */}
-              <button
-                type="button"
-                onClick={handleDownloadImage}
-                disabled={isExportingImage}
-                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
-              >
-                {isExportingImage ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Download className="h-3.5 w-3.5" />
-                )}
-                <span>PNG</span>
-              </button>
+            {/* PNG */}
+            <button
+              type="button"
+              onClick={handleDownloadImage}
+              disabled={isExportingImage}
+              className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-2xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+            >
+              {isExportingImage ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Download className="h-3.5 w-3.5 text-slate-500" />
+              )}
+              <span>PNG</span>
+            </button>
 
-              {/* Print */}
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
-              >
-                <Printer className="h-3.5 w-3.5 text-slate-300" />
-                <span>Print</span>
-              </button>
+            {/* Print */}
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-2xs active:scale-95 transition-all cursor-pointer shrink-0"
+            >
+              <Printer className="h-3.5 w-3.5 text-slate-500" />
+              <span>Print</span>
+            </button>
+          </div>
 
-              {/* Save */}
-              <button
-                type="button"
-                onClick={() => handleSaveInvoice()}
-                disabled={isSavingInvoice}
-                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
-              >
-                <Bookmark className="h-3.5 w-3.5 text-[#57B71B]" />
-                <span>{isSavingInvoice ? 'Saving...' : 'Save'}</span>
-              </button>
+          {/* Right: Save & History Group */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            {/* Save */}
+            <button
+              type="button"
+              onClick={() => handleSaveInvoice()}
+              disabled={isSavingInvoice}
+              className="flex items-center justify-center gap-1.5 h-9 px-3.5 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 border border-emerald-200/90 shadow-2xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+            >
+              <Bookmark className="h-3.5 w-3.5 text-[#57B71B]" />
+              <span>{isSavingInvoice ? 'Saving...' : 'Save Invoice'}</span>
+            </button>
 
-              {/* Draft */}
-              <button
-                type="button"
-                onClick={() => handleSaveInvoice('DRAFT')}
-                disabled={isSavingInvoice}
-                className="flex items-center justify-center h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
-              >
-                <span>Draft</span>
-              </button>
+            {/* Draft */}
+            <button
+              type="button"
+              onClick={() => handleSaveInvoice('DRAFT')}
+              disabled={isSavingInvoice}
+              className="flex items-center justify-center h-9 px-3 rounded-xl text-xs font-medium bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 shadow-2xs active:scale-95 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+            >
+              <span>Draft</span>
+            </button>
 
-              {/* History */}
-              <button
-                type="button"
-                onClick={() => setIsHistoryModalOpen(true)}
-                className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-medium bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
-              >
-                <FolderOpen className="h-3.5 w-3.5 text-[#57B71B]" />
-                <span>History</span>
-                {savedInvoices.length > 0 && (
-                  <span className="ml-0.5 px-1.5 py-0.2 text-[9.5px] font-bold rounded-full bg-[#57B71B] text-white">
-                    {savedInvoices.length}
-                  </span>
-                )}
-              </button>
+            <div className="h-4 w-px bg-slate-200 mx-0.5 hidden sm:block" />
 
-              {/* Reset */}
-              <button
-                type="button"
-                onClick={handleResetForm}
-                className="flex items-center justify-center h-9 w-9 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700/80 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
-                title="Reset Form"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-              </button>
-            </div>
+            {/* History */}
+            <button
+              type="button"
+              onClick={() => setIsHistoryModalOpen(true)}
+              className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-2xs active:scale-95 transition-all cursor-pointer shrink-0"
+            >
+              <FolderOpen className="h-3.5 w-3.5 text-[#57B71B]" />
+              <span>History</span>
+              {savedInvoices.length > 0 && (
+                <span className="ml-0.5 px-1.5 py-0.2 text-[9.5px] font-bold rounded-full bg-[#57B71B] text-white">
+                  {savedInvoices.length}
+                </span>
+              )}
+            </button>
+
+            {/* Reset */}
+            <button
+              type="button"
+              onClick={handleResetForm}
+              className="flex items-center justify-center h-9 w-9 rounded-xl bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200 shadow-2xs active:scale-95 transition-all cursor-pointer shrink-0"
+              title="Reset Form"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+            </button>
           </div>
         </div>
       </div>
@@ -2467,13 +2486,15 @@ export const InvoicesPage: React.FC = () => {
           </details>
 
           {/* Card 4: Items & Description */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <ListChecks className="h-4 w-4 text-emerald-500" />
-                <span>Invoice Items & Services ({items.length})</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <ListChecks className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Invoice Items & Services ({items.length})</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
             <div className="p-3.5 space-y-3 text-xs">
               {/* Invoice Column Settings (Admin / User management) */}
@@ -2970,13 +2991,15 @@ export const InvoicesPage: React.FC = () => {
           </details>
 
           {/* Card 5: Payment Options (Bank, UPI & Crypto) */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <Wallet className="h-4 w-4 text-amber-500" />
-                <span>Payment Methods (Bank, UPI & Crypto)</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <Wallet className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Payment Methods (Bank, UPI & Crypto)</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
             <div className="p-3.5 space-y-3 text-xs">
               {/* Payment Tab Selector to Edit Details & Switch Active View */}
@@ -4269,13 +4292,15 @@ export const InvoicesPage: React.FC = () => {
           </details>
 
           {/* Card 6: Financial Adjustments (Tax & Discounts) */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <Calculator className="h-4 w-4 text-indigo-600" />
-                <span>Tax, Discount & Financial Adjustments</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <Calculator className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Tax, Discount & Financial Adjustments</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
             <div className="p-3.5 space-y-3 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -4336,13 +4361,15 @@ export const InvoicesPage: React.FC = () => {
           </details>
 
           {/* Card 7: Separated Notes & Terms Control */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <MessageSquare className="h-4 w-4 text-indigo-600" />
-                <span>Notes & Terms of Service (Separated)</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <MessageSquare className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Notes & Terms of Service (Separated)</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
             <div className="p-3.5 space-y-4 text-xs">
               {/* SECTION 1: NOTE: CONTROL */}
@@ -4605,13 +4632,15 @@ export const InvoicesPage: React.FC = () => {
           </details>
 
           {/* Card 8: Team & Authorized Signatory Control */}
-          <details open className="group rounded-card border border-border bg-white shadow-xs overflow-hidden">
-            <summary className="flex items-center justify-between p-3.5 bg-slate-50 border-b border-border font-bold text-xs text-txt-primary cursor-pointer hover:bg-slate-100 transition-colors list-none">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-indigo-600" />
-                <span>Team & Authorized Signatory</span>
+          <details open className="group rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden transition-all hover:border-slate-300">
+            <summary className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-200/90 font-bold text-xs text-slate-800 cursor-pointer hover:bg-slate-100/70 transition-colors list-none select-none">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#57B71B]/10 text-[#57B71B] flex items-center justify-center shrink-0">
+                  <Users className="h-4 w-4" />
+                </div>
+                <span className="text-xs font-bold text-slate-800 tracking-tight">Team & Authorized Signatory</span>
               </div>
-              <span className="text-[10px] text-txt-muted group-open:rotate-180 transition-transform">▼</span>
+              <ChevronDown className="h-4 w-4 text-slate-400 group-open:rotate-180 transition-transform duration-200" />
             </summary>
             <div className="p-3.5 space-y-3 text-xs">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
@@ -4980,15 +5009,6 @@ export const InvoicesPage: React.FC = () => {
               id="invoiceDocument"
               className="bg-white rounded-2xl border border-slate-200/90 shadow-xl p-5 sm:p-8 w-full max-w-full min-w-0 print:!min-w-0 print:!min-h-0 print:!h-auto print:!p-0 print:!m-0 print:!border-none print:!shadow-none flex flex-col justify-between relative font-sans text-slate-800"
             >
-              {/* Draft Watermark Badge */}
-              {meta.status === 'DRAFT' && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-10">
-                  <span className="text-8xl font-black text-rose-500/10 -rotate-30 tracking-widest uppercase">
-                    DRAFT
-                  </span>
-                </div>
-              )}
-
               {/* 1. Header: Brand Info & Invoice Title */}
               <div className="invoice-header grid grid-cols-12 gap-4 items-start pb-2 relative">
                 {/* Left (7 Cols): Brand & Sender Profile */}
