@@ -688,7 +688,7 @@ export const MeetingsPage: React.FC = () => {
       />
 
       {/* 2. Metric Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
         <MetricCard
           label="Total Sessions"
           value={meetings.length}
@@ -997,18 +997,19 @@ export const MeetingsPage: React.FC = () => {
                         href={normalizeMeetingUrl(m.meetingUrl)}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn hover:border-[#57B71B] transition-colors"
+                        title={m.meetingUrl}
+                        className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn hover:border-[#57B71B] transition-colors min-w-0 max-w-full overflow-hidden"
                       >
                         <Video className="h-3.5 w-3.5 text-primary shrink-0" />
-                        <span className="truncate font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]">
+                        <span className="truncate min-w-0 flex-1 font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]">
                           {m.meetingUrl}
                         </span>
                         <ExternalLink className="h-2.5 w-2.5 text-txt-muted ml-auto shrink-0" />
                       </a>
                     ) : (
-                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
+                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn min-w-0 max-w-full overflow-hidden" title={m.meetingUrl}>
                         <MapPin className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                        <span className="truncate text-[11px] text-txt-secondary">
+                        <span className="truncate min-w-0 flex-1 text-[11px] text-txt-secondary">
                           {m.meetingUrl}
                         </span>
                       </div>
@@ -1088,22 +1089,23 @@ export const MeetingsPage: React.FC = () => {
                   (() => {
                     const platform = getMeetingPlatformInfo(m.meetingUrl);
                     return platform.isOnline ? (
-                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
+                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn min-w-0 max-w-full overflow-hidden">
                         <Video className="h-3.5 w-3.5 text-primary shrink-0" />
                         <a
                           href={normalizeMeetingUrl(m.meetingUrl)}
                           target="_blank"
                           rel="noreferrer"
-                          className="truncate font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]"
+                          title={m.meetingUrl}
+                          className="truncate min-w-0 flex-1 font-mono text-[11px] text-txt-secondary hover:text-[#57B71B]"
                         >
                           {m.meetingUrl.replace(/^https?:\/\//, '')}
                         </a>
                         <ExternalLink className="h-2.5 w-2.5 text-txt-muted ml-auto shrink-0" />
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn">
+                      <div className="flex items-center gap-2 text-xs bg-slate-50 border border-border p-2 rounded-btn min-w-0 max-w-full overflow-hidden" title={m.meetingUrl}>
                         <MapPin className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                        <span className="truncate text-[11px] text-txt-secondary">
+                        <span className="truncate min-w-0 flex-1 text-[11px] text-txt-secondary">
                           {m.meetingUrl}
                         </span>
                       </div>

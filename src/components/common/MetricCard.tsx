@@ -52,22 +52,28 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       )}
       onClick={onClick}
     >
-      <CardContent className="p-3.5 sm:p-4 flex items-center justify-between">
-        <div className="space-y-0.5 min-w-0">
-          <p className="text-[11px] font-semibold text-txt-muted uppercase tracking-wider truncate">
+      <CardContent className="p-2.5 sm:p-4 flex items-center justify-between gap-1.5 sm:gap-2">
+        <div className="space-y-0.5 min-w-0 flex-1">
+          <p
+            title={label}
+            className="text-[10px] sm:text-[11px] font-semibold text-txt-muted uppercase tracking-tight leading-tight line-clamp-1 xs:line-clamp-2 break-words"
+          >
             {label}
           </p>
-          <div className="text-xl sm:text-2xl font-bold tracking-tight text-txt-primary tabular-nums">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight text-txt-primary tabular-nums leading-tight">
             {value}
           </div>
           {subtext && (
-            <p className={cn("text-[11px] font-medium truncate", subtextVariantClasses[subtextVariant])}>
+            <p
+              title={subtext}
+              className={cn("text-[10px] sm:text-[11px] font-medium leading-tight line-clamp-1 xs:line-clamp-2 break-words", subtextVariantClasses[subtextVariant])}
+            >
               {subtext}
             </p>
           )}
         </div>
         {Icon && (
-          <div className={cn("flex h-9 w-9 items-center justify-center rounded-btn shrink-0 ml-3", iconColors.bg, iconColors.text)}>
+          <div className={cn("hidden min-[360px]:flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-btn shrink-0 ml-1.5 sm:ml-3", iconColors.bg, iconColors.text)}>
             <Icon className="h-4 w-4" />
           </div>
         )}

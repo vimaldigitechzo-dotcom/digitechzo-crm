@@ -868,7 +868,7 @@ export const LeadsPage: React.FC = () => {
       )}
 
       {/* 2. Interactive Lead Metric Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
         <MetricCard
           label="Total Ingested"
           value={leads.length}
@@ -1003,29 +1003,31 @@ export const LeadsPage: React.FC = () => {
                 <div
                   key={lead.id}
                   className={cn(
-                    "p-3.5 space-y-2.5 bg-white transition-all cursor-pointer hover:bg-slate-50/80 active:bg-slate-100",
+                    "p-3 sm:p-3.5 space-y-2 bg-white transition-all cursor-pointer hover:bg-slate-50/80 active:bg-slate-100 min-w-0 overflow-hidden",
                     isRecentlyCreated && "bg-emerald-50/80 ring-1 ring-[#57B71B]/30"
                   )}
                   onClick={() => navigate(`/leads/${lead.id}`)}
                 >
                   {/* Row 1: Name + Status + Score + Actions */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-0.5 min-w-0">
+                  <div className="flex items-start justify-between gap-2 min-w-0">
+                    <div className="space-y-0.5 min-w-0 flex-1 overflow-hidden">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-xs text-txt-primary leading-tight">
+                        <span className="font-bold text-xs text-txt-primary leading-tight break-words" title={lead.fullName}>
                           {lead.fullName}
                         </span>
                         {isRecentlyCreated && (
-                          <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#57B71B] text-white">
+                          <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#57B71B] text-white shrink-0">
                             NEW
                           </span>
                         )}
                         <StatusBadge status={lead.status} type="lead" />
                       </div>
-                      <div className="text-[11px] text-txt-muted flex items-center gap-1">
+                      <div className="text-[11px] text-txt-muted flex items-center gap-1 min-w-0 overflow-hidden">
                         <Building className="h-3 w-3 text-txt-muted shrink-0" />
-                        <span className="truncate">{lead.companyName || 'Individual'}</span>
-                        {lead.title && <span>&bull; {lead.title}</span>}
+                        <span className="truncate min-w-0 flex-1" title={lead.companyName || 'Individual'}>
+                          {lead.companyName || 'Individual'}
+                        </span>
+                        {lead.title && <span className="shrink-0 text-txt-muted/70">&bull; {lead.title}</span>}
                       </div>
                     </div>
 
@@ -1060,11 +1062,11 @@ export const LeadsPage: React.FC = () => {
                   </div>
 
                   {/* Row 2: Contact Phone & Email */}
-                  <div className="flex items-center gap-3 text-xs flex-wrap" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex items-center gap-3 text-xs flex-wrap min-w-0" onClick={(e) => e.stopPropagation()}>
                     {lead.phone && (
                       <a
                         href={`tel:${lead.phone.replace(/[^0-9+]/g, '')}`}
-                        className="inline-flex items-center gap-1 font-semibold text-slate-800 hover:text-[#57B71B] transition-colors"
+                        className="inline-flex items-center gap-1 font-semibold text-slate-800 hover:text-[#57B71B] transition-colors shrink-0"
                       >
                         <Phone className="h-3 w-3 text-slate-400 shrink-0" />
                         <span className="tabular-nums">{lead.phone}</span>
@@ -1073,17 +1075,21 @@ export const LeadsPage: React.FC = () => {
                     {lead.email && (
                       <a
                         href={`mailto:${lead.email}`}
-                        className="inline-flex items-center gap-1 text-[11px] text-txt-muted hover:text-[#57B71B] truncate max-w-[180px]"
+                        title={lead.email}
+                        className="inline-flex items-center gap-1 text-[11px] text-txt-muted hover:text-[#57B71B] truncate max-w-full min-w-0"
                       >
                         <Mail className="h-2.5 w-2.5 text-slate-400 shrink-0" />
-                        <span className="truncate">{lead.email}</span>
+                        <span className="truncate min-w-0">{lead.email}</span>
                       </a>
                     )}
                   </div>
 
                   {/* Row 3: Category & Source */}
-                  <div className="flex items-center justify-between text-xs gap-2 pt-1 border-t border-slate-100">
-                    <span className="text-[11px] text-txt-secondary truncate" title={lead.serviceInterest}>
+                  <div className="flex items-center justify-between text-xs gap-2 pt-1 border-t border-slate-100 min-w-0">
+                    <span
+                      className="text-[11px] text-txt-secondary line-clamp-1 break-words min-w-0 flex-1"
+                      title={lead.serviceInterest}
+                    >
                       {lead.serviceInterest}
                     </span>
                     <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-semibold bg-slate-100 text-txt-secondary border border-border shrink-0">
@@ -1092,22 +1098,22 @@ export const LeadsPage: React.FC = () => {
                   </div>
 
                   {/* Row 4: Owner & Next Action */}
-                  <div className="flex items-center justify-between text-[11px] gap-2 pt-0.5">
-                    <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="flex items-center justify-between text-[11px] gap-2 pt-0.5 min-w-0">
+                    <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden" title={`Owner: ${lead.ownerName}`}>
                       <Avatar className="h-4.5 w-4.5 shrink-0">
                         <AvatarFallback className="bg-primary-soft text-primary text-[8px] font-bold">
                           {lead.ownerName.split(' ').map((n: string) => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-txt-muted truncate">{lead.ownerName}</span>
+                      <span className="text-txt-muted truncate min-w-0">{lead.ownerName}</span>
                     </div>
 
                     {lead.nextAction ? (
-                      <div className="text-right text-[10px] text-[#57B71B] font-semibold truncate shrink-0">
+                      <div className="text-right text-[10px] text-[#57B71B] font-semibold truncate shrink-0 max-w-[55%]">
                         Next: {lead.nextAction.actionType} ({lead.nextAction.time || formatDate(lead.nextAction.date)})
                       </div>
                     ) : (
-                      <span className="text-[10px] text-txt-muted">No action scheduled</span>
+                      <span className="text-[10px] text-txt-muted shrink-0">No action scheduled</span>
                     )}
                   </div>
                 </div>
