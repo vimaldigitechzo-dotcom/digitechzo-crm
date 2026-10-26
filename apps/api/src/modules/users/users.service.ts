@@ -159,8 +159,10 @@ export class UsersService {
       organizationId: user.organizationId,
     };
 
-    if (query.status) {
+    if (query.status && query.status.toUpperCase() !== 'ALL') {
       where.status = query.status.toUpperCase();
+    } else if (!query.status) {
+      where.status = 'ACTIVE';
     }
 
     if (query.role) {
@@ -388,22 +390,33 @@ export class UsersService {
       throw new NotFoundException(`User with ID '${id}' not found in this organization`);
     }
 
-    await this.prisma.user.update({
-      where: { id },
-      data: { status: 'INACTIVE' },
-    });
+    if (existing.id === user.userId) {
+      throw new BadRequestException('Cannot delete your own account');
+    }
+
+    try {
+      await this.prisma.user.delete({
+        where: { id },
+      });
+    } catch {
+      await this.prisma.user.update({
+        where: { id },
+        data: { status: 'INACTIVE' },
+      });
+    }
 
     await this.auditService.record({
       organizationId: user.organizationId,
       userId: user.userId,
-      action: 'USER_DEACTIVATED',
+      action: 'USER_DELETED',
       resource: 'users',
       resourceId: id,
       details: {
-        previousStatus: existing.status,
+        email: existing.email,
+        name: existing.name,
       },
     });
 
-    return { message: 'User account deactivated successfully' };
+    return { message: 'User account deleted successfully' };
   }
 }

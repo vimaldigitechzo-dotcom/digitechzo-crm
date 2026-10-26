@@ -169,8 +169,9 @@ export const TeamPage: React.FC = () => {
       list = usersQuery.data?.data || [];
     }
 
-    // Completely remove and exclude the specified account
+    // Filter out inactive/deleted members
     return list.filter((m) => {
+      if (m.status === 'INACTIVE' || m.status === 'DELETED') return false;
       if (removedUserIds.includes(m.id)) return false;
       if (m.id === '121fc497-45c4-4096-9cb0-add599bcb1c6') return false;
       if (m.email?.toLowerCase() === 'vimaldigitechzo@gmail.com') return false;

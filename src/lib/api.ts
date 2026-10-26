@@ -1,9 +1,20 @@
 import { AuthSession, User } from '@/types/auth';
 
 const STORAGE_KEY = 'digitechzo_auth_session';
-// Target local backend API server directly (defaults to local PostgreSQL backend on port 4000)
-const rawEnvUrl = (import.meta as any)?.env?.VITE_API_URL || 'http://localhost:4000';
-const RAW_API_URL = String(rawEnvUrl).replace(/\/+$/, '');
+const isLocalhost = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.endsWith('.local')
+);
+
+// If running in browser on production domain (e.g. digitechzo-crm.vercel.app), ALWAYS route to Cloud Render API
+// If running on localhost, route to local backend on port 4000
+const rawEnvUrl = (import.meta as any)?.env?.VITE_API_URL;
+const targetUrl = (!isLocalhost && rawEnvUrl && rawEnvUrl.includes('localhost'))
+  ? 'https://digitechzo-crm-api.onrender.com'
+  : (isLocalhost ? 'http://localhost:4000' : (rawEnvUrl || 'https://digitechzo-crm-api.onrender.com'));
+
+const RAW_API_URL = String(targetUrl).replace(/\/+$/, '');
 const API_BASE_URL = `${RAW_API_URL}/api/v1`;
 
 export class ApiError extends Error {
