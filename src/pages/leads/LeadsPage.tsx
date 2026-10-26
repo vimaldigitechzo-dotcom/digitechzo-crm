@@ -154,7 +154,9 @@ export const LeadsPage: React.FC = () => {
   } = useQuery({
     queryKey: ['leads'],
     queryFn: () => crmApi.getLeads({ limit: 100 }),
-    staleTime: 30000,
+    staleTime: 2000,
+    refetchInterval: 4000,
+    refetchOnWindowFocus: true,
   });
 
   const rawLeads: any[] = leadsResponse?.items || leadsResponse?.data || [];

@@ -53,21 +53,29 @@ export const DashboardPage: React.FC = () => {
   const { data: leadsData, isLoading: leadsLoading } = useQuery({
     queryKey: ['dashboard-leads'],
     queryFn: () => crmApi.getLeads({ limit: 10 }),
+    refetchInterval: 5000,
+    refetchOnWindowFocus: true,
   });
 
   const { data: dealsData, isLoading: dealsLoading } = useQuery({
     queryKey: ['dashboard-deals'],
     queryFn: () => crmApi.getDeals({ limit: 50 }),
+    refetchInterval: 5000,
+    refetchOnWindowFocus: true,
   });
 
   const { data: tasksData, isLoading: tasksLoading } = useQuery({
     queryKey: ['dashboard-tasks'],
     queryFn: () => crmApi.getTasks({ limit: 10 }),
+    refetchInterval: 5000,
+    refetchOnWindowFocus: true,
   });
 
   const { data: activitiesData, isLoading: activitiesLoading } = useQuery({
     queryKey: ['dashboard-activities'],
     queryFn: () => crmApi.getActivities({ limit: 10 }),
+    refetchInterval: 5000,
+    refetchOnWindowFocus: true,
   });
 
   const leads: any[] = leadsData?.items || leadsData?.data || [];
