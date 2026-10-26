@@ -17,7 +17,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "ts-node prisma/seed.ts"
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@nestjs/cli": "^10.4.9",

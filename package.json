@@ -12,7 +12,8 @@
     "backend:start": "npm --prefix apps/api run start:dev",
     "backend:start:prod": "npm --prefix apps/api run start:prod",
     "backend:test": "npm --prefix apps/api test",
-    "backend:typecheck": "npm --prefix apps/api run typecheck"
+    "backend:typecheck": "npm --prefix apps/api run typecheck",
+    "prisma:studio": "npm --prefix apps/api run prisma:studio"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

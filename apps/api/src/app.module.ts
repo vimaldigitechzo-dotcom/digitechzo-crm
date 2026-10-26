@@ -36,7 +36,7 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
       isGlobal: true,
       load: [appConfig, authConfig, databaseConfig],
       validate,
-      envFilePath: ['.env'],
+      envFilePath: ['apps/api/.env', '.env'],
     }),
     PrismaModule,
     AuditModule,

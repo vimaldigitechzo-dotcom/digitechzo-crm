@@ -663,6 +663,12 @@ export const LeadDetailPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await crmApi.deleteLead(id);
+      queryClient.removeQueries({ queryKey: ['lead', id] });
+      queryClient.invalidateQueries({ queryKey: ['crm-directory-leads'] });
+      queryClient.invalidateQueries({ queryKey: ['crm-directory-customers'] });
+      queryClient.invalidateQueries({ queryKey: ['deals'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['meetings'] });
       await queryClient.invalidateQueries({ queryKey: ['leads'] });
       navigate('/leads');
     } catch (err: any) {

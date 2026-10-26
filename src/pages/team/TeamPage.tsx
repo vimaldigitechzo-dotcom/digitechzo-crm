@@ -265,6 +265,12 @@ export const TeamPage: React.FC = () => {
       return;
     }
 
+    const cleanPhone = inviteForm.phone.replace(/\D/g, '');
+    if (inviteForm.phone.trim() && cleanPhone.length !== 10) {
+      setFormError(`Phone number must be exactly 10 digits if provided (${cleanPhone.length}/10 entered).`);
+      return;
+    }
+
     const pwd = inviteForm.password;
     if (!pwd || !pwd.trim()) {
       setFormError('Initial password is required (*).');
@@ -993,17 +999,48 @@ export const TeamPage: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
-                  <span>Phone</span>
-                  <span className="text-[10px] font-normal text-txt-muted">Optional</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-txt-primary flex items-center">
+                    <span>Phone Number</span>
+                    <span className="text-[10px] font-normal text-txt-muted ml-1.5">(Optional)</span>
+                  </label>
+                  <span className="text-[10px] text-txt-muted tabular-nums">
+                    {inviteForm.phone.length}/10 digits
+                  </span>
+                </div>
                 <Input
+                  type="tel"
                   value={inviteForm.phone}
-                  onChange={(e) => setInviteForm({ ...inviteForm, phone: e.target.value })}
-                  placeholder="+919812345678"
-                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
+                  onChange={(e) => {
+                    const cleaned = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setInviteForm({ ...inviteForm, phone: cleaned });
+                  }}
+                  maxLength={10}
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  title="Phone number must be exactly 10 digits"
+                  placeholder="e.g. 9876543210 (10 digits)"
+                  className={`h-8 text-xs rounded-lg transition-colors ${
+                    inviteForm.phone.length === 10
+                      ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500'
+                      : 'border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]'
+                  }`}
                   autoComplete="off"
                 />
+                <div className="text-[11px] pt-0.5">
+                  {inviteForm.phone.length > 0 && inviteForm.phone.length < 10 ? (
+                    <span className="text-amber-600 font-medium">
+                      Only 10 digits allowed ({inviteForm.phone.length}/10 entered)
+                    </span>
+                  ) : inviteForm.phone.length === 10 ? (
+                    <span className="text-emerald-600 font-medium flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3 inline shrink-0" />
+                      Valid 10-digit number
+                    </span>
+                  ) : (
+                    <span className="text-txt-muted">Only 10 digits allowed (no symbols)</span>
+                  )}
+                </div>
               </div>
             </div>
 

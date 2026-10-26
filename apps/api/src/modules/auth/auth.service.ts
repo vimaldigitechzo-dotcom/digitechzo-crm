@@ -119,10 +119,10 @@ export class AuthService {
     };
     const accessToken = this.jwtService.sign(jwtPayload);
 
-    // Issue and persist 7d rotating Refresh Token
+    // Issue and persist 2d rotating Refresh Token
     const rawRefreshToken = this.generateSecureToken();
     const tokenHash = this.hashToken(rawRefreshToken);
-    const refreshDays = this.configService.get<number>('auth.refreshExpirationDays') || 7;
+    const refreshDays = this.configService.get<number>('auth.refreshExpirationDays') || 2;
     const expiresAt = new Date(Date.now() + refreshDays * 24 * 60 * 60 * 1000);
 
     await this.prisma.refreshToken.create({
@@ -150,7 +150,7 @@ export class AuthService {
     return {
       accessToken,
       refreshToken: rawRefreshToken,
-      expiresIn: 30 * 24 * 60 * 60, // 30 days (2,592,000 seconds)
+      expiresIn: 2 * 24 * 60 * 60, // 2 days (172,800 seconds)
       user: {
         id: user.id,
         name: user.name,
@@ -244,7 +244,7 @@ export class AuthService {
     // 2. Generate new refresh token
     const newRawRefreshToken = this.generateSecureToken();
     const newTokenHash = this.hashToken(newRawRefreshToken);
-    const refreshDays = this.configService.get<number>('auth.refreshExpirationDays') || 7;
+    const refreshDays = this.configService.get<number>('auth.refreshExpirationDays') || 2;
     const newExpiresAt = new Date(Date.now() + refreshDays * 24 * 60 * 60 * 1000);
 
     await this.prisma.refreshToken.create({
@@ -286,7 +286,7 @@ export class AuthService {
     return {
       accessToken: newAccessToken,
       refreshToken: newRawRefreshToken,
-      expiresIn: 30 * 24 * 60 * 60, // 30 days
+      expiresIn: 2 * 24 * 60 * 60, // 2 days (172,800 seconds)
     };
   }
 

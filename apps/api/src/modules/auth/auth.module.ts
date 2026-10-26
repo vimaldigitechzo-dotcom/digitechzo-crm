@@ -20,7 +20,7 @@ import { MailModule } from '../mail/mail.module';
           configService.get<string>('auth.jwtSecret') ||
           'digitechzo_jwt_access_secret_super_secure_key_b1_2026',
         signOptions: {
-          expiresIn: configService.get<string>('auth.jwtExpiration') || '30d',
+          expiresIn: configService.get<string>('auth.jwtExpiration') || '2d',
         },
       }),
     }),

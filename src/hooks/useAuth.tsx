@@ -24,20 +24,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (existing && existing.user && existing.accessToken) {
       const isMockToken = typeof existing.accessToken === 'string' && existing.accessToken.startsWith('mock-');
       const isExpired = existing.expiresAt
-        ? new Date(existing.expiresAt).getTime() < Date.now()
-        : false;
+        ? new Date(existing.expiresAt).getTime() <= Date.now()
+        : true;
 
-      if (isMockToken) {
+      if (isMockToken || isExpired) {
         authStorage.clearSession();
         setSession(null);
-      } else if (!isExpired) {
-        setSession(existing);
-      } else if (existing.refreshToken && !existing.refreshToken.startsWith('mock-')) {
-        // Token expired but refreshToken exists; apiFetch will refresh on demand
-        setSession(existing);
+        if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+          window.location.href = '/login?expired=1';
+        }
       } else {
-        authStorage.clearSession();
-        setSession(null);
+        setSession(existing);
       }
     } else {
       setSession(null);

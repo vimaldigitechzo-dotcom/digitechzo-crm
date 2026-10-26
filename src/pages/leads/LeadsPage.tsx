@@ -21,8 +21,8 @@ import {
 } from '@/components/ui/dialog';
 import { crmApi } from '@/lib/api';
 import { Lead, LeadSource, TaskPriority, TaskActionType } from '@/types/crm';
-import { formatDate, cn } from '@/lib/utils';
-import { CategorySelect, LEAD_CATEGORIES } from '@/components/leads/CategorySelect';
+import { formatDate, getLocalDateString, cn } from '@/lib/utils';
+import { CategorySelect } from '@/components/leads/CategorySelect';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import {
   PlusCircle,
@@ -30,6 +30,7 @@ import {
   Upload,
   Building,
   Sparkles,
+  Calendar,
   X,
   ExternalLink,
   Edit,
@@ -80,11 +81,8 @@ export const LeadsPage: React.FC = () => {
     }
   };
 
-  // Add lead modal state
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newLeadForm, setNewLeadForm] = useState({
+  // Initial state helper for Add Lead Form with automated date & time
+  const getInitialLeadForm = () => ({
     fullName: '',
     companyName: '',
     title: '',
@@ -93,14 +91,20 @@ export const LeadsPage: React.FC = () => {
     source: 'WEBSITE_FORM' as LeadSource,
     priority: 'MEDIUM' as TaskPriority,
     temperature: '' as '' | 'HOT' | 'WARM' | 'COLD',
-    serviceInterest: LEAD_CATEGORIES[0] as string,
+    serviceInterest: '',
     ownerId: '',
     ownerName: '',
-    nextActionDate: '',
-    nextActionTime: '',
+    nextActionDate: getLocalDateString(),
+    nextActionTime: '10:00',
     nextActionType: 'CALL' as TaskActionType,
-    nextActionPurpose: '',
+    nextActionPurpose: 'Introductory discovery call & requirements discussion',
   });
+
+  // Add lead modal state
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newLeadForm, setNewLeadForm] = useState(getInitialLeadForm);
 
   // Edit lead modal state
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
@@ -133,7 +137,7 @@ export const LeadsPage: React.FC = () => {
 
   // Recently created lead highlight & banner state
   const [recentlyCreatedLeadId, setRecentlyCreatedLeadId] = useState<string | null>(null);
-  const [createdSuccessBanner, setCreatedSuccessBanner] = useState<{ id: string; name: string } | null>(null);
+  const [createdSuccessBanner, setCreatedSuccessBanner] = useState<{ id: string; name: string; date?: string } | null>(null);
 
   useEffect(() => {
     if (!recentlyCreatedLeadId) return;
@@ -234,7 +238,7 @@ export const LeadsPage: React.FC = () => {
 
   const uniqueCategories = useMemo(() => {
     const fromLeads = Array.from(new Set(leads.map((l) => l.serviceInterest).filter(Boolean)));
-    return Array.from(new Set([...LEAD_CATEGORIES, ...fromLeads]));
+    return fromLeads;
   }, [leads]);
 
   // Filtered leads
@@ -294,6 +298,98 @@ export const LeadsPage: React.FC = () => {
     return findDuplicateLeadByPhone(editForm.phone, editingLead.id);
   }, [editForm.phone, editingLead, leads]);
 
+  // Open Add Lead Modal with automated current date, time, and agenda
+  const handleOpenAddModal = () => {
+    setCreateError(null);
+    setNewLeadForm((prev) => ({
+      ...prev,
+      nextActionDate: prev.nextActionDate || getLocalDateString(),
+      nextActionTime: prev.nextActionTime || '10:00',
+      nextActionPurpose: prev.nextActionPurpose || 'Introductory discovery call & requirements discussion',
+    }));
+    setIsAddModalOpen(true);
+  };
+
+  // Automated generator to populate valid lead data instantly (with automated date & phone deduplication)
+  const handleAutoFillData = () => {
+    const sampleProfiles = [
+      {
+        fullName: 'Rajesh Kumar',
+        companyName: 'Acme Tech Solutions Pvt Ltd',
+        title: 'Managing Director',
+        emailDomain: 'acmetech.in',
+        category: 'Custom Web Application Development',
+      },
+      {
+        fullName: 'Priya Sharma',
+        companyName: 'Innovatech Cloud Systems',
+        title: 'VP of Technology',
+        emailDomain: 'innovatech.co',
+        category: 'Cloud Modernization & AI Integration',
+      },
+      {
+        fullName: 'Karthik Raman',
+        companyName: 'Apex Dynamic Retailers',
+        title: 'Head of Operations',
+        emailDomain: 'apexretail.in',
+        category: 'Enterprise Software Solutions',
+      },
+      {
+        fullName: 'Ananya Desai',
+        companyName: 'NextGen Scale Labs',
+        title: 'Chief Technology Officer',
+        emailDomain: 'nextgenscale.io',
+        category: 'Mobile Application Development',
+      },
+      {
+        fullName: 'Siddharth Mehta',
+        companyName: 'FinVantage Solutions',
+        title: 'Product Director',
+        emailDomain: 'finvantage.in',
+        category: 'Digital Transformation & Consulting',
+      },
+    ];
+
+    const pick = sampleProfiles[Math.floor(Math.random() * sampleProfiles.length)];
+
+    // Generate unique 10-digit phone number that does not duplicate any existing lead
+    let uniquePhone = '';
+    for (let i = 0; i < 30; i++) {
+      const rand = Math.floor(10000000 + Math.random() * 90000000).toString();
+      const candidate = `98${rand}`;
+      if (!findDuplicateLeadByPhone(candidate)) {
+        uniquePhone = candidate;
+        break;
+      }
+    }
+    if (!uniquePhone) {
+      uniquePhone = `9876${Date.now().toString().slice(-6)}`;
+    }
+
+    const emailName = pick.fullName.toLowerCase().replace(/\s+/g, '.');
+    const cleanEmail = `${emailName}@${pick.emailDomain}`;
+    const todayDate = getLocalDateString();
+
+    setNewLeadForm({
+      fullName: pick.fullName,
+      companyName: pick.companyName,
+      title: pick.title,
+      phone: uniquePhone,
+      email: cleanEmail,
+      source: 'WEBSITE_FORM',
+      priority: 'MEDIUM',
+      temperature: 'WARM',
+      serviceInterest: pick.category,
+      ownerId: '',
+      ownerName: '',
+      nextActionDate: todayDate,
+      nextActionTime: '10:00',
+      nextActionType: 'CALL',
+      nextActionPurpose: 'Introductory discovery call & requirements discussion',
+    });
+    setCreateError(null);
+  };
+
   // Create Lead
   const handleAddLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -324,6 +420,12 @@ export const LeadsPage: React.FC = () => {
       return;
     }
 
+    const cleanCategory = newLeadForm.serviceInterest.trim();
+    if (!cleanCategory) {
+      setCreateError('Category / Service Interest is required. Please type or select a category.');
+      return;
+    }
+
     const cleanEmail = newLeadForm.email.trim()
       ? newLeadForm.email.trim().toLowerCase()
       : undefined;
@@ -339,7 +441,7 @@ export const LeadsPage: React.FC = () => {
         source: newLeadForm.source,
         priority: newLeadForm.priority || 'MEDIUM',
         temperature: newLeadForm.temperature ? (newLeadForm.temperature as 'HOT' | 'WARM' | 'COLD') : undefined,
-        serviceInterest: newLeadForm.serviceInterest.trim() || LEAD_CATEGORIES[0],
+        serviceInterest: cleanCategory,
         ownerId: newLeadForm.ownerId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(newLeadForm.ownerId)
           ? newLeadForm.ownerId
           : undefined,
@@ -383,32 +485,17 @@ export const LeadsPage: React.FC = () => {
         setSearchQuery('');
       }
 
-      // 3. Close modal & reset form
+      // 3. Close modal & reset form to automated defaults
       setIsAddModalOpen(false);
-      setNewLeadForm({
-        fullName: '',
-        companyName: '',
-        title: '',
-        phone: '',
-        email: '',
-        source: 'WEBSITE_FORM' as LeadSource,
-        priority: 'MEDIUM' as TaskPriority,
-        temperature: '' as '' | 'HOT' | 'WARM' | 'COLD',
-        serviceInterest: LEAD_CATEGORIES[0],
-        ownerId: '',
-        ownerName: '',
-        nextActionDate: '',
-        nextActionTime: '',
-        nextActionType: 'CALL' as TaskActionType,
-        nextActionPurpose: '',
-      });
+      setNewLeadForm(getInitialLeadForm());
 
-      // 4. Highlight new lead and show notification banner
+      // 4. Highlight new lead and show notification banner with registration date
       if (created?.id) {
         setRecentlyCreatedLeadId(created.id);
         setCreatedSuccessBanner({
           id: created.id,
           name: created.fullName,
+          date: formatDate(created.createdAt || new Date().toISOString()),
         });
       }
 
@@ -537,6 +624,13 @@ export const LeadsPage: React.FC = () => {
           total: Math.max(0, (old.total ?? prevItems.length) - 1),
         };
       });
+
+      queryClient.removeQueries({ queryKey: ['lead', deletingLead.id] });
+      queryClient.invalidateQueries({ queryKey: ['crm-directory-leads'] });
+      queryClient.invalidateQueries({ queryKey: ['crm-directory-customers'] });
+      queryClient.invalidateQueries({ queryKey: ['deals'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['meetings'] });
 
       setDeletingLead(null);
       queryClient.invalidateQueries({ queryKey: ['leads'], refetchType: 'active' });
@@ -827,10 +921,7 @@ export const LeadsPage: React.FC = () => {
             </div>
             <Button
               size="sm"
-              onClick={() => {
-                setCreateError(null);
-                setIsAddModalOpen(true);
-              }}
+              onClick={handleOpenAddModal}
               className="h-8 text-xs bg-[#57B71B] hover:bg-[#469815] text-white font-semibold cursor-pointer shadow-subtle shrink-0 ml-auto sm:ml-0"
             >
               <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
@@ -846,7 +937,7 @@ export const LeadsPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-[#57B71B] shrink-0" />
             <span>
-              Lead <strong className="font-semibold text-emerald-950">{createdSuccessBanner.name}</strong> created and added to the top of your list!
+              Lead <strong className="font-semibold text-emerald-950">{createdSuccessBanner.name}</strong> was registered on <span className="font-semibold text-emerald-900">{createdSuccessBanner.date || formatDate(new Date().toISOString())}</span> and added to the top of your list!
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -990,7 +1081,7 @@ export const LeadsPage: React.FC = () => {
               : 'Get started by creating your first prospective lead or importing from CSV.'
           }
           actionLabel={hasActiveFilters ? 'Clear Filters' : 'Add Lead'}
-          onAction={hasActiveFilters ? handleResetFilters : () => setIsAddModalOpen(true)}
+          onAction={hasActiveFilters ? handleResetFilters : handleOpenAddModal}
           className="bg-white"
         />
       ) : (
@@ -1028,6 +1119,15 @@ export const LeadsPage: React.FC = () => {
                           {lead.companyName || 'Individual'}
                         </span>
                         {lead.title && <span className="shrink-0 text-txt-muted/70">&bull; {lead.title}</span>}
+                      </div>
+                      <div className="text-[10px] text-slate-500 flex items-center gap-1 font-medium pt-0.5">
+                        <Calendar className="h-3 w-3 text-emerald-600 shrink-0" />
+                        <span>Registered: <strong className="text-slate-700 font-semibold">{formatDate(lead.createdAt)}</strong></span>
+                        {lead.createdAt && (
+                          <span className="text-[10px] text-txt-muted">
+                            ({new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -1126,13 +1226,14 @@ export const LeadsPage: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[200px]">Lead / Prospect</TableHead>
-                  <TableHead className="w-[180px]">Contact Info</TableHead>
+                  <TableHead className="w-[190px]">Lead / Prospect</TableHead>
+                  <TableHead className="w-[170px]">Contact Info</TableHead>
                   <TableHead className="w-[110px]">Source</TableHead>
                   <TableHead className="w-[130px]">Status & Score</TableHead>
-                  <TableHead className="w-[180px]">Category / Service</TableHead>
-                  <TableHead className="w-[140px]">Owner</TableHead>
-                  <TableHead className="min-w-[210px]">Next Action</TableHead>
+                  <TableHead className="w-[170px]">Category / Service</TableHead>
+                  <TableHead className="w-[130px]">Owner</TableHead>
+                  <TableHead className="w-[135px]">Registered Date</TableHead>
+                  <TableHead className="min-w-[200px]">Next Action</TableHead>
                   <TableHead className="w-[80px] text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -1166,6 +1267,10 @@ export const LeadsPage: React.FC = () => {
                             <span className="break-words font-normal">
                               {lead.companyName || 'Individual'}
                             </span>
+                          </span>
+                          <span className="text-[10px] text-slate-500 flex items-center gap-1 font-medium pt-0.5">
+                            <Calendar className="h-2.5 w-2.5 text-slate-400 shrink-0" />
+                            <span>Registered: {formatDate(lead.createdAt)}</span>
                           </span>
                         </div>
                       </TableCell>
@@ -1247,6 +1352,19 @@ export const LeadsPage: React.FC = () => {
                       </div>
                     </TableCell>
 
+                    {/* 6.5. Registered Date */}
+                    <TableCell>
+                      <div className="space-y-0.5 text-xs">
+                        <div className="font-semibold text-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+                          <Calendar className="h-3 w-3 text-emerald-600 shrink-0" />
+                          <span>{formatDate(lead.createdAt)}</span>
+                        </div>
+                        <span className="text-[10px] text-txt-muted block">
+                          {lead.createdAt ? new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}
+                        </span>
+                      </div>
+                    </TableCell>
+
                     {/* 7. Next Action */}
                     <TableCell>
                       {lead.nextAction ? (
@@ -1319,12 +1437,30 @@ export const LeadsPage: React.FC = () => {
       {/* MODAL: CREATE NEW LEAD */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
         <DialogContent className="w-full max-w-[calc(100vw-1.5rem)] sm:max-w-lg p-0 gap-0 overflow-hidden rounded-2xl border border-border bg-white shadow-xl">
-          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
-            <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
-              <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Create New Lead
-            </DialogTitle>
-            <DialogDescription className="text-xs text-txt-muted">
-              Record a new prospect inquiry and persist it to PostgreSQL
+          <DialogHeader className="shrink-0 sticky top-0 z-20 flex flex-col space-y-1.5 text-left border-b border-border px-4 py-3 sm:px-5 sm:py-3.5 bg-white pr-12 sm:pr-14">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <DialogTitle className="text-base font-bold text-txt-primary flex items-center gap-2">
+                <PlusCircle className="h-4 w-4 text-[#57B71B]" /> Create New Lead
+              </DialogTitle>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleAutoFillData}
+                disabled={isSubmitting}
+                className="h-6.5 px-2.5 text-[11px] font-semibold border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-800 transition-colors rounded-full flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                title="Automatically generate correct sample data for quick registration"
+              >
+                <Sparkles className="h-3 w-3 text-emerald-600" />
+                <span>Auto-Generate Data</span>
+              </Button>
+            </div>
+            <DialogDescription className="text-xs text-txt-muted flex items-center justify-between flex-wrap gap-1">
+              <span>Record a new prospect inquiry and persist it to PostgreSQL</span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <Calendar className="h-3 w-3 text-emerald-600" />
+                Registration Date: {formatDate(new Date().toISOString())}
+              </span>
             </DialogDescription>
           </DialogHeader>
 
@@ -1336,6 +1472,19 @@ export const LeadsPage: React.FC = () => {
                   <span className="font-medium leading-relaxed">{createError}</span>
                 </div>
               )}
+
+              {/* Automated Lead Registration Date Mention */}
+              <div className="flex items-center justify-between p-2 sm:p-2.5 rounded-btn bg-emerald-50/80 border border-emerald-200 text-xs">
+                <div className="flex items-center gap-2 text-emerald-900 font-medium flex-wrap">
+                  <Calendar className="h-4 w-4 text-emerald-600 shrink-0" />
+                  <span>Lead Registration Date:</span>
+                  <strong className="text-emerald-950 font-bold">{formatDate(new Date().toISOString())}</strong>
+                  <span className="text-[11px] text-emerald-700 font-normal hidden sm:inline">&bull; Automated timestamp</span>
+                </div>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-600 text-white shrink-0">
+                  Automated
+                </span>
+              </div>
 
             <div className="space-y-1">
               <label className="text-caption text-txt-secondary block font-medium">
@@ -1548,9 +1697,14 @@ export const LeadsPage: React.FC = () => {
 
             {/* Follow-up / Next Action Setting */}
             <div className="pt-2 border-t border-border/60 space-y-2">
-              <span className="text-caption font-semibold text-txt-primary block">
-                Next Follow-Up / Action (Optional)
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-caption font-semibold text-txt-primary block">
+                  Next Follow-Up / Action (Optional)
+                </span>
+                <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                  Automated Date & Time
+                </span>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
                 <div className="space-y-1">
@@ -1567,7 +1721,17 @@ export const LeadsPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] text-txt-muted block">Time (Optional)</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] text-txt-muted block">Time (Optional)</label>
+                    <button
+                      type="button"
+                      onClick={() => setNewLeadForm({ ...newLeadForm, nextActionTime: '10:00' })}
+                      className="text-[10px] text-emerald-700 hover:underline font-medium cursor-pointer"
+                      title="Set to 10:00 AM"
+                    >
+                      10:00 AM
+                    </button>
+                  </div>
                   <input
                     type="time"
                     value={newLeadForm.nextActionTime}

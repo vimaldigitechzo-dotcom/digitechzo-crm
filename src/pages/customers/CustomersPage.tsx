@@ -38,6 +38,7 @@ import {
   FileCheck2,
   Loader2,
   AlertCircle,
+  CheckCircle2,
   Trash2,
   Edit2,
 } from 'lucide-react';
@@ -256,6 +257,16 @@ export const CustomersPage: React.FC = () => {
       return;
     }
 
+    const phoneDigits = formState.contactPhone.replace(/\D/g, '');
+    if (phoneDigits.length !== 10) {
+      setFormError(
+        phoneDigits.length === 0
+          ? 'Contact Phone is required (must be exactly 10 digits).'
+          : `Contact Phone must be exactly 10 digits. You entered ${phoneDigits.length} digit${phoneDigits.length === 1 ? '' : 's'}.`
+      );
+      return;
+    }
+
     setIsSubmitting(true);
     setFormError(null);
 
@@ -339,6 +350,16 @@ export const CustomersPage: React.FC = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(editFormState.contactEmail.trim())) {
       setFormError('Please enter a valid email address.');
+      return;
+    }
+
+    const phoneDigits = editFormState.contactPhone.replace(/\D/g, '');
+    if (phoneDigits.length !== 10) {
+      setFormError(
+        phoneDigits.length === 0
+          ? 'Contact Phone is required (must be exactly 10 digits).'
+          : `Contact Phone must be exactly 10 digits. You entered ${phoneDigits.length} digit${phoneDigits.length === 1 ? '' : 's'}.`
+      );
       return;
     }
 
@@ -960,16 +981,48 @@ export const CustomersPage: React.FC = () => {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
-                  <span>Contact Phone <span className="text-red-500 ml-0.5">*</span></span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-txt-primary flex items-center">
+                    <span>Contact Phone <span className="text-red-500 ml-0.5">*</span></span>
+                  </label>
+                  <span className="text-[10px] text-txt-muted tabular-nums">
+                    {formState.contactPhone.length}/10 digits
+                  </span>
+                </div>
                 <Input
+                  type="tel"
                   required
                   value={formState.contactPhone}
-                  onChange={(e) => setFormState({ ...formState, contactPhone: e.target.value })}
-                  placeholder="+91 98000 00000"
-                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
+                  onChange={(e) => {
+                    const cleaned = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setFormState({ ...formState, contactPhone: cleaned });
+                  }}
+                  maxLength={10}
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  title="Phone number must be exactly 10 digits"
+                  placeholder="e.g. 9876543210 (10 digits)"
+                  disabled={isSubmitting}
+                  className={`h-8 text-xs rounded-lg transition-colors ${
+                    formState.contactPhone.length === 10
+                      ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500'
+                      : 'border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]'
+                  }`}
                 />
+                <div className="text-[11px] pt-0.5">
+                  {formState.contactPhone.length > 0 && formState.contactPhone.length < 10 ? (
+                    <span className="text-amber-600 font-medium">
+                      Only 10 digits allowed ({formState.contactPhone.length}/10 entered)
+                    </span>
+                  ) : formState.contactPhone.length === 10 ? (
+                    <span className="text-emerald-600 font-medium flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3 inline shrink-0" />
+                      Valid 10-digit number
+                    </span>
+                  ) : (
+                    <span className="text-txt-muted">Only 10 digits allowed (no symbols)</span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -988,7 +1041,7 @@ export const CustomersPage: React.FC = () => {
                     companyName: selected?.companyName || prev.companyName,
                     contactName: selected?.contactName || prev.contactName,
                     contactEmail: selected?.email || prev.contactEmail,
-                    contactPhone: selected?.phone || prev.contactPhone,
+                    contactPhone: (selected?.phone || prev.contactPhone || '').replace(/\D/g, '').slice(0, 10),
                   }));
                 }}
                 placeholder="Select lead/prospect to import details..."
@@ -1179,15 +1232,48 @@ export const CustomersPage: React.FC = () => {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-txt-primary flex items-center justify-between">
-                  <span>Phone <span className="text-red-500 ml-0.5">*</span></span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-txt-primary flex items-center">
+                    <span>Contact Phone <span className="text-red-500 ml-0.5">*</span></span>
+                  </label>
+                  <span className="text-[10px] text-txt-muted tabular-nums">
+                    {editFormState.contactPhone.length}/10 digits
+                  </span>
+                </div>
                 <Input
+                  type="tel"
                   required
                   value={editFormState.contactPhone}
-                  onChange={(e) => setEditFormState({ ...editFormState, contactPhone: e.target.value })}
-                  className="h-8 text-xs rounded-lg border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]"
+                  onChange={(e) => {
+                    const cleaned = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setEditFormState({ ...editFormState, contactPhone: cleaned });
+                  }}
+                  maxLength={10}
+                  inputMode="numeric"
+                  pattern="[0-9]{10}"
+                  title="Phone number must be exactly 10 digits"
+                  placeholder="e.g. 9876543210 (10 digits)"
+                  disabled={isSubmitting}
+                  className={`h-8 text-xs rounded-lg transition-colors ${
+                    editFormState.contactPhone.length === 10
+                      ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500'
+                      : 'border-border focus:ring-1 focus:ring-[#57B71B] focus:border-[#57B71B]'
+                  }`}
                 />
+                <div className="text-[11px] pt-0.5">
+                  {editFormState.contactPhone.length > 0 && editFormState.contactPhone.length < 10 ? (
+                    <span className="text-amber-600 font-medium">
+                      Only 10 digits allowed ({editFormState.contactPhone.length}/10 entered)
+                    </span>
+                  ) : editFormState.contactPhone.length === 10 ? (
+                    <span className="text-emerald-600 font-medium flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3 inline shrink-0" />
+                      Valid 10-digit number
+                    </span>
+                  ) : (
+                    <span className="text-txt-muted">Only 10 digits allowed (no symbols)</span>
+                  )}
+                </div>
               </div>
             </div>
 

@@ -53,7 +53,7 @@ export const DashboardLayout: React.FC = () => {
 
         {/* Page Content with safe padding for mobile bottom bar */}
         <main className="flex-1 overflow-y-auto p-2.5 sm:p-5 lg:p-6 pb-20 lg:pb-6">
-          <div className="max-w-7xl mx-auto space-y-3.5 sm:space-y-5">
+          <div className="w-full max-w-full space-y-3.5 sm:space-y-5">
             <Outlet />
           </div>
         </main>

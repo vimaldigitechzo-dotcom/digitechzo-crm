@@ -1,0 +1,2689 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-26T07:47:19.285Z",
+    "creator": "Antigravity AI",
+    "purpose": "Pre-Reset Fresh State Backup",
+    "version": "1.0"
+  },
+  "cloud": {
+    "users": [
+      {
+        "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "roleId": "fd1ce324-461c-4940-9aee-7a5d3abff185",
+        "name": "Veera solai",
+        "firstName": "Veera",
+        "lastName": "solai",
+        "email": "veera.digitechzo@gmail.com",
+        "phone": "8438524424",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-24T06:32:09.479Z",
+        "updatedAt": "2026-10-24T06:32:09.479Z",
+        "role": {
+          "id": "fd1ce324-461c-4940-9aee-7a5d3abff185",
+          "name": "BDE_SALES",
+          "description": "Business development, leads, deals, and tasks",
+          "displayAlias": "BDE"
+        },
+        "organization": {
+          "id": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+          "name": "DigiTechzo Media & Technologies Pvt Ltd",
+          "slug": "digitechzo"
+        },
+        "teamName": "Sales & Revenue Team",
+        "dataScope": "Assigned Only"
+      },
+      {
+        "id": "220e0497-8e86-4f5e-b026-789fcdc374e4",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "roleId": "22460a26-782c-4d34-bd4c-e9a407d4d65b",
+        "name": "vimal r k",
+        "firstName": "vimal",
+        "lastName": "r k",
+        "email": "vimaldigitechzoo@gmail.com",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-23T11:25:56.188Z",
+        "updatedAt": "2026-10-23T11:25:56.188Z",
+        "role": {
+          "id": "22460a26-782c-4d34-bd4c-e9a407d4d65b",
+          "name": "MANAGER",
+          "description": "Team management, pipeline approvals, and reporting",
+          "displayAlias": "SALES_MANAGER"
+        },
+        "organization": {
+          "id": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+          "name": "DigiTechzo Media & Technologies Pvt Ltd",
+          "slug": "digitechzo"
+        },
+        "teamName": "Sales Management",
+        "dataScope": "Team Records"
+      },
+      {
+        "id": "121fc497-45c4-4096-9cb0-add599bcb1c6",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "roleId": "fd1ce324-461c-4940-9aee-7a5d3abff185",
+        "name": "sekar babu new",
+        "firstName": "sekar",
+        "lastName": "babu new",
+        "email": "vimaldigitechzo@gmail.com",
+        "status": "INACTIVE",
+        "createdAt": "2026-10-15T11:45:40.135Z",
+        "updatedAt": "2026-10-23T10:43:51.104Z",
+        "role": {
+          "id": "fd1ce324-461c-4940-9aee-7a5d3abff185",
+          "name": "BDE_SALES",
+          "description": "Business development, leads, deals, and tasks",
+          "displayAlias": "BDE"
+        },
+        "organization": {
+          "id": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+          "name": "DigiTechzo Media & Technologies Pvt Ltd",
+          "slug": "digitechzo"
+        },
+        "teamName": "Sales & Revenue Team",
+        "dataScope": "Assigned Only"
+      },
+      {
+        "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "roleId": "ffc51e5e-00c6-4fb1-b6a5-cb79f7dff55f",
+        "name": "DigiTechzo Administrator",
+        "firstName": "DigiTechzo",
+        "lastName": "Administrator",
+        "email": "admin@digitechzo.com",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-15T09:06:43.255Z",
+        "updatedAt": "2026-10-26T06:25:25.143Z",
+        "role": {
+          "id": "ffc51e5e-00c6-4fb1-b6a5-cb79f7dff55f",
+          "name": "ADMIN",
+          "description": "Full system administration and control",
+          "displayAlias": "ADMIN"
+        },
+        "organization": {
+          "id": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+          "name": "DigiTechzo Media & Technologies Pvt Ltd",
+          "slug": "digitechzo"
+        },
+        "teamName": "Global / Leadership",
+        "dataScope": "All Records"
+      }
+    ],
+    "leads": [
+      {
+        "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "fullName": "Veerasolai",
+        "companyName": null,
+        "title": null,
+        "phone": "8438524424",
+        "email": null,
+        "source": "WEBSITE_FORM",
+        "status": "CONVERTED",
+        "priority": "MEDIUM",
+        "temperature": null,
+        "leadScore": 80,
+        "serviceInterest": "AI Development Company",
+        "ownerId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "ownerName": "Veera solai",
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-24T06:40:40.738Z",
+        "createdAt": "2026-10-24T06:39:36.204Z",
+        "updatedAt": "2026-10-24T06:40:40.739Z",
+        "nextAction": null,
+        "qualification": null
+      },
+      {
+        "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "fullName": "Sneha Reddy",
+        "companyName": "Apex Retail Solutions",
+        "title": "VP of Product",
+        "phone": "9789065432",
+        "email": "sneha.reddy@apexretail.in",
+        "source": "MANUAL",
+        "status": "NEGOTIATION",
+        "priority": "MEDIUM",
+        "temperature": "WARM",
+        "leadScore": 75,
+        "serviceInterest": "Custom Web Application Development",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "ownerName": "DigiTechzo Administrator",
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-26T05:27:11.598Z",
+        "createdAt": "2026-10-23T04:47:31.291Z",
+        "updatedAt": "2026-10-26T05:27:12.860Z",
+        "nextAction": {
+          "dueDate": "2026-10-25T04:46:45.642Z",
+          "type": "EMAIL",
+          "purpose": "Share CRM & Mobile application portfolio deck",
+          "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7"
+        },
+        "qualification": null
+      },
+      {
+        "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "fullName": "Arun Kumar",
+        "companyName": "Nexus Innovations Pvt Ltd",
+        "title": "Chief Technology Officer",
+        "phone": "9840123456",
+        "email": "arun.kumar@nexusinno.com",
+        "source": "WEBSITE_FORM",
+        "status": "CONVERTED",
+        "priority": "HIGH",
+        "temperature": "HOT",
+        "leadScore": 88,
+        "serviceInterest": "Cloud Modernization & AI Integration",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "ownerName": "DigiTechzo Administrator",
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-26T05:20:41.390Z",
+        "createdAt": "2026-10-23T04:47:31.007Z",
+        "updatedAt": "2026-10-26T05:20:41.460Z",
+        "nextAction": {
+          "dueDate": "2026-10-24T04:46:44.929Z",
+          "type": "CALL",
+          "purpose": "Discovery call on Enterprise Cloud Architecture",
+          "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7"
+        },
+        "qualification": null
+      }
+    ],
+    "deals": [
+      {
+        "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "ownerId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "ownerName": "Veera solai",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "leadName": "Veerasolai",
+        "stageId": "bf98ca23-4c85-48ef-ad6b-89a9fecd36c9",
+        "stageName": "Closed Won",
+        "stage": {
+          "id": "bf98ca23-4c85-48ef-ad6b-89a9fecd36c9",
+          "name": "Closed Won",
+          "order": 6,
+          "stageType": "WON",
+          "dealCountBenchmark": 2,
+          "totalValueBenchmark": 950000
+        },
+        "title": "Veerasolai - AI Development Company",
+        "value": 0,
+        "expectedCloseDate": null,
+        "probability": 100,
+        "status": "WON",
+        "lostReasonId": null,
+        "lostReasonLabel": null,
+        "lostReasonNotes": null,
+        "closedAt": "2026-10-24T06:40:40.639Z",
+        "wonNotes": "Contract finalized & approved",
+        "createdAt": "2026-10-24T06:39:36.212Z",
+        "updatedAt": "2026-10-24T06:40:40.640Z"
+      },
+      {
+        "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "ownerName": "DigiTechzo Administrator",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "leadName": "Arun Kumar",
+        "stageId": "bf98ca23-4c85-48ef-ad6b-89a9fecd36c9",
+        "stageName": "Closed Won",
+        "stage": {
+          "id": "bf98ca23-4c85-48ef-ad6b-89a9fecd36c9",
+          "name": "Closed Won",
+          "order": 6,
+          "stageType": "WON",
+          "dealCountBenchmark": 2,
+          "totalValueBenchmark": 950000
+        },
+        "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations",
+        "value": 708000,
+        "expectedCloseDate": "2026-11-07T04:49:11.254Z",
+        "probability": 100,
+        "status": "WON",
+        "lostReasonId": null,
+        "lostReasonLabel": null,
+        "lostReasonNotes": null,
+        "closedAt": "2026-10-26T05:20:41.390Z",
+        "wonNotes": "Closed Won upon acceptance of proposal PROP-202610-0007",
+        "createdAt": "2026-10-23T04:49:56.935Z",
+        "updatedAt": "2026-10-26T05:20:41.457Z"
+      },
+      {
+        "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "ownerName": "DigiTechzo Administrator",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "leadName": "Sneha Reddy",
+        "stageId": "4171a46f-c0bc-4812-847e-a1d5ef3ca1e2",
+        "stageName": "Negotiation",
+        "stage": {
+          "id": "4171a46f-c0bc-4812-847e-a1d5ef3ca1e2",
+          "name": "Negotiation",
+          "order": 5,
+          "stageType": "OPEN",
+          "dealCountBenchmark": 3,
+          "totalValueBenchmark": 1200000
+        },
+        "title": "Sneha Reddy - Custom Web Application Development",
+        "value": 0,
+        "expectedCloseDate": null,
+        "probability": 100,
+        "status": "OPEN",
+        "lostReasonId": null,
+        "lostReasonLabel": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "createdAt": "2026-10-23T04:47:31.295Z",
+        "updatedAt": "2026-10-24T06:36:29.256Z"
+      },
+      {
+        "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "ownerName": "DigiTechzo Administrator",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "leadName": "Arun Kumar",
+        "stageId": "dc3fdff3-a0c8-433d-a6c5-4b9f0fd46e84",
+        "stageName": "Demo / Meeting Completed",
+        "stage": {
+          "id": "dc3fdff3-a0c8-433d-a6c5-4b9f0fd46e84",
+          "name": "Demo / Meeting Completed",
+          "order": 3,
+          "stageType": "OPEN",
+          "dealCountBenchmark": 4,
+          "totalValueBenchmark": 1600000
+        },
+        "title": "Arun Kumar - Cloud Modernization & AI Integration",
+        "value": 0,
+        "expectedCloseDate": null,
+        "probability": 50,
+        "status": "OPEN",
+        "lostReasonId": null,
+        "lostReasonLabel": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "createdAt": "2026-10-23T04:47:31.014Z",
+        "updatedAt": "2026-10-23T08:23:10.486Z"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "db5533eb-7abb-45b1-acf2-a770df280c82",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "assigneeId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskType": "CALL",
+        "title": "Discovery call on Enterprise Cloud Architecture",
+        "description": "Scheduled follow-up CALL regarding service: Cloud Modernization & AI Integration",
+        "dueDate": "2026-10-24T04:46:44.929Z",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "completedAt": null,
+        "completionNotes": null,
+        "createdAt": "2026-10-23T04:47:31.016Z",
+        "updatedAt": "2026-10-26T04:59:57.336Z",
+        "assignee": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration",
+          "value": 0
+        }
+      },
+      {
+        "id": "b0475a47-9837-46f6-8259-65038a2e6163",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "assigneeId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "taskType": "EMAIL",
+        "title": "Share CRM & Mobile application portfolio deck",
+        "description": "Scheduled follow-up EMAIL regarding service: Custom Web Application Development",
+        "dueDate": "2026-10-25T04:46:45.642Z",
+        "priority": "MEDIUM",
+        "status": "PENDING",
+        "completedAt": null,
+        "completionNotes": null,
+        "createdAt": "2026-10-23T04:47:31.296Z",
+        "updatedAt": "2026-10-26T05:27:12.848Z",
+        "assignee": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy",
+          "companyName": "Apex Retail Solutions"
+        },
+        "deal": {
+          "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+          "title": "Sneha Reddy - Custom Web Application Development",
+          "value": 0
+        }
+      },
+      {
+        "id": "e872d20c-6654-40f0-9b3a-5bd6b6ef3a52",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "assigneeId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "taskType": "PROPOSAL",
+        "title": "Prepare Scope of Work & Cloud Sizing Architecture Document",
+        "description": "Detail multi-region redundancy and Kubernetes migration for Nexus Innovations.",
+        "dueDate": "2026-10-25T04:49:12.065Z",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "completedAt": null,
+        "completionNotes": null,
+        "createdAt": "2026-10-23T04:49:57.744Z",
+        "updatedAt": "2026-10-23T04:49:57.744Z",
+        "assignee": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations",
+          "value": 708000
+        }
+      }
+    ],
+    "activities": [
+      {
+        "id": "7384008b-cb03-4dc1-8f9a-e835e1ce94dd",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "taskId": "b0475a47-9837-46f6-8259-65038a2e6163",
+        "activityType": "EMAIL",
+        "direction": null,
+        "subject": "Task Completed: Share CRM & Mobile application portfolio deck",
+        "description": "Completed from tasks action queue",
+        "activityDate": "2026-10-26T05:27:11.598Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-26T05:27:11.610Z",
+        "updatedAt": "2026-10-26T05:27:11.610Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy",
+          "companyName": "Apex Retail Solutions"
+        },
+        "deal": {
+          "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+          "title": "Sneha Reddy - Custom Web Application Development"
+        },
+        "task": {
+          "id": "b0475a47-9837-46f6-8259-65038a2e6163",
+          "title": "Share CRM & Mobile application portfolio deck"
+        }
+      },
+      {
+        "id": "eb5302e0-2bf4-4ca8-a956-aa7d73151a09",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "taskId": "b0475a47-9837-46f6-8259-65038a2e6163",
+        "activityType": "EMAIL",
+        "direction": null,
+        "subject": "Task Completed: Share CRM & Mobile application portfolio deck",
+        "description": "Completed from tasks action queue",
+        "activityDate": "2026-10-26T04:59:54.071Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-26T04:59:54.084Z",
+        "updatedAt": "2026-10-26T04:59:54.084Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy",
+          "companyName": "Apex Retail Solutions"
+        },
+        "deal": {
+          "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+          "title": "Sneha Reddy - Custom Web Application Development"
+        },
+        "task": {
+          "id": "b0475a47-9837-46f6-8259-65038a2e6163",
+          "title": "Share CRM & Mobile application portfolio deck"
+        }
+      },
+      {
+        "id": "5cfe94d2-d978-4a07-881b-74cd33ad43a8",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Proposal Sent",
+        "description": "Deal moved from previous stage to \"Proposal Sent\". Stage order: 4. Status: OPEN",
+        "activityDate": "2026-10-24T06:40:28.265Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-24T06:40:28.266Z",
+        "updatedAt": "2026-10-24T06:40:28.266Z",
+        "user": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai",
+          "companyName": null
+        },
+        "deal": {
+          "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+          "title": "Veerasolai - AI Development Company"
+        }
+      },
+      {
+        "id": "91b3cdce-6f4b-44c6-8cf1-24f614db29c9",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Proposal Sent",
+        "description": "Deal moved from previous stage to \"Proposal Sent\". Stage order: 4. Status: OPEN",
+        "activityDate": "2026-10-24T06:40:21.579Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-24T06:40:21.579Z",
+        "updatedAt": "2026-10-24T06:40:21.579Z",
+        "user": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai",
+          "companyName": null
+        },
+        "deal": {
+          "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+          "title": "Veerasolai - AI Development Company"
+        }
+      },
+      {
+        "id": "ad3cb75f-965b-4552-b8c2-f3b0aa29f391",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: New Lead (Qualification)",
+        "description": "Deal moved from previous stage to \"New Lead (Qualification)\". Stage order: 1. Status: OPEN",
+        "activityDate": "2026-10-24T06:40:18.238Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-24T06:40:18.239Z",
+        "updatedAt": "2026-10-24T06:40:18.239Z",
+        "user": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai",
+          "companyName": null
+        },
+        "deal": {
+          "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+          "title": "Veerasolai - AI Development Company"
+        }
+      },
+      {
+        "id": "a443ad96-1ba8-4cf9-923a-26ce5a55cfd4",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: New Lead (Qualification)",
+        "description": "Deal moved from previous stage to \"New Lead (Qualification)\". Stage order: 1. Status: OPEN",
+        "activityDate": "2026-10-24T06:39:59.513Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-24T06:39:59.513Z",
+        "updatedAt": "2026-10-24T06:39:59.513Z",
+        "user": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai",
+          "companyName": null
+        },
+        "deal": {
+          "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+          "title": "Veerasolai - AI Development Company"
+        }
+      },
+      {
+        "id": "96f665bd-1a09-40c4-bb5e-995b5e0da5f1",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Discovery & Requirement Discussion",
+        "description": "Deal moved from previous stage to \"Discovery & Requirement Discussion\". Stage order: 2. Status: OPEN",
+        "activityDate": "2026-10-24T06:39:48.443Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-24T06:39:48.444Z",
+        "updatedAt": "2026-10-24T06:39:48.444Z",
+        "user": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai",
+          "companyName": null
+        },
+        "deal": {
+          "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+          "title": "Veerasolai - AI Development Company"
+        }
+      },
+      {
+        "id": "fdf0fe3c-6ed5-4d39-b9fe-770b078f6013",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": null,
+        "taskId": null,
+        "activityType": "SYSTEM",
+        "direction": null,
+        "subject": "Lead Captured",
+        "description": "New lead created via WEBSITE_FORM. Service interest: AI Development Company",
+        "activityDate": "2026-10-24T06:39:36.216Z",
+        "durationSeconds": null,
+        "outcome": null,
+        "createdAt": "2026-10-24T06:39:36.216Z",
+        "updatedAt": "2026-10-24T06:39:36.216Z",
+        "user": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai",
+          "companyName": null
+        }
+      },
+      {
+        "id": "8e2fd50c-8eef-43e8-99a4-f4549709effb",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Negotiation",
+        "description": "Deal moved from previous stage to \"Negotiation\". Stage order: 5. Status: OPEN",
+        "activityDate": "2026-10-24T06:36:29.265Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-24T06:36:29.266Z",
+        "updatedAt": "2026-10-24T06:36:29.266Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy",
+          "companyName": "Apex Retail Solutions"
+        },
+        "deal": {
+          "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+          "title": "Sneha Reddy - Custom Web Application Development"
+        }
+      },
+      {
+        "id": "df8d97b5-fd9f-47ee-96bb-62b576c8ac53",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "taskId": "b0475a47-9837-46f6-8259-65038a2e6163",
+        "activityType": "EMAIL",
+        "direction": null,
+        "subject": "Task Completed: Share CRM & Mobile application portfolio deck",
+        "description": "Completed from tasks action queue",
+        "activityDate": "2026-10-23T09:32:09.745Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T09:32:09.755Z",
+        "updatedAt": "2026-10-23T09:32:09.755Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy",
+          "companyName": "Apex Retail Solutions"
+        },
+        "deal": {
+          "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+          "title": "Sneha Reddy - Custom Web Application Development"
+        },
+        "task": {
+          "id": "b0475a47-9837-46f6-8259-65038a2e6163",
+          "title": "Share CRM & Mobile application portfolio deck"
+        }
+      },
+      {
+        "id": "d2772fb5-b9c6-42fb-8843-b5981ac937c4",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Demo / Meeting Completed",
+        "description": "Deal moved from previous stage to \"Demo / Meeting Completed\". Stage order: 3. Status: OPEN",
+        "activityDate": "2026-10-23T08:23:10.493Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:23:10.494Z",
+        "updatedAt": "2026-10-23T08:23:10.494Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "a7ee07bf-5b66-49f3-a072-ab760c6591e2",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Proposal Sent",
+        "description": "Deal moved from previous stage to \"Proposal Sent\". Stage order: 4. Status: OPEN",
+        "activityDate": "2026-10-23T08:22:56.285Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:22:56.286Z",
+        "updatedAt": "2026-10-23T08:22:56.286Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "f9f2f8b0-1d6c-45f5-913e-6d34b41e7e2f",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Demo / Meeting Completed",
+        "description": "Deal moved from previous stage to \"Demo / Meeting Completed\". Stage order: 3. Status: OPEN",
+        "activityDate": "2026-10-23T08:14:23.755Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:14:23.756Z",
+        "updatedAt": "2026-10-23T08:14:23.756Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "34824355-61f8-46cb-9bb6-84c9328526bb",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Discovery & Requirement Discussion",
+        "description": "Deal moved from previous stage to \"Discovery & Requirement Discussion\". Stage order: 2. Status: OPEN",
+        "activityDate": "2026-10-23T08:08:19.602Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:08:19.603Z",
+        "updatedAt": "2026-10-23T08:08:19.603Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "5202241e-15c3-446e-a898-f2136255ad36",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Negotiation",
+        "description": "Deal moved from previous stage to \"Negotiation\". Stage order: 5. Status: OPEN",
+        "activityDate": "2026-10-23T08:08:13.978Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:08:13.979Z",
+        "updatedAt": "2026-10-23T08:08:13.979Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "67567b41-22dd-4d8e-957c-3731cce3f79e",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Discovery & Requirement Discussion",
+        "description": "Deal moved from previous stage to \"Discovery & Requirement Discussion\". Stage order: 2. Status: OPEN",
+        "activityDate": "2026-10-23T08:08:09.991Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:08:09.992Z",
+        "updatedAt": "2026-10-23T08:08:09.992Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "436e9188-4c27-4b5b-9b02-8fe74032cec1",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Demo / Meeting Completed",
+        "description": "Deal moved from previous stage to \"Demo / Meeting Completed\". Stage order: 3. Status: OPEN",
+        "activityDate": "2026-10-23T08:08:08.451Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:08:08.451Z",
+        "updatedAt": "2026-10-23T08:08:08.451Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "ef42c0fa-2f0f-4cbe-bc05-fa3ebedb498e",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Discovery & Requirement Discussion",
+        "description": "Deal moved from previous stage to \"Discovery & Requirement Discussion\". Stage order: 2. Status: OPEN",
+        "activityDate": "2026-10-23T08:06:41.859Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:06:41.860Z",
+        "updatedAt": "2026-10-23T08:06:41.860Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "e36fe027-51dd-40c8-9558-a4d393a2f810",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Demo / Meeting Completed",
+        "description": "Deal moved from previous stage to \"Demo / Meeting Completed\". Stage order: 3. Status: OPEN",
+        "activityDate": "2026-10-23T08:06:40.545Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:06:40.546Z",
+        "updatedAt": "2026-10-23T08:06:40.546Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      },
+      {
+        "id": "38d0b5c1-1f1e-4d73-b7d9-f007cfc912ef",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "userId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "taskId": null,
+        "activityType": "NOTE",
+        "direction": null,
+        "subject": "Pipeline Stage Changed: Discovery & Requirement Discussion",
+        "description": "Deal moved from previous stage to \"Discovery & Requirement Discussion\". Stage order: 2. Status: OPEN",
+        "activityDate": "2026-10-23T08:06:21.126Z",
+        "durationSeconds": null,
+        "outcome": "COMPLETED",
+        "createdAt": "2026-10-23T08:06:21.127Z",
+        "updatedAt": "2026-10-23T08:06:21.127Z",
+        "user": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+          "title": "Arun Kumar - Cloud Modernization & AI Integration"
+        }
+      }
+    ],
+    "meetings": [
+      {
+        "id": "580f7ebb-008d-4e1c-857c-489a113e5fb8",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "title": "AI Architecture & Cloud Infrastructure Demo with Nexus",
+        "description": "Review architecture scalability, API throughput, and security requirements with CTO Arun Kumar.",
+        "meetingType": "DEMO",
+        "startTime": "2026-10-24T04:49:11.666Z",
+        "endTime": "2026-10-24T05:34:11.666Z",
+        "location": "https://meet.google.com/dtz-ai-nexus",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "status": "COMPLETED",
+        "outcome": "hii",
+        "notes": "newss",
+        "completedAt": "2026-10-23T05:27:33.478Z",
+        "cancelledAt": null,
+        "cancelReason": null,
+        "createdAt": "2026-10-23T04:49:57.349Z",
+        "updatedAt": "2026-10-23T05:27:33.479Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd",
+          "phone": "9840123456"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations"
+        }
+      }
+    ],
+    "proposals": [
+      {
+        "id": "324c5c7f-414e-47b6-8806-8d7cb0fd9a96",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "proposalNumber": "PROP-202610-0007",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal (v2)",
+        "description": "Production-ready cloud modernization, microservices architecture, and dedicated AI pipeline integration.",
+        "subtotal": 708000,
+        "discountAmount": 0,
+        "taxAmount": 0,
+        "totalAmount": 708000,
+        "currency": "INR",
+        "validUntil": "2026-11-22T00:00:00.000Z",
+        "status": "ACCEPTED",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": "2026-10-26T05:20:41.390Z",
+        "rejectedAt": "2026-10-26T05:20:39.179Z",
+        "rejectionReason": "Declined by client",
+        "notes": null,
+        "createdAt": "2026-10-23T09:43:59.361Z",
+        "updatedAt": "2026-10-26T05:20:41.396Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations"
+        },
+        "customerId": null
+      },
+      {
+        "id": "a348aff9-c1df-43cf-86a6-ef3f6dd87730",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "proposalNumber": "PROP-202610-0006",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal (v2)",
+        "description": "Production-ready cloud modernization, microservices architecture, and dedicated AI pipeline integration.",
+        "subtotal": 708000,
+        "discountAmount": 0,
+        "taxAmount": 0,
+        "totalAmount": 708000,
+        "currency": "INR",
+        "validUntil": "2026-11-22T00:00:00.000Z",
+        "status": "DRAFT",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "createdAt": "2026-10-23T09:43:59.066Z",
+        "updatedAt": "2026-10-23T09:43:59.066Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations"
+        },
+        "customerId": null
+      },
+      {
+        "id": "d8c5dd14-8b68-4644-990f-e4b1501be007",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "proposalNumber": "PROP-202610-0005",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal (v2)",
+        "description": "Production-ready cloud modernization, microservices architecture, and dedicated AI pipeline integration.",
+        "subtotal": 708000,
+        "discountAmount": 0,
+        "taxAmount": 0,
+        "totalAmount": 708000,
+        "currency": "INR",
+        "validUntil": "2026-11-22T00:00:00.000Z",
+        "status": "DRAFT",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "createdAt": "2026-10-23T09:43:58.711Z",
+        "updatedAt": "2026-10-23T09:43:58.711Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations"
+        },
+        "customerId": null
+      },
+      {
+        "id": "152459c4-f843-4596-b1e8-c1720a752ef6",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": null,
+        "proposalNumber": "PROP-202610-0003",
+        "title": "Customer Proposal Test",
+        "description": null,
+        "subtotal": 4000,
+        "discountAmount": 0,
+        "taxAmount": 0,
+        "totalAmount": 4000,
+        "currency": "INR",
+        "validUntil": null,
+        "status": "DRAFT",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "createdAt": "2026-10-23T08:02:57.746Z",
+        "updatedAt": "2026-10-23T08:02:57.746Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy",
+          "companyName": "Apex Retail Solutions"
+        },
+        "customerId": null
+      },
+      {
+        "id": "d574f79e-00e8-425c-8b1e-ab9ab575af74",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "proposalNumber": "PROP-202610-0001",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal",
+        "description": "Production-ready cloud modernization, microservices architecture, and dedicated AI pipeline integration.",
+        "subtotal": 650000,
+        "discountAmount": 50000,
+        "taxAmount": 108000,
+        "totalAmount": 708000,
+        "currency": "INR",
+        "validUntil": "2026-11-22T04:49:12.483Z",
+        "status": "ACCEPTED",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": "2026-10-23T07:18:27.221Z",
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": "Includes 6 months enterprise support, CI/CD pipeline setup, and dedicated cloud architect onboarding.",
+        "createdAt": "2026-10-23T04:49:58.137Z",
+        "updatedAt": "2026-10-23T07:18:27.229Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations"
+        },
+        "customerId": null
+      }
+    ],
+    "customers": [
+      {
+        "id": "2448fa9c-08de-4827-a36e-24bf526cd5cd",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "dealId": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "companyName": "Veerasolai",
+        "contactName": "Veerasolai",
+        "title": null,
+        "phone": "8438524424",
+        "email": "8438524424@client.digitechzo.local",
+        "address": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "India",
+        "status": "ACTIVE",
+        "ownerId": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "customerSince": "2026-10-24T06:40:40.742Z",
+        "notes": "[Won Deal: Veerasolai - AI Development Company] Contract finalized & approved",
+        "createdAt": "2026-10-24T06:40:40.743Z",
+        "updatedAt": "2026-10-24T06:40:40.743Z",
+        "owner": {
+          "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+          "name": "Veera solai",
+          "email": "veera.digitechzo@gmail.com"
+        },
+        "lead": {
+          "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+          "fullName": "Veerasolai"
+        },
+        "deal": {
+          "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+          "title": "Veerasolai - AI Development Company",
+          "value": 0
+        }
+      },
+      {
+        "id": "67bd2142-d025-40ed-a509-b59521f36446",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "dealId": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "companyName": "Apex Retail Solutions",
+        "contactName": "Sneha Reddy",
+        "title": "VP of Product",
+        "phone": "9789065432",
+        "email": "sneha.reddy@apexretail.in",
+        "address": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "India",
+        "status": "ACTIVE",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "customerSince": "2026-10-23T07:52:08.140Z",
+        "notes": "Converted from Lead: Sneha Reddy",
+        "createdAt": "2026-10-23T07:52:08.180Z",
+        "updatedAt": "2026-10-23T07:52:08.180Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+          "fullName": "Sneha Reddy"
+        },
+        "deal": {
+          "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+          "title": "Sneha Reddy - Custom Web Application Development",
+          "value": 0
+        }
+      },
+      {
+        "id": "df131725-b493-459a-8e92-891be5a1aa8c",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "dealId": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "companyName": "Nexus Innovations Pvt Ltd",
+        "contactName": "Arun Kumar",
+        "title": "Chief Technology Officer",
+        "phone": "9840123456",
+        "email": "arun.kumar@nexusinno.com",
+        "address": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "India",
+        "status": "ACTIVE",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "customerSince": "2026-10-23T04:50:56.378Z",
+        "notes": "[Won Deal: Enterprise AI & Cloud Infrastructure - Nexus Innovations] Approved by CTO Arun Kumar after meeting demo and proposal review.\n\nService: Cloud Modernization & AI Integration | Accepted Proposal: PROP-202610-0001 (Cloud Modernization & AI Integration Commercial Proposal) - ₹7,08,00\n\nService: Cloud Modernization & AI Integration | Accepted Proposal: PROP-202610-0007 (Cloud Modernization & AI Integration Commercial Proposal (v2)) - ₹7,08,000",
+        "createdAt": "2026-10-23T04:50:56.379Z",
+        "updatedAt": "2026-10-26T05:20:41.465Z",
+        "owner": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar"
+        },
+        "deal": {
+          "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+          "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations",
+          "value": 708000
+        }
+      }
+    ],
+    "invoices": [
+      {
+        "id": "bda84425-7c09-40c8-88d5-999743f8758d",
+        "organizationId": "9bc282a3-71f4-4b11-9f90-9a562131964f",
+        "invoiceNumber": "INV-2026-NEXUS-01",
+        "clientName": "Nexus Innovations Pvt Ltd",
+        "clientContact": "Arun Kumar",
+        "clientEmail": "arun.kumar@nexusinno.com",
+        "clientPhone": "9840123456",
+        "clientAddress": "Nexus Tech Park, Whitefield, Bangalore, Karnataka 560066",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "issueDate": "2026-10-23T04:49:59.171Z",
+        "dueDate": "2026-11-07T04:49:13.509Z",
+        "paymentTermsDays": "15",
+        "status": "PAID",
+        "currency": "₹",
+        "subtotal": 300000,
+        "taxRate": 18,
+        "taxAmount": 54000,
+        "discountRate": 0,
+        "discountAmount": 0,
+        "total": 354000,
+        "advanceAmount": 354000,
+        "amountPaid": 354000,
+        "balanceDue": 0,
+        "notes": "Initial Milestone Sprint 1 & Architecture Kickoff - Paid in full via Bank Transfer.",
+        "items": [
+          {
+            "id": "e47b072f-abbe-4253-8b52-743e195860b8",
+            "invoiceId": "bda84425-7c09-40c8-88d5-999743f8758d",
+            "description": "Milestone 1: Cloud Architecture Blueprint & AI Infrastructure Provisioning",
+            "subdesc": "Full infrastructure setup on GCP/AWS with Terraform",
+            "quantity": 1,
+            "price": 300000,
+            "advanceAmount": 300000,
+            "order": 1,
+            "createdAt": "2026-10-23T04:49:59.173Z",
+            "updatedAt": "2026-10-23T04:49:59.173Z"
+          }
+        ],
+        "lead": {
+          "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+          "fullName": "Arun Kumar",
+          "companyName": "Nexus Innovations Pvt Ltd"
+        },
+        "creator": {
+          "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+          "name": "DigiTechzo Administrator",
+          "email": "admin@digitechzo.com"
+        },
+        "createdAt": "2026-10-23T04:49:59.173Z",
+        "updatedAt": "2026-10-23T04:49:59.173Z"
+      }
+    ]
+  },
+  "local": {
+    "organizations": [
+      {
+        "id": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "name": "DigiTechzo Media & Technologies Pvt Ltd",
+        "slug": "digitechzo",
+        "status": "ACTIVE",
+        "createdAt": "2026-10-26T07:29:59.035Z",
+        "updatedAt": "2026-10-26T07:38:54.736Z"
+      }
+    ],
+    "users": [
+      {
+        "id": "d96c428f-80f9-4f46-9746-289ec8beeff9",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "roleId": "2623d249-02e5-4b69-9fd2-cb39d014c0cf",
+        "name": "Veera solai",
+        "email": "veera.digitechzo@gmail.com",
+        "phone": null,
+        "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$placeholder_hash_for_sync",
+        "status": "ACTIVE",
+        "avatarUrl": null,
+        "teamName": "Sales & Revenue Team",
+        "dataScope": "ALL",
+        "createdAt": "2026-10-26T07:31:41.008Z",
+        "updatedAt": "2026-10-26T07:38:55.187Z"
+      },
+      {
+        "id": "220e0497-8e86-4f5e-b026-789fcdc374e4",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "roleId": "827f64fe-2599-4ccd-af48-a697df76d67a",
+        "name": "vimal r k",
+        "email": "vimaldigitechzoo@gmail.com",
+        "phone": null,
+        "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$placeholder_hash_for_sync",
+        "status": "ACTIVE",
+        "avatarUrl": null,
+        "teamName": "Sales Management",
+        "dataScope": "ALL",
+        "createdAt": "2026-10-26T07:31:41.014Z",
+        "updatedAt": "2026-10-26T07:38:55.190Z"
+      },
+      {
+        "id": "121fc497-45c4-4096-9cb0-add599bcb1c6",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "roleId": "2623d249-02e5-4b69-9fd2-cb39d014c0cf",
+        "name": "sekar babu new",
+        "email": "vimaldigitechzo@gmail.com",
+        "phone": null,
+        "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$placeholder_hash_for_sync",
+        "status": "INACTIVE",
+        "avatarUrl": null,
+        "teamName": "Sales & Revenue Team",
+        "dataScope": "ALL",
+        "createdAt": "2026-10-26T07:31:41.016Z",
+        "updatedAt": "2026-10-26T07:38:55.191Z"
+      },
+      {
+        "id": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "name": "DigiTechzo Administrator",
+        "email": "admin@digitechzo.com",
+        "phone": null,
+        "passwordHash": "$argon2id$v=19$m=65536,t=3,p=4$placeholder_hash_for_sync",
+        "status": "ACTIVE",
+        "avatarUrl": null,
+        "teamName": "Global / Leadership",
+        "dataScope": "ALL",
+        "createdAt": "2026-10-26T07:31:41.017Z",
+        "updatedAt": "2026-10-26T07:38:55.193Z"
+      }
+    ],
+    "roles": [
+      {
+        "id": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "name": "ADMIN",
+        "description": "Full system administration",
+        "isSystem": true,
+        "createdAt": "2026-10-26T07:29:59.094Z",
+        "updatedAt": "2026-10-26T07:38:54.768Z"
+      },
+      {
+        "id": "827f64fe-2599-4ccd-af48-a697df76d67a",
+        "name": "MANAGER",
+        "description": "Team management and reporting",
+        "isSystem": true,
+        "createdAt": "2026-10-26T07:29:59.098Z",
+        "updatedAt": "2026-10-26T07:38:54.769Z"
+      },
+      {
+        "id": "2623d249-02e5-4b69-9fd2-cb39d014c0cf",
+        "name": "BDE_SALES",
+        "description": "Business development and leads",
+        "isSystem": true,
+        "createdAt": "2026-10-26T07:29:59.101Z",
+        "updatedAt": "2026-10-26T07:38:54.770Z"
+      },
+      {
+        "id": "40dfe8df-7a0d-474e-9d64-11b9f7bb7450",
+        "name": "MARKETING",
+        "description": "Campaign management",
+        "isSystem": true,
+        "createdAt": "2026-10-26T07:29:59.105Z",
+        "updatedAt": "2026-10-26T07:38:54.771Z"
+      },
+      {
+        "id": "1096e3c3-3d27-4dfd-a455-66f4da173e21",
+        "name": "DELIVERY",
+        "description": "Customer onboarding",
+        "isSystem": true,
+        "createdAt": "2026-10-26T07:29:59.107Z",
+        "updatedAt": "2026-10-26T07:38:54.772Z"
+      }
+    ],
+    "permissions": [
+      {
+        "id": "b8767bf0-06f5-455e-87c8-5a6b65d19e52",
+        "resource": "deals",
+        "action": "read",
+        "description": "read deals",
+        "createdAt": "2026-10-26T07:29:59.163Z"
+      },
+      {
+        "id": "d81df080-f2fc-4e86-99e2-31f5b5e4cf18",
+        "resource": "deals",
+        "action": "create",
+        "description": "create deals",
+        "createdAt": "2026-10-26T07:29:59.165Z"
+      },
+      {
+        "id": "050af328-855a-4243-ad79-16ddfae1fd56",
+        "resource": "deals",
+        "action": "update",
+        "description": "update deals",
+        "createdAt": "2026-10-26T07:29:59.166Z"
+      },
+      {
+        "id": "e6ac1b71-10c1-4497-9f92-04646134c55a",
+        "resource": "deals",
+        "action": "delete",
+        "description": "delete deals",
+        "createdAt": "2026-10-26T07:29:59.167Z"
+      },
+      {
+        "id": "82dfa3ed-fba5-4c43-ba05-245a46dc87d1",
+        "resource": "tasks",
+        "action": "read",
+        "description": "read tasks",
+        "createdAt": "2026-10-26T07:29:59.170Z"
+      },
+      {
+        "id": "9127e17f-4430-416c-9da3-f3d24c8a243b",
+        "resource": "tasks",
+        "action": "create",
+        "description": "create tasks",
+        "createdAt": "2026-10-26T07:29:59.172Z"
+      },
+      {
+        "id": "9afbdc5e-196a-4a31-9142-063aa6dae0a7",
+        "resource": "tasks",
+        "action": "update",
+        "description": "update tasks",
+        "createdAt": "2026-10-26T07:29:59.174Z"
+      },
+      {
+        "id": "e78248a5-fca1-454f-8770-43cc659a2145",
+        "resource": "tasks",
+        "action": "delete",
+        "description": "delete tasks",
+        "createdAt": "2026-10-26T07:29:59.175Z"
+      },
+      {
+        "id": "2c8b82f8-cd79-4511-a510-be65a51b5663",
+        "resource": "activities",
+        "action": "read",
+        "description": "read activities",
+        "createdAt": "2026-10-26T07:29:59.177Z"
+      },
+      {
+        "id": "a369702b-3e27-4c62-b963-5d491a20de68",
+        "resource": "activities",
+        "action": "create",
+        "description": "create activities",
+        "createdAt": "2026-10-26T07:29:59.179Z"
+      },
+      {
+        "id": "379eaecb-8907-47e4-a4f1-41f08ea6538b",
+        "resource": "activities",
+        "action": "update",
+        "description": "update activities",
+        "createdAt": "2026-10-26T07:29:59.180Z"
+      },
+      {
+        "id": "4944f00b-eb83-4532-9698-4fd2b77a4351",
+        "resource": "activities",
+        "action": "delete",
+        "description": "delete activities",
+        "createdAt": "2026-10-26T07:29:59.182Z"
+      },
+      {
+        "id": "b3c4cb62-dd7e-4bed-a656-2f2292615431",
+        "resource": "meetings",
+        "action": "read",
+        "description": "read meetings",
+        "createdAt": "2026-10-26T07:29:59.184Z"
+      },
+      {
+        "id": "7f51f789-33cf-4bfb-be4d-3e06dddcfdba",
+        "resource": "meetings",
+        "action": "create",
+        "description": "create meetings",
+        "createdAt": "2026-10-26T07:29:59.185Z"
+      },
+      {
+        "id": "23a9b081-2942-4b2a-8e41-5b713333fdd4",
+        "resource": "meetings",
+        "action": "update",
+        "description": "update meetings",
+        "createdAt": "2026-10-26T07:29:59.186Z"
+      },
+      {
+        "id": "f0b238f3-7019-4f01-a631-2338403c2f60",
+        "resource": "meetings",
+        "action": "delete",
+        "description": "delete meetings",
+        "createdAt": "2026-10-26T07:29:59.187Z"
+      },
+      {
+        "id": "b584db18-0eb4-400c-bc9b-07f13b38300b",
+        "resource": "proposals",
+        "action": "read",
+        "description": "read proposals",
+        "createdAt": "2026-10-26T07:29:59.188Z"
+      },
+      {
+        "id": "8eb03dca-cad6-42e8-bc9a-0cede2ebfc2e",
+        "resource": "proposals",
+        "action": "create",
+        "description": "create proposals",
+        "createdAt": "2026-10-26T07:29:59.190Z"
+      },
+      {
+        "id": "c3d5a9ee-4ff9-4f2e-be61-f83d937becab",
+        "resource": "proposals",
+        "action": "update",
+        "description": "update proposals",
+        "createdAt": "2026-10-26T07:29:59.192Z"
+      },
+      {
+        "id": "edb295ee-6b34-47c2-adde-eb19121bd424",
+        "resource": "proposals",
+        "action": "delete",
+        "description": "delete proposals",
+        "createdAt": "2026-10-26T07:29:59.193Z"
+      },
+      {
+        "id": "5abd7c28-cc49-41a6-a6bc-4733b1869b0f",
+        "resource": "customers",
+        "action": "read",
+        "description": "read customers",
+        "createdAt": "2026-10-26T07:29:59.195Z"
+      },
+      {
+        "id": "dd6a4caf-a3f5-4528-b4e2-0f25dfaac58c",
+        "resource": "customers",
+        "action": "create",
+        "description": "create customers",
+        "createdAt": "2026-10-26T07:29:59.196Z"
+      },
+      {
+        "id": "86a167d7-c19a-4be1-a83c-9cf260bac9ca",
+        "resource": "customers",
+        "action": "update",
+        "description": "update customers",
+        "createdAt": "2026-10-26T07:29:59.199Z"
+      },
+      {
+        "id": "d6a506c7-b8f7-45c6-b43d-ae6d7d5ea168",
+        "resource": "customers",
+        "action": "delete",
+        "description": "delete customers",
+        "createdAt": "2026-10-26T07:29:59.200Z"
+      },
+      {
+        "id": "ade14a02-8d6a-4eaf-be95-ed5bda4043b0",
+        "resource": "invoices",
+        "action": "read",
+        "description": "read invoices",
+        "createdAt": "2026-10-26T07:29:59.201Z"
+      },
+      {
+        "id": "e510111e-1b6d-42f8-b3a8-0bad36b5c1eb",
+        "resource": "invoices",
+        "action": "create",
+        "description": "create invoices",
+        "createdAt": "2026-10-26T07:29:59.204Z"
+      },
+      {
+        "id": "1ff6bf2e-2a88-45ad-a8ba-5aac98bc45e9",
+        "resource": "invoices",
+        "action": "update",
+        "description": "update invoices",
+        "createdAt": "2026-10-26T07:29:59.206Z"
+      },
+      {
+        "id": "45c58197-5250-4203-8929-bc91742b3324",
+        "resource": "invoices",
+        "action": "delete",
+        "description": "delete invoices",
+        "createdAt": "2026-10-26T07:29:59.207Z"
+      },
+      {
+        "id": "b10a6b0c-090d-47e8-9c4f-d2cac8398c12",
+        "resource": "reports",
+        "action": "read",
+        "description": "read reports",
+        "createdAt": "2026-10-26T07:29:59.209Z"
+      },
+      {
+        "id": "1d5d0a9d-8270-4bba-a52f-b0476d8bafad",
+        "resource": "users",
+        "action": "read",
+        "description": "read users",
+        "createdAt": "2026-10-26T07:29:59.109Z"
+      },
+      {
+        "id": "06b4169a-d9aa-428a-933e-6cd01dc67dff",
+        "resource": "users",
+        "action": "create",
+        "description": "create users",
+        "createdAt": "2026-10-26T07:29:59.131Z"
+      },
+      {
+        "id": "e6d0a3d4-e896-438f-a480-58bdfc7bd17b",
+        "resource": "users",
+        "action": "update",
+        "description": "update users",
+        "createdAt": "2026-10-26T07:29:59.135Z"
+      },
+      {
+        "id": "e0588138-aec8-4aab-9b47-2b8aa1fedff2",
+        "resource": "users",
+        "action": "delete",
+        "description": "delete users",
+        "createdAt": "2026-10-26T07:29:59.137Z"
+      },
+      {
+        "id": "e1697773-6bff-47a6-ad9a-c76035d583f0",
+        "resource": "roles",
+        "action": "read",
+        "description": "read roles",
+        "createdAt": "2026-10-26T07:29:59.141Z"
+      },
+      {
+        "id": "67c8aaf0-b581-4c79-bb2e-f9adeacd27c5",
+        "resource": "roles",
+        "action": "update",
+        "description": "update roles",
+        "createdAt": "2026-10-26T07:29:59.145Z"
+      },
+      {
+        "id": "f215c620-29c7-4e6b-89ec-8945696d7f16",
+        "resource": "audit_logs",
+        "action": "read",
+        "description": "read audit_logs",
+        "createdAt": "2026-10-26T07:29:59.151Z"
+      },
+      {
+        "id": "80c7b7ed-c588-4f18-b09a-26a12facf93b",
+        "resource": "settings",
+        "action": "read",
+        "description": "read settings",
+        "createdAt": "2026-10-26T07:29:59.153Z"
+      },
+      {
+        "id": "96c0f93d-96ff-46f8-88e2-926e18382155",
+        "resource": "settings",
+        "action": "update",
+        "description": "update settings",
+        "createdAt": "2026-10-26T07:29:59.155Z"
+      },
+      {
+        "id": "58aa8bb6-da8c-40dc-88cf-a2bb18e6c0d0",
+        "resource": "leads",
+        "action": "read",
+        "description": "read leads",
+        "createdAt": "2026-10-26T07:29:59.158Z"
+      },
+      {
+        "id": "a474248b-e188-4a6e-ba8f-79bebacba36a",
+        "resource": "leads",
+        "action": "create",
+        "description": "create leads",
+        "createdAt": "2026-10-26T07:29:59.159Z"
+      },
+      {
+        "id": "030d929a-bd39-4de5-b843-06588117e0e8",
+        "resource": "leads",
+        "action": "update",
+        "description": "update leads",
+        "createdAt": "2026-10-26T07:29:59.160Z"
+      },
+      {
+        "id": "37c0c023-0c70-49f7-9ac2-ffda198fb281",
+        "resource": "leads",
+        "action": "delete",
+        "description": "delete leads",
+        "createdAt": "2026-10-26T07:29:59.161Z"
+      }
+    ],
+    "rolePermissions": [
+      {
+        "id": "395fb311-ec79-46dd-a896-33761582a44a",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "1d5d0a9d-8270-4bba-a52f-b0476d8bafad"
+      },
+      {
+        "id": "bb52ae36-1a8d-4ae7-8190-dd9a0e83d261",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "06b4169a-d9aa-428a-933e-6cd01dc67dff"
+      },
+      {
+        "id": "a72bf586-639a-4468-aea7-1df019c5cb0f",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "e6d0a3d4-e896-438f-a480-58bdfc7bd17b"
+      },
+      {
+        "id": "7ed0959f-4a49-4e6e-b26a-a262324bfc2a",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "e0588138-aec8-4aab-9b47-2b8aa1fedff2"
+      },
+      {
+        "id": "ceead881-5836-4743-ab59-0ed533317dd2",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "e1697773-6bff-47a6-ad9a-c76035d583f0"
+      },
+      {
+        "id": "12203299-1727-4768-b669-ccc26341cab3",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "67c8aaf0-b581-4c79-bb2e-f9adeacd27c5"
+      },
+      {
+        "id": "705566f9-c698-4c41-b072-881b7016f20c",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "f215c620-29c7-4e6b-89ec-8945696d7f16"
+      },
+      {
+        "id": "48285a24-ae0d-4b23-aeea-8a39801325b8",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "80c7b7ed-c588-4f18-b09a-26a12facf93b"
+      },
+      {
+        "id": "43dc2513-78aa-4fd3-8676-cf514da4ccd0",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "96c0f93d-96ff-46f8-88e2-926e18382155"
+      },
+      {
+        "id": "6f489763-170e-41ff-be89-72fddda3dcdb",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "58aa8bb6-da8c-40dc-88cf-a2bb18e6c0d0"
+      },
+      {
+        "id": "88e64200-2f3c-42cb-aaf2-4a1e5dd04a26",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "a474248b-e188-4a6e-ba8f-79bebacba36a"
+      },
+      {
+        "id": "1a23bbd8-2cfc-4c9f-8375-824cd6bb3a0f",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "030d929a-bd39-4de5-b843-06588117e0e8"
+      },
+      {
+        "id": "6ca32c86-e512-45e1-a579-3466e5b3929e",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "37c0c023-0c70-49f7-9ac2-ffda198fb281"
+      },
+      {
+        "id": "e8cfd461-054b-40ba-baa4-0486f0827ec7",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "b8767bf0-06f5-455e-87c8-5a6b65d19e52"
+      },
+      {
+        "id": "c3dac90d-eb4c-42d9-b4d9-72bd958d1edd",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "d81df080-f2fc-4e86-99e2-31f5b5e4cf18"
+      },
+      {
+        "id": "b05f229a-79ea-4381-bfbc-973fca1354e1",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "050af328-855a-4243-ad79-16ddfae1fd56"
+      },
+      {
+        "id": "5a7bb055-bad6-4bb7-b1d9-7b5144b7dfb6",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "e6ac1b71-10c1-4497-9f92-04646134c55a"
+      },
+      {
+        "id": "4306150f-1aef-4534-8b9d-5d182b0eb0b3",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "82dfa3ed-fba5-4c43-ba05-245a46dc87d1"
+      },
+      {
+        "id": "b8368516-b017-432d-bd49-e3644b4d1142",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "9127e17f-4430-416c-9da3-f3d24c8a243b"
+      },
+      {
+        "id": "b2cd5c2a-e245-40da-a411-ee044e819b5f",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "9afbdc5e-196a-4a31-9142-063aa6dae0a7"
+      },
+      {
+        "id": "887fea06-0809-43ef-aa96-943adeb12d7d",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "e78248a5-fca1-454f-8770-43cc659a2145"
+      },
+      {
+        "id": "26430590-ec67-47de-a687-f615511e68e4",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "2c8b82f8-cd79-4511-a510-be65a51b5663"
+      },
+      {
+        "id": "155a1c83-6b6a-4e7a-9519-c1ab5eaebcbd",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "a369702b-3e27-4c62-b963-5d491a20de68"
+      },
+      {
+        "id": "036f1846-0028-42e4-937a-79ff53be1901",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "379eaecb-8907-47e4-a4f1-41f08ea6538b"
+      },
+      {
+        "id": "2afe7724-ca60-4f85-9662-152280b45824",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "4944f00b-eb83-4532-9698-4fd2b77a4351"
+      },
+      {
+        "id": "7b64ec96-b4e7-4b3b-97c7-d9269f0a883d",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "b3c4cb62-dd7e-4bed-a656-2f2292615431"
+      },
+      {
+        "id": "c0485ed2-8d80-4372-b12b-98b14afcb5bc",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "7f51f789-33cf-4bfb-be4d-3e06dddcfdba"
+      },
+      {
+        "id": "74af88f0-e208-45c7-bdf2-74170ec916c0",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "23a9b081-2942-4b2a-8e41-5b713333fdd4"
+      },
+      {
+        "id": "6937a816-cb61-4e87-988e-38fc87db4d53",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "f0b238f3-7019-4f01-a631-2338403c2f60"
+      },
+      {
+        "id": "3b99a553-dc17-4913-be15-d75fb9496570",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "b584db18-0eb4-400c-bc9b-07f13b38300b"
+      },
+      {
+        "id": "e45e15ef-110d-49c0-840f-a3dcbf3dd42a",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "8eb03dca-cad6-42e8-bc9a-0cede2ebfc2e"
+      },
+      {
+        "id": "7f4b082a-09ac-40d2-9c1e-2f61ead11445",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "c3d5a9ee-4ff9-4f2e-be61-f83d937becab"
+      },
+      {
+        "id": "9323736c-cf9e-4832-87be-efda56895794",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "edb295ee-6b34-47c2-adde-eb19121bd424"
+      },
+      {
+        "id": "d48aea2f-dec7-4e7e-970f-66798b6c4cd9",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "5abd7c28-cc49-41a6-a6bc-4733b1869b0f"
+      },
+      {
+        "id": "5be5bde1-724c-478f-90a4-c42c64a0f5ee",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "dd6a4caf-a3f5-4528-b4e2-0f25dfaac58c"
+      },
+      {
+        "id": "4f220552-f9a1-4ad2-a0cc-7d2f5849d718",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "86a167d7-c19a-4be1-a83c-9cf260bac9ca"
+      },
+      {
+        "id": "696816db-0da2-4b1d-81f4-f8e7c63705c1",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "d6a506c7-b8f7-45c6-b43d-ae6d7d5ea168"
+      },
+      {
+        "id": "18fb6ecc-d7f6-4678-ab62-ba92f0b1f967",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "ade14a02-8d6a-4eaf-be95-ed5bda4043b0"
+      },
+      {
+        "id": "b9d6134c-9030-4575-bb0b-430f2be6e185",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "e510111e-1b6d-42f8-b3a8-0bad36b5c1eb"
+      },
+      {
+        "id": "6506ad9c-c233-4ba6-b878-df0a49088cbd",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "1ff6bf2e-2a88-45ad-a8ba-5aac98bc45e9"
+      },
+      {
+        "id": "7d1cd2c1-bd71-42c7-8771-747361757e68",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "45c58197-5250-4203-8929-bc91742b3324"
+      },
+      {
+        "id": "182b2267-58fe-4f1c-869a-fd3766c1e17c",
+        "roleId": "9dce1ad1-447f-40c3-872f-e535c984edf0",
+        "permissionId": "b10a6b0c-090d-47e8-9c4f-d2cac8398c12"
+      }
+    ],
+    "pipelineStages": [
+      {
+        "id": "b5900ae8-3873-4372-b8b9-12dd07fe496d",
+        "name": "New Lead (Qualification)",
+        "order": 1,
+        "stageType": "OPEN",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.282Z",
+        "updatedAt": "2026-10-26T07:29:59.282Z"
+      },
+      {
+        "id": "9b2f811f-e5a4-4c3d-86de-ed1dfd1b22f8",
+        "name": "Discovery & Requirement Discussion",
+        "order": 2,
+        "stageType": "OPEN",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.286Z",
+        "updatedAt": "2026-10-26T07:29:59.286Z"
+      },
+      {
+        "id": "7315c528-fcb6-46db-81ea-2d1d05e7b63a",
+        "name": "Demo / Meeting Completed",
+        "order": 3,
+        "stageType": "OPEN",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.288Z",
+        "updatedAt": "2026-10-26T07:29:59.288Z"
+      },
+      {
+        "id": "78c3ec79-2db8-4c6c-927f-e33d97027f33",
+        "name": "Proposal Sent",
+        "order": 4,
+        "stageType": "OPEN",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.290Z",
+        "updatedAt": "2026-10-26T07:29:59.290Z"
+      },
+      {
+        "id": "02b3b0de-12a0-4bc1-b60e-d362af36e785",
+        "name": "Negotiation",
+        "order": 5,
+        "stageType": "OPEN",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.291Z",
+        "updatedAt": "2026-10-26T07:29:59.291Z"
+      },
+      {
+        "id": "29185315-f354-48c9-bd62-497b3f5b1384",
+        "name": "Closed Won",
+        "order": 6,
+        "stageType": "WON",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.293Z",
+        "updatedAt": "2026-10-26T07:29:59.293Z"
+      },
+      {
+        "id": "ed94590d-8e4d-443b-b869-c8dcd2ffdcfd",
+        "name": "Closed Lost",
+        "order": 7,
+        "stageType": "LOST",
+        "dealCountBenchmark": 0,
+        "totalValueBenchmark": "0",
+        "createdAt": "2026-10-26T07:29:59.296Z",
+        "updatedAt": "2026-10-26T07:29:59.296Z"
+      }
+    ],
+    "lostReasons": [
+      {
+        "id": "c6d80e01-53b6-47dd-97fc-4b3468356ed6",
+        "code": "PRICE_TOO_HIGH",
+        "label": "Price too high / Budget constraint",
+        "isActive": true,
+        "createdAt": "2026-10-26T07:29:59.297Z",
+        "updatedAt": "2026-10-26T07:38:54.888Z"
+      },
+      {
+        "id": "c0427435-1586-4b89-ba53-81078bb969b1",
+        "code": "COMPETITOR_CHOSEN",
+        "label": "Selected alternative competitor",
+        "isActive": true,
+        "createdAt": "2026-10-26T07:29:59.299Z",
+        "updatedAt": "2026-10-26T07:38:54.889Z"
+      },
+      {
+        "id": "5c8e7879-bccc-4630-9a7f-0b5f68c6a29c",
+        "code": "TIMING_POSTPONED",
+        "label": "Project postponed or deprioritized",
+        "isActive": true,
+        "createdAt": "2026-10-26T07:29:59.299Z",
+        "updatedAt": "2026-10-26T07:38:54.889Z"
+      },
+      {
+        "id": "8dc075e2-0cf5-44ee-84d1-6a1fa77cfca7",
+        "code": "POOR_FIT",
+        "label": "Requirements outside technical capabilities",
+        "isActive": true,
+        "createdAt": "2026-10-26T07:29:59.301Z",
+        "updatedAt": "2026-10-26T07:38:54.890Z"
+      },
+      {
+        "id": "b7400ad9-2379-4770-ae8d-61ac56246576",
+        "code": "UNRESPONSIVE",
+        "label": "Prospect stopped responding",
+        "isActive": true,
+        "createdAt": "2026-10-26T07:29:59.302Z",
+        "updatedAt": "2026-10-26T07:38:54.891Z"
+      }
+    ],
+    "leads": [
+      {
+        "id": "4e96ed3f-356d-40ac-a93d-136ae04ea40b",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "fullName": "vimal",
+        "companyName": null,
+        "title": null,
+        "phone": "3452345353",
+        "email": "rage@gmail.com",
+        "source": "WEBSITE_FORM",
+        "status": "NEW",
+        "priority": "MEDIUM",
+        "temperature": null,
+        "leadScore": 80,
+        "serviceInterest": "ai agent",
+        "category": null,
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-26T07:36:50.574Z",
+        "nextActionDueAt": null,
+        "nextActionType": null,
+        "nextActionPurpose": null,
+        "nextActionOwnerId": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-26T07:36:30.508Z",
+        "updatedAt": "2026-10-26T07:36:30.508Z"
+      },
+      {
+        "id": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "fullName": "Veerasolai",
+        "companyName": null,
+        "title": null,
+        "phone": "8438524424",
+        "email": null,
+        "source": "WEBSITE_FORM",
+        "status": "CONVERTED",
+        "priority": "MEDIUM",
+        "temperature": null,
+        "leadScore": 80,
+        "serviceInterest": "AI Development Company",
+        "category": null,
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-26T07:36:50.599Z",
+        "nextActionDueAt": null,
+        "nextActionType": null,
+        "nextActionPurpose": null,
+        "nextActionOwnerId": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-24T06:39:36.204Z",
+        "updatedAt": "2026-10-24T06:40:40.739Z"
+      },
+      {
+        "id": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "fullName": "Sneha Reddy",
+        "companyName": "Apex Retail Solutions",
+        "title": "VP of Product",
+        "phone": "9789065432",
+        "email": "sneha.reddy@apexretail.in",
+        "source": "MANUAL",
+        "status": "NEGOTIATION",
+        "priority": "MEDIUM",
+        "temperature": "WARM",
+        "leadScore": 75,
+        "serviceInterest": "Custom Web Application Development",
+        "category": null,
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-26T07:36:50.602Z",
+        "nextActionDueAt": null,
+        "nextActionType": null,
+        "nextActionPurpose": null,
+        "nextActionOwnerId": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:47:31.291Z",
+        "updatedAt": "2026-10-26T05:27:12.860Z"
+      },
+      {
+        "id": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "fullName": "Arun Kumar",
+        "companyName": "Nexus Innovations Pvt Ltd",
+        "title": "Chief Technology Officer",
+        "phone": "9840123456",
+        "email": "arun.kumar@nexusinno.com",
+        "source": "WEBSITE_FORM",
+        "status": "CONVERTED",
+        "priority": "HIGH",
+        "temperature": "HOT",
+        "leadScore": 88,
+        "serviceInterest": "Cloud Modernization & AI Integration",
+        "category": null,
+        "unqualifiedReason": null,
+        "unqualifiedNotes": null,
+        "lastActivityAt": "2026-10-26T07:36:50.605Z",
+        "nextActionDueAt": null,
+        "nextActionType": null,
+        "nextActionPurpose": null,
+        "nextActionOwnerId": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:47:31.007Z",
+        "updatedAt": "2026-10-26T05:20:41.460Z"
+      }
+    ],
+    "deals": [
+      {
+        "id": "8894e5d4-bfce-4f7d-a588-c32c16d38b2d",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "4e96ed3f-356d-40ac-a93d-136ae04ea40b",
+        "stageId": "b5900ae8-3873-4372-b8b9-12dd07fe496d",
+        "title": "vimal - ai agent",
+        "value": "0",
+        "expectedCloseDate": null,
+        "probability": 50,
+        "status": "OPEN",
+        "lostReasonId": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-26T07:36:30.516Z",
+        "updatedAt": "2026-10-26T07:36:30.516Z"
+      },
+      {
+        "id": "0e61c86c-82ca-4174-8599-55c5f6dfb1f1",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "36c6a4f2-9ed2-4040-b561-213f88a9ff4e",
+        "stageId": "b5900ae8-3873-4372-b8b9-12dd07fe496d",
+        "title": "Veerasolai - AI Development Company",
+        "value": "0",
+        "expectedCloseDate": null,
+        "probability": 50,
+        "status": "WON",
+        "lostReasonId": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-24T06:39:36.212Z",
+        "updatedAt": "2026-10-24T06:40:40.640Z"
+      },
+      {
+        "id": "00c5cd32-0548-4c55-afe3-245f566a2dbb",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "stageId": "b5900ae8-3873-4372-b8b9-12dd07fe496d",
+        "title": "Enterprise AI & Cloud Infrastructure - Nexus Innovations",
+        "value": "708000",
+        "expectedCloseDate": null,
+        "probability": 50,
+        "status": "WON",
+        "lostReasonId": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:49:56.935Z",
+        "updatedAt": "2026-10-26T05:20:41.457Z"
+      },
+      {
+        "id": "5eb8a3d4-5d01-487f-ae1f-edda754297aa",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "d4b3923a-8f66-4a8f-bde7-61fa2ff2c912",
+        "stageId": "b5900ae8-3873-4372-b8b9-12dd07fe496d",
+        "title": "Sneha Reddy - Custom Web Application Development",
+        "value": "0",
+        "expectedCloseDate": null,
+        "probability": 50,
+        "status": "OPEN",
+        "lostReasonId": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:47:31.295Z",
+        "updatedAt": "2026-10-24T06:36:29.256Z"
+      },
+      {
+        "id": "1e4b4335-f8ee-4ffa-b6a0-2550314abc0e",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "leadId": "786052b3-db19-48c9-83d2-fe043e6345f2",
+        "stageId": "b5900ae8-3873-4372-b8b9-12dd07fe496d",
+        "title": "Arun Kumar - Cloud Modernization & AI Integration",
+        "value": "0",
+        "expectedCloseDate": null,
+        "probability": 50,
+        "status": "OPEN",
+        "lostReasonId": null,
+        "lostReasonNotes": null,
+        "closedAt": null,
+        "wonNotes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:47:31.014Z",
+        "updatedAt": "2026-10-23T08:23:10.486Z"
+      }
+    ],
+    "tasks": [],
+    "activities": [],
+    "meetings": [
+      {
+        "id": "580f7ebb-008d-4e1c-857c-489a113e5fb8",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "customerId": null,
+        "dealId": null,
+        "title": "AI Architecture & Cloud Infrastructure Demo with Nexus",
+        "description": null,
+        "meetingType": "MEETING",
+        "startTime": "2026-10-24T04:49:11.666Z",
+        "endTime": "2026-10-24T05:34:11.666Z",
+        "duration": null,
+        "meetingUrl": null,
+        "location": null,
+        "whatsappMessage": null,
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": null,
+        "status": "COMPLETED",
+        "outcome": null,
+        "notes": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:49:57.349Z",
+        "updatedAt": "2026-10-26T07:38:56.402Z"
+      }
+    ],
+    "proposals": [
+      {
+        "id": "324c5c7f-414e-47b6-8806-8d7cb0fd9a96",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "customerId": null,
+        "dealId": null,
+        "proposalNumber": "PROP-202610-0007",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal (v2)",
+        "description": null,
+        "subtotal": "0",
+        "discountAmount": "0",
+        "taxAmount": "0",
+        "totalAmount": "708000",
+        "currency": "INR",
+        "validUntil": null,
+        "status": "ACCEPTED",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T09:43:59.361Z",
+        "updatedAt": "2026-10-26T07:38:56.685Z"
+      },
+      {
+        "id": "a348aff9-c1df-43cf-86a6-ef3f6dd87730",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "customerId": null,
+        "dealId": null,
+        "proposalNumber": "PROP-202610-0006",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal (v2)",
+        "description": null,
+        "subtotal": "0",
+        "discountAmount": "0",
+        "taxAmount": "0",
+        "totalAmount": "708000",
+        "currency": "INR",
+        "validUntil": null,
+        "status": "DRAFT",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T09:43:59.066Z",
+        "updatedAt": "2026-10-26T07:38:56.707Z"
+      },
+      {
+        "id": "d8c5dd14-8b68-4644-990f-e4b1501be007",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "customerId": null,
+        "dealId": null,
+        "proposalNumber": "PROP-202610-0005",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal (v2)",
+        "description": null,
+        "subtotal": "0",
+        "discountAmount": "0",
+        "taxAmount": "0",
+        "totalAmount": "708000",
+        "currency": "INR",
+        "validUntil": null,
+        "status": "DRAFT",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T09:43:58.711Z",
+        "updatedAt": "2026-10-26T07:38:56.713Z"
+      },
+      {
+        "id": "152459c4-f843-4596-b1e8-c1720a752ef6",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "customerId": null,
+        "dealId": null,
+        "proposalNumber": "PROP-202610-0003",
+        "title": "Customer Proposal Test",
+        "description": null,
+        "subtotal": "0",
+        "discountAmount": "0",
+        "taxAmount": "0",
+        "totalAmount": "4000",
+        "currency": "INR",
+        "validUntil": null,
+        "status": "DRAFT",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T08:02:57.746Z",
+        "updatedAt": "2026-10-26T07:38:56.715Z"
+      },
+      {
+        "id": "d574f79e-00e8-425c-8b1e-ab9ab575af74",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "customerId": null,
+        "dealId": null,
+        "proposalNumber": "PROP-202610-0001",
+        "title": "Cloud Modernization & AI Integration Commercial Proposal",
+        "description": null,
+        "subtotal": "0",
+        "discountAmount": "0",
+        "taxAmount": "0",
+        "totalAmount": "708000",
+        "currency": "INR",
+        "validUntil": null,
+        "status": "ACCEPTED",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "creatorId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "sentAt": null,
+        "acceptedAt": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:49:58.137Z",
+        "updatedAt": "2026-10-26T07:38:56.717Z"
+      }
+    ],
+    "customers": [
+      {
+        "id": "2448fa9c-08de-4827-a36e-24bf526cd5cd",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "dealId": null,
+        "companyName": "Veerasolai",
+        "contactName": "Veerasolai",
+        "title": null,
+        "phone": "8438524424",
+        "email": "8438524424@client.digitechzo.local",
+        "address": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "India",
+        "category": null,
+        "purchasedServices": null,
+        "status": "ACTIVE",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "customerSince": "2026-10-26T07:33:47.119Z",
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-24T06:40:40.743Z",
+        "updatedAt": "2026-10-26T07:38:56.096Z"
+      },
+      {
+        "id": "67bd2142-d025-40ed-a509-b59521f36446",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "dealId": null,
+        "companyName": "Apex Retail Solutions",
+        "contactName": "Sneha Reddy",
+        "title": null,
+        "phone": "9789065432",
+        "email": "sneha.reddy@apexretail.in",
+        "address": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "India",
+        "category": null,
+        "purchasedServices": null,
+        "status": "ACTIVE",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "customerSince": "2026-10-26T07:33:47.127Z",
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T07:52:08.180Z",
+        "updatedAt": "2026-10-26T07:38:56.101Z"
+      },
+      {
+        "id": "df131725-b493-459a-8e92-891be5a1aa8c",
+        "organizationId": "f28ddd97-3316-4a07-a5f9-01c7bf10f47c",
+        "leadId": null,
+        "dealId": null,
+        "companyName": "Nexus Innovations Pvt Ltd",
+        "contactName": "Arun Kumar",
+        "title": null,
+        "phone": "9840123456",
+        "email": "arun.kumar@nexusinno.com",
+        "address": null,
+        "city": null,
+        "state": null,
+        "postalCode": null,
+        "country": "India",
+        "category": null,
+        "purchasedServices": null,
+        "status": "ACTIVE",
+        "ownerId": "0f048a4c-0223-475f-9bc8-4e3e026dd9a7",
+        "customerSince": "2026-10-26T07:33:47.135Z",
+        "notes": null,
+        "deletedAt": null,
+        "createdAt": "2026-10-23T04:50:56.379Z",
+        "updatedAt": "2026-10-26T07:38:56.120Z"
+      }
+    ],
+    "invoices": [],
+    "auditLogs": []
+  }
+}

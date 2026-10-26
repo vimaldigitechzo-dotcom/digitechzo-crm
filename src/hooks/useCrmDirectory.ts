@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { crmApi } from '@/lib/api';
-import { MOCK_USERS } from '@/mocks/mockAuth';
-import { MOCK_LEADS } from '@/mocks/mockData';
 
 export interface CrmDirectoryClient {
   id: string;
@@ -25,7 +23,7 @@ export interface CrmDirectoryUser {
 }
 
 export function useCrmDirectory() {
-  // 1. Fetch Users / Team Members
+  // 1. Fetch Users / Team Members from database via API
   const usersQuery = useQuery({
     queryKey: ['crm-directory-users'],
     queryFn: () => crmApi.getUsers({ limit: 100 }),
@@ -33,7 +31,7 @@ export function useCrmDirectory() {
     retry: 1,
   });
 
-  // 2. Fetch Leads
+  // 2. Fetch Leads from database via API
   const leadsQuery = useQuery({
     queryKey: ['crm-directory-leads'],
     queryFn: () => crmApi.getLeads({ limit: 100 }),
@@ -41,7 +39,7 @@ export function useCrmDirectory() {
     retry: 1,
   });
 
-  // 3. Fetch Customers
+  // 3. Fetch Customers from database via API
   const customersQuery = useQuery({
     queryKey: ['crm-directory-customers'],
     queryFn: () => crmApi.getCustomers({ limit: 100 }),
@@ -49,7 +47,7 @@ export function useCrmDirectory() {
     retry: 1,
   });
 
-  // Normalize Team Users
+  // Normalize Team Users (exclusively from real database API)
   const teamUsers = useMemo<CrmDirectoryUser[]>(() => {
     const uData = usersQuery.data as any;
     const rawUsers: any[] =
@@ -59,7 +57,7 @@ export function useCrmDirectory() {
       uData?.items ||
       (Array.isArray(uData) ? uData : []);
 
-    const fromApi = (Array.isArray(rawUsers) ? rawUsers : [])
+    return (Array.isArray(rawUsers) ? rawUsers : [])
       .filter((u: any) => u.status === 'ACTIVE' || !u.status)
       .map((u: any) => ({
         id: u.id,
@@ -67,26 +65,6 @@ export function useCrmDirectory() {
         email: u.email || '',
         role: u.role?.displayAlias || u.role?.name || u.role || 'Member',
       }));
-
-    if (fromApi.length > 0) {
-      return fromApi;
-    }
-
-    const fromMock = MOCK_USERS.map((u) => ({
-      id: u.id,
-      name: u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
-      email: u.email || '',
-      role: u.role || 'Member',
-    }));
-
-    // Merge ensuring unique IDs and unique Names
-    const map = new Map<string, CrmDirectoryUser>();
-    fromMock.forEach((u) => map.set(u.name.toLowerCase(), u));
-    fromApi.forEach((u) => {
-      if (u.name) map.set(u.name.toLowerCase(), u);
-    });
-
-    return Array.from(map.values());
   }, [usersQuery.data]);
 
   // Unique Owner Names for Filter Dropdowns
@@ -94,7 +72,7 @@ export function useCrmDirectory() {
     return Array.from(new Set(teamUsers.map((u) => u.name).filter(Boolean)));
   }, [teamUsers]);
 
-  // Normalize Clients (Leads + Customers + Mock Leads fallback)
+  // Normalize Clients (exclusively from real Leads and Customers in database)
   const clients = useMemo<CrmDirectoryClient[]>(() => {
     const rawLeads: any[] =
       leadsQuery.data?.items ||
@@ -142,7 +120,7 @@ export function useCrmDirectory() {
       }
     });
 
-    // Add Leads from API
+    // Add Leads from Database
     rawLeads.forEach((l: any) => {
       const company = (l.companyName || '').trim();
       const contact = (l.fullName || l.name || '').trim();
@@ -165,38 +143,7 @@ export function useCrmDirectory() {
           contactName: contact,
           phone,
           email,
-          status: l.status || 'HOT',
-          type: 'lead',
-          displayName,
-          displayText: `${displayName} ${details}`.trim(),
-        });
-      }
-    });
-
-    // If leads and customers are empty or few, add MOCK_LEADS so directory is rich
-    MOCK_LEADS.forEach((l) => {
-      const company = (l.companyName || '').trim();
-      const contact = (l.fullName || '').trim();
-      const phone = (l.phone || '').trim();
-      const email = (l.email || '').trim();
-      const displayName = company || contact;
-      const key = `${displayName.toLowerCase()}_${phone}`;
-
-      if (!seen.has(key)) {
-        seen.add(key);
-        const details = [
-          contact && contact !== company ? `(${contact})` : '',
-          phone ? `• ${phone}` : '',
-          email ? `• ${email}` : '',
-        ].filter(Boolean).join(' ');
-
-        list.push({
-          id: l.id,
-          companyName: company || contact,
-          contactName: contact,
-          phone,
-          email,
-          status: l.status,
+          status: l.status || 'NEW',
           type: 'lead',
           displayName,
           displayText: `${displayName} ${details}`.trim(),

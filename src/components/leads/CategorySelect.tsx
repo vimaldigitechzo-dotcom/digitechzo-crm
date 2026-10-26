@@ -1,25 +1,22 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
-  Bot,
-  Terminal,
-  Blocks,
-  Globe,
-  Megaphone,
   ChevronDown,
   Check,
+  Tag,
+  X,
   Plus,
-  Search,
-  Sparkles,
+  Trash2,
 } from 'lucide-react';
 import {
   DEFAULT_LEAD_CATEGORIES,
   getAllCategories,
   addCustomCategory,
+  removeCustomCategory,
   CATEGORIES_UPDATED_EVENT,
 } from '@/lib/categories';
 
 export const LEAD_CATEGORIES = DEFAULT_LEAD_CATEGORIES;
-export type LeadCategory = (typeof DEFAULT_LEAD_CATEGORIES)[number];
+export type LeadCategory = string;
 
 interface CategorySelectProps {
   value: string;
@@ -34,25 +31,21 @@ interface CategorySelectProps {
 }
 
 export const CategorySelect: React.FC<CategorySelectProps> = ({
-  value,
+  value = '',
   onChange,
   disabled = false,
   required = false,
-  placeholder = 'Select or add category...',
+  placeholder = 'Type category or choose from list...',
   id,
-  extraCategories = [],
   className = '',
-  allowAddNew = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchFilter, setSearchFilter] = useState('');
-  const [isAddingNew, setIsAddingNew] = useState(false);
-  const [newCategoryInput, setNewCategoryInput] = useState('');
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [customListVersion, setCustomListVersion] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const newCatInputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   // Listen for storage / cross-component category updates
   useEffect(() => {
@@ -67,20 +60,33 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     };
   }, []);
 
-  // Compute all available categories (predefined + custom + extra + current value)
+  // Clean slate: strictly track categories explicitly confirmed and saved by admin
   const allCategories = useMemo(() => {
-    return getAllCategories([...extraCategories, value]);
+    return getAllCategories([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [extraCategories, value, customListVersion]);
+  }, [customListVersion]);
 
-  // Click outside listener to close dropdown
+  // Filter categories dynamically: ONLY show when user has started typing
+  const filteredCategories = useMemo(() => {
+    const q = (value || '').trim().toLowerCase();
+    // When input is blank, do NOT show any dropdown list
+    if (!q) return [];
+    return allCategories.filter((cat) => cat.toLowerCase().includes(q));
+  }, [allCategories, value]);
+
+  // Does the typed text exactly match an existing category?
+  const hasExactMatch = useMemo(() => {
+    const q = (value || '').trim().toLowerCase();
+    if (!q) return false;
+    return allCategories.some((cat) => cat.toLowerCase() === q);
+  }, [allCategories, value]);
+
+  // Click outside listener to close downlist
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
-        setIsAddingNew(false);
-        setSearchFilter('');
-        setNewCategoryInput('');
+        setHighlightedIndex(-1);
       }
     };
 
@@ -90,233 +96,194 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     };
   }, []);
 
-  // Filter categories only if user typed a search filter
-  const filteredCategories = useMemo(() => {
-    const q = searchFilter.trim().toLowerCase();
-    if (!q) return allCategories;
-    return allCategories.filter((cat) => cat.toLowerCase().includes(q));
-  }, [allCategories, searchFilter]);
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'AI Development Company':
-        return <Bot className="h-3.5 w-3.5 text-indigo-500 shrink-0" />;
-      case 'Forward Deployed Engineering':
-        return <Terminal className="h-3.5 w-3.5 text-emerald-500 shrink-0" />;
-      case 'Blockchain Development Company':
-        return <Blocks className="h-3.5 w-3.5 text-amber-500 shrink-0" />;
-      case 'Web3 Development Company':
-        return <Globe className="h-3.5 w-3.5 text-blue-500 shrink-0" />;
-      case 'Web3 Marketing Agency':
-        return <Megaphone className="h-3.5 w-3.5 text-purple-500 shrink-0" />;
-      default:
-        return <Sparkles className="h-3.5 w-3.5 text-amber-500 shrink-0" />;
+  const handleDeleteCategory = (e: React.MouseEvent, category: string) => {
+    e.stopPropagation();
+    removeCustomCategory(category);
+    if (value.trim().toLowerCase() === category.trim().toLowerCase()) {
+      onChange('');
     }
   };
 
-  const handleSelectCategory = (category: string) => {
-    onChange(category);
+  const handleSelect = (category: string) => {
+    const clean = category.trim();
+    onChange(clean);
+    addCustomCategory(clean);
     setIsOpen(false);
-    setSearchFilter('');
-    setIsAddingNew(false);
+    setHighlightedIndex(-1);
   };
 
-  const handleAddNewCategory = () => {
-    const trimmed = newCategoryInput.trim();
-    if (!trimmed) return;
-
-    addCustomCategory(trimmed);
-    onChange(trimmed);
-    setIsOpen(false);
-    setIsAddingNew(false);
-    setNewCategoryInput('');
-    setSearchFilter('');
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange('');
+    setIsOpen(true);
+    setHighlightedIndex(-1);
+    inputRef.current?.focus();
   };
 
-  const handleToggleOpen = () => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (disabled) return;
-    const nextState = !isOpen;
-    setIsOpen(nextState);
-    setSearchFilter('');
-    setIsAddingNew(false);
-    if (nextState) {
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 50);
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!isOpen) {
+        setIsOpen(true);
+        setHighlightedIndex(0);
+        return;
+      }
+      setHighlightedIndex((prev) =>
+        prev < filteredCategories.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === 'Enter') {
+      if (isOpen && highlightedIndex >= 0 && highlightedIndex < filteredCategories.length) {
+        e.preventDefault();
+        handleSelect(filteredCategories[highlightedIndex]);
+      } else if (value && value.trim()) {
+        addCustomCategory(value.trim());
+        setIsOpen(false);
+      }
+    } else if (e.key === 'Escape') {
+      setIsOpen(false);
+      setHighlightedIndex(-1);
     }
   };
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
-      {/* Trigger Button / Display Input */}
-      <button
-        id={id}
-        type="button"
-        disabled={disabled}
-        onClick={handleToggleOpen}
-        className={`w-full h-8 rounded-input border border-border bg-white px-2.5 text-xs text-left flex items-center justify-between gap-2 shadow-subtle hover:border-slate-300 focus:outline-none focus:ring-1 focus:ring-primary transition-all cursor-pointer ${
-          disabled ? 'opacity-60 cursor-not-allowed bg-slate-50' : ''
-        }`}
-      >
-        <div className="flex items-center gap-2 truncate">
-          {value ? (
-            <>
-              {getCategoryIcon(value)}
-              <span className="text-txt-primary font-medium truncate">{value}</span>
-            </>
-          ) : (
-            <span className="text-txt-muted truncate">{placeholder}</span>
-          )}
-        </div>
-
-        <ChevronDown
-          className={`h-3.5 w-3.5 text-txt-muted shrink-0 transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-primary' : ''
-          }`}
-        />
-      </button>
-
-      {/* Hidden input for form validity if required */}
-      {required && (
+      {/* Direct Editable Text Input */}
+      <div className="relative flex items-center">
         <input
+          ref={inputRef}
+          id={id}
           type="text"
           value={value}
           required={required}
-          onChange={() => {}}
-          className="sr-only"
-          tabIndex={-1}
+          disabled={disabled}
+          autoComplete="off"
+          placeholder={placeholder}
+          onChange={(e) => {
+            onChange(e.target.value);
+            if (!isOpen) setIsOpen(true);
+            setHighlightedIndex(-1);
+          }}
+          onFocus={() => {
+            if (!disabled) setIsOpen(true);
+          }}
+          onKeyDown={handleKeyDown}
+          className="w-full h-8 rounded-input border border-border bg-white pl-2.5 pr-14 text-xs text-txt-primary placeholder:text-txt-muted focus:outline-none focus:ring-1 focus:ring-primary shadow-subtle hover:border-slate-300 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         />
-      )}
 
-      {/* Dropdown Menu - Directly shows ALL categories */}
-      {isOpen && !disabled && (
-        <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-border rounded-card shadow-lg py-1 text-xs max-h-72 overflow-hidden flex flex-col animate-in fade-in-50 zoom-in-95 duration-100">
-          {/* Quick Search Header */}
-          <div className="p-1.5 border-b border-border/60 bg-slate-50/50">
-            <div className="relative flex items-center">
-              <Search className="absolute left-2 h-3.5 w-3.5 text-txt-muted pointer-events-none" />
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchFilter}
-                onChange={(e) => setSearchFilter(e.target.value)}
-                placeholder="Search categories or type to filter..."
-                className="w-full h-7 rounded-input border border-border bg-white pl-7 pr-2 text-xs text-txt-primary placeholder:text-txt-muted focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-            </div>
-          </div>
+        {/* Action Buttons inside Input */}
+        <div className="absolute right-1.5 flex items-center gap-1">
+          {/* Add/Save Category Check Icon when user typed a category */}
+          {value.trim().length >= 2 && !disabled && (
+            <button
+              type="button"
+              onClick={() => handleSelect(value)}
+              className="p-1 rounded text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 cursor-pointer transition-colors"
+              title="Save category to list"
+              tabIndex={-1}
+            >
+              <Check className="h-3.5 w-3.5 font-bold" />
+            </button>
+          )}
 
-          {/* Categories List Container */}
-          <div className="overflow-y-auto flex-1 py-1 max-h-48">
-            <div className="px-2.5 py-1 text-[10px] font-semibold text-txt-muted uppercase tracking-wider flex items-center justify-between">
-              <span>Categories ({filteredCategories.length})</span>
-              <span className="text-[9px] font-normal lowercase">click to select</span>
-            </div>
+          {value && !disabled && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer transition-colors"
+              title="Clear category"
+              tabIndex={-1}
+            >
+              <X className="h-3 w-3" />
+            </button>
+          )}
 
-            {filteredCategories.length > 0 ? (
-              filteredCategories.map((cat) => {
-                const isSelected = value === cat;
-                const isPredefined = (DEFAULT_LEAD_CATEGORIES as readonly string[]).includes(cat);
+          <button
+            type="button"
+            onClick={() => {
+              if (disabled) return;
+              setIsOpen((prev) => !prev);
+              inputRef.current?.focus();
+            }}
+            className="p-1 rounded text-slate-400 hover:text-slate-600 cursor-pointer transition-transform"
+            tabIndex={-1}
+            title="Toggle category list"
+          >
+            <ChevronDown
+              className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                isOpen ? 'rotate-180 text-primary' : ''
+              }`}
+            />
+          </button>
+        </div>
+      </div>
+
+      {/* Downlist Dropdown: ONLY show when user has started typing or there are matching categories */}
+      {isOpen && !disabled && (value.trim().length > 0 || filteredCategories.length > 0) && (
+        <div
+          ref={listRef}
+          className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-border rounded-xl shadow-lg text-xs max-h-56 overflow-y-auto py-1 animate-in fade-in-50 zoom-in-95 duration-100"
+        >
+          {/* If user typed a custom category not yet in list, offer to use it directly */}
+          {value.trim() && !hasExactMatch && (
+            <button
+              type="button"
+              onClick={() => handleSelect(value)}
+              className="w-full flex items-center gap-2 px-3 py-1.5 text-left bg-emerald-50/70 hover:bg-emerald-100/70 text-emerald-800 font-medium transition-colors border-b border-emerald-100 cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+              <span className="truncate">Use &quot;<strong className="text-emerald-900">{value.trim()}</strong>&quot;</span>
+              <span className="ml-auto text-[10px] text-emerald-600 font-normal uppercase tracking-wider shrink-0">New</span>
+            </button>
+          )}
+
+          {/* List of matching categories */}
+          {filteredCategories.length > 0 && (
+            <div className="py-0.5">
+              <div className="px-2.5 py-1 text-[10px] font-semibold text-txt-muted uppercase tracking-wider flex items-center justify-between">
+                <span>Matching Categories ({filteredCategories.length})</span>
+                <span className="text-[9px] font-normal lowercase">click to select</span>
+              </div>
+
+              {filteredCategories.map((cat, idx) => {
+                const isSelected = value.trim().toLowerCase() === cat.toLowerCase();
+                const isHighlighted = idx === highlightedIndex;
 
                 return (
-                  <button
+                  <div
                     key={cat}
-                    type="button"
-                    onClick={() => handleSelectCategory(cat)}
-                    className={`w-full flex items-center justify-between px-2.5 py-1.5 text-left hover:bg-slate-50 transition-colors cursor-pointer ${
-                      isSelected ? 'bg-primary/5 text-primary font-medium' : 'text-txt-primary'
+                    onClick={() => handleSelect(cat)}
+                    onMouseEnter={() => setHighlightedIndex(idx)}
+                    className={`group w-full flex items-center justify-between px-3 py-1.5 text-left transition-colors cursor-pointer ${
+                      isSelected
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : isHighlighted
+                        ? 'bg-slate-100 text-txt-primary'
+                        : 'text-txt-primary hover:bg-slate-50'
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
-                      {getCategoryIcon(cat)}
+                      <Tag className="h-3 w-3 text-slate-400 shrink-0" />
                       <span className="truncate">{cat}</span>
-                      {!isPredefined && (
-                        <span className="text-[9px] px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200">
-                          Custom
-                        </span>
-                      )}
                     </div>
-                    {isSelected && <Check className="h-3.5 w-3.5 text-primary shrink-0 ml-2" />}
-                  </button>
+                    <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                      {isSelected && <Check className="h-3.5 w-3.5 text-primary shrink-0" />}
+                      <span
+                        role="button"
+                        onClick={(e) => handleDeleteCategory(e, cat)}
+                        className="opacity-0 group-hover:opacity-100 hover:opacity-100 p-0.5 rounded text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer"
+                        title="Remove category"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </span>
+                    </div>
+                  </div>
                 );
-              })
-            ) : (
-              <div className="px-3 py-2 text-xs text-txt-muted text-center italic">
-                No matching category found
-              </div>
-            )}
-          </div>
-
-          {/* Add New Category / Other Section - only when allowAddNew is true */}
-          {allowAddNew && (
-            <div className="border-t border-border/70 p-1.5 bg-slate-50/80">
-              {isAddingNew ? (
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-1.5">
-                    <input
-                      ref={newCatInputRef}
-                      type="text"
-                      value={newCategoryInput}
-                      onChange={(e) => setNewCategoryInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddNewCategory();
-                        }
-                        if (e.key === 'Escape') {
-                          setIsAddingNew(false);
-                        }
-                      }}
-                      placeholder="Enter new category name..."
-                      className="flex-1 h-7 rounded-input border border-border bg-white px-2 text-xs text-txt-primary focus:outline-none focus:ring-1 focus:ring-[#57B71B]"
-                      autoFocus
-                    />
-                    <button
-                      type="button"
-                      onClick={handleAddNewCategory}
-                      disabled={!newCategoryInput.trim()}
-                      className="h-7 px-2.5 rounded-btn bg-[#57B71B] hover:bg-[#469815] text-white text-xs font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-                    >
-                      Add
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsAddingNew(false);
-                        setNewCategoryInput('');
-                      }}
-                      className="h-7 px-2 text-xs text-txt-muted hover:text-txt-primary cursor-pointer shrink-0"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                  <span className="text-[10px] text-txt-muted block px-0.5">
-                    Press Enter to save and select immediately for leads & customers.
-                  </span>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsAddingNew(true);
-                    if (searchFilter.trim() && !filteredCategories.includes(searchFilter.trim())) {
-                      setNewCategoryInput(searchFilter.trim());
-                    }
-                    setTimeout(() => {
-                      newCatInputRef.current?.focus();
-                    }, 50);
-                  }}
-                  className="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-slate-100 text-txt-secondary hover:text-txt-primary transition-colors cursor-pointer text-xs"
-                >
-                  <div className="flex items-center gap-1.5 font-medium text-[#2563EB]">
-                    <Plus className="h-3.5 w-3.5" />
-                    <span>Other / Add New Category</span>
-                  </div>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200/60 text-txt-muted">
-                    Custom
-                  </span>
-                </button>
-              )}
+              })}
             </div>
           )}
         </div>

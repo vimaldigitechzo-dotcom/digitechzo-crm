@@ -1,11 +1,10 @@
 import { AuthSession, User } from '@/types/auth';
 
 const STORAGE_KEY = 'digitechzo_auth_session';
-const isDev = Boolean((import.meta as any)?.env?.DEV);
-const defaultUrl = isDev ? '' : 'https://digitechzo-crm-api.onrender.com';
-const rawEnvUrl = (import.meta as any)?.env?.VITE_API_URL || defaultUrl;
-const RAW_API_URL = rawEnvUrl ? String(rawEnvUrl).replace(/\/+$/, '') : '';
-const API_BASE_URL = RAW_API_URL ? `${RAW_API_URL}/api/v1` : '/api/v1';
+// Target local backend API server directly (defaults to local PostgreSQL backend on port 4000)
+const rawEnvUrl = (import.meta as any)?.env?.VITE_API_URL || 'http://localhost:4000';
+const RAW_API_URL = String(rawEnvUrl).replace(/\/+$/, '');
+const API_BASE_URL = `${RAW_API_URL}/api/v1`;
 
 export class ApiError extends Error {
   constructor(public status: number, message: string, public data?: any) {
@@ -44,8 +43,24 @@ export const authStorage = {
 
   clearSession(): void {
     localStorage.removeItem(STORAGE_KEY);
+    try {
+      localStorage.removeItem('digitechzo_mock_session');
+      localStorage.removeItem('digitechzo_crm_custom_categories');
+    } catch {
+      // Ignore
+    }
   },
 };
+
+// Immediate cleanup on startup to ensure zero mock/business data in localStorage
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem('digitechzo_mock_session');
+    localStorage.removeItem('digitechzo_crm_custom_categories');
+  } catch {
+    // Ignore
+  }
+}
 
 function triggerSessionExpired(reason: string) {
   authStorage.clearSession();
@@ -88,7 +103,7 @@ export async function apiFetch<T = any>(endpoint: string, options: RequestInit =
           const refreshData = await refreshRes.json();
           const newAccessToken = refreshData.data?.accessToken || refreshData.accessToken;
           const newRefreshToken = refreshData.data?.refreshToken || refreshData.refreshToken;
-          const newExpiresIn = refreshData.data?.expiresIn || refreshData.expiresIn || 2592000;
+          const newExpiresIn = refreshData.data?.expiresIn || refreshData.expiresIn || 172800; // 2 days max
           const newSession: AuthSession = {
             ...session,
             accessToken: newAccessToken,
@@ -182,7 +197,7 @@ export const authApi = {
       user,
       accessToken: data.accessToken,
       refreshToken: data.refreshToken,
-      expiresAt: new Date(Date.now() + (data.expiresIn || 2592000) * 1000).toISOString(),
+      expiresAt: new Date(Date.now() + (data.expiresIn || 172800) * 1000).toISOString(), // 2 days max
     };
 
     authStorage.setSession(session);

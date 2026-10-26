@@ -1,69 +1,72 @@
-export const DEFAULT_LEAD_CATEGORIES = [
-  'AI Development Company',
-  'Forward Deployed Engineering',
-  'Blockchain Development Company',
-  'Web3 Development Company',
-  'Web3 Marketing Agency',
-] as const;
+export const DEFAULT_LEAD_CATEGORIES: readonly string[] = [] as const;
 
-export type DefaultLeadCategory = (typeof DEFAULT_LEAD_CATEGORIES)[number];
+export type DefaultLeadCategory = string;
 
-const STORAGE_KEY = 'digitechzo_crm_custom_categories';
+const LEGACY_STORAGE_KEY = 'digitechzo_crm_custom_categories';
 export const CATEGORIES_UPDATED_EVENT = 'digitechzo_categories_updated';
 
+// In-memory runtime categories (persisted only in active React session memory, NOT in browser localStorage)
+let memoryCustomCategories: string[] = [];
+
+// Clean up any legacy business data inadvertently stored in localStorage
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
+  } catch {
+    // Ignore cleanup error
+  }
+}
+
 /**
- * Get custom categories persisted in localStorage
+ * Get custom categories held in memory for the active session
  */
 export const getCustomCategories = (): string[] => {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        return parsed.filter(
-          (c) => typeof c === 'string' && c.trim().length > 0 && !DEFAULT_LEAD_CATEGORIES.includes(c as any)
-        );
-      }
-    }
-  } catch (err) {
-    console.error('Failed to parse stored categories', err);
-  }
-  return [];
+  return [...memoryCustomCategories];
 };
 
 /**
- * Persist a newly added category and notify listeners
+ * Add a runtime category in active memory and notify listeners
  */
 export const addCustomCategory = (newCat: string): string[] => {
   const trimmed = newCat.trim();
   if (!trimmed) return getCustomCategories();
 
-  // If already in predefined list, no need to store as custom
-  const isPredefined = DEFAULT_LEAD_CATEGORIES.some(
-    (c) => c.toLowerCase() === trimmed.toLowerCase()
-  );
-  if (isPredefined) {
-    return getCustomCategories();
-  }
-
-  const current = getCustomCategories();
-  const exists = current.some((c) => c.toLowerCase() === trimmed.toLowerCase());
+  const exists = memoryCustomCategories.some((c) => c.toLowerCase() === trimmed.toLowerCase());
   if (!exists) {
-    const updated = [...current, trimmed];
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    memoryCustomCategories = [...memoryCustomCategories, trimmed];
+    if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event(CATEGORIES_UPDATED_EVENT));
-    } catch (err) {
-      console.error('Failed to save category', err);
     }
-    return updated;
   }
-  return current;
+  return [...memoryCustomCategories];
 };
 
 /**
- * Get all available categories (predefined + custom + any from current records)
+ * Remove a runtime category from active memory
+ */
+export const removeCustomCategory = (catToDelete: string): string[] => {
+  const trimmed = catToDelete.trim().toLowerCase();
+  if (!trimmed) return getCustomCategories();
+
+  memoryCustomCategories = memoryCustomCategories.filter((c) => c.trim().toLowerCase() !== trimmed);
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(CATEGORIES_UPDATED_EVENT));
+  }
+  return [...memoryCustomCategories];
+};
+
+/**
+ * Clear all runtime custom categories
+ */
+export const clearCustomCategories = (): void => {
+  memoryCustomCategories = [];
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(CATEGORIES_UPDATED_EVENT));
+  }
+};
+
+/**
+ * Get all available categories (in-memory + categories loaded directly from database records)
  */
 export const getAllCategories = (extraCategories: (string | undefined | null)[] = []): string[] => {
   const custom = getCustomCategories();
@@ -71,8 +74,8 @@ export const getAllCategories = (extraCategories: (string | undefined | null)[] 
     .filter((c): c is string => typeof c === 'string' && c.trim().length > 0)
     .map((c) => c.trim());
 
-  const combined = [...DEFAULT_LEAD_CATEGORIES, ...custom, ...validExtras];
-  
+  const combined = [...custom, ...validExtras];
+
   // Deduplicate case-insensitively while preserving original casing
   const seen = new Set<string>();
   const result: string[] = [];
